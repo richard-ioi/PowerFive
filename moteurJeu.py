@@ -1,12 +1,15 @@
 import pygame
+<<<<<<< HEAD
 import time
 import numpy as np
+=======
+>>>>>>> 20491d0af7a794fb1cf7c576dd327b3aa7c9c1be
 
 class MoteurJeu:
-    def __init__(self):
+    def __init__(self,grid):
         #self.joueur = Joueur()
         #self.ia = IA()
-        self.grille = Grille()
+        self.grille = grid
 
     def Placer(self,jeton):
         if not self.grille.ColonnePleine():
@@ -106,7 +109,7 @@ class Grille:
                 nbJeton += 1
         return nbJeton == self.hauteur
 
-class Jeton: 
+"""class Jeton: 
     #Classe Jeton très temporaire juste pour tester le bon fonctionnement de MoteurJeu
     def __init__(self,x,y):
         self.x = x
@@ -123,4 +126,4 @@ if __name__ == "__main__":
     print("Coordonnées des cases vides: ",Grille1.CasesVides())
     Moteur1.Placer(Jeton1)
     print("Id du Joueur gagnant: ",Moteur1.Gagnant(Jeton1))
-    print(Moteur1.grille.grille)
+    print(Moteur1.grille.grille)"""
