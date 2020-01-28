@@ -1,4 +1,5 @@
 import pygame
+import time
 import numpy as np
 
 class MoteurJeu:
@@ -8,6 +9,9 @@ class MoteurJeu:
         self.grille = Grille()
 
     def Placer(self,jeton):
+        if not self.grille.ColonnePleine():
+            pass
+
         self.grille.grille[jeton.x][jeton.y] = jeton.idJoueur
         print("Jeton placé en (",jeton.x,",",jeton.y,")")
     
@@ -94,6 +98,13 @@ class Grille:
                     casesVides.append( (colonne, elm) )
                     break
         return casesVides
+    
+    def ColonnePleine(colonne):
+        nbJeton = 0
+        for jeton in colonne:
+            if jeton = 1:
+                nbJeton += 1
+        return nbJeton == self.hauteur
 
 class Jeton: 
     #Classe Jeton très temporaire juste pour tester le bon fonctionnement de MoteurJeu
