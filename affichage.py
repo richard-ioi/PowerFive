@@ -25,13 +25,14 @@ class Animation:
         self.y_pos = y_sprites
         self.sprite_list = []
         for i_sprite in range(self.nb_sprites):
-            print(x_sprites+(self.larg_sprite+1)*i_sprite)
+            #print(x_sprites+(self.larg_sprite+1)*i_sprite)
             sprite = self.palette.subsurface(x_sprites+(self.larg_sprite+2)*i_sprite, y_sprites, self.larg_sprite-1, self.haut_sprite-1)
             #if self.palette_name == "microman_sprites.png":
-                #sprite = scale(sprite, (51,51))
+            sprite = scale(sprite, (self.larg_sprite*3,self.haut_sprite*3))
             self.sprite_list.append(sprite)
 
-    def affiche(self, x, y):
+    def affiche(self, x, y, clock):
+        #print(new_speed)
         if self.play_count >= self.nb_sprites * self.speed:
             if self.isLoop:
                 self.play_count = 0
