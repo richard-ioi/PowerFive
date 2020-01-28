@@ -31,13 +31,16 @@ class MoteurJeu:
                 compteur = 0
             if compteur == 5:
                 return jeton.idJoueur
+        compteur = 0
         compteur1 = 0
         compteur2 = 0
         # Vérification diagonale 1
         for elmD1 in range(self.grille.hauteur):
-            print("elm= ",elmD1)
-            caseDiag1 = self.grille.grille[jeton.x + elmD1][jeton.y + elmD1]
-            caseDiag2 = self.grille.grille[jeton.x - elmD1][jeton.y + elmD1]
+            print(elmD1)
+            try: caseDiag1 = self.grille.grille[jeton.x + elmD1][jeton.y + elmD1]
+            except IndexError: pass
+            try: caseDiag2 = self.grille.grille[jeton.x - elmD1][jeton.y + elmD1]
+            except IndexError: pass
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(caseDiag2 == jeton.idJoueur):
@@ -45,38 +48,40 @@ class MoteurJeu:
             if(compteur1 == 5 or compteur2 == 5):
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
             elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):
-                print(compteur1," ",compteur2)
+                print("STOP")    #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
+                break
+        print("###")
+        compteur1 -= 1
+        compteur2 -= 1
+        for elmD2 in range(self.grille.hauteur):
+            try: caseDiag1 = self.grille.grille[jeton.x - elmD2][jeton.y - elmD2]
+            except IndexError: pass
+            try: caseDiag2 = self.grille.grille[jeton.x + elmD2][jeton.y - elmD2]
+            except IndexError: pass
+            if(caseDiag1 == jeton.idJoueur):
+                compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
+            if(caseDiag2 == jeton.idJoueur):
+                compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
+            if(compteur1 == 5 or compteur2 == 5):
+                return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
+            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):
                 print("STOP")    #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
                 break
         compteur1 = 0
         compteur2 = 0
-        print("###")
-        for elmD2 in range(self.grille.hauteur):
-            print("elm= ",elmD2)
-            caseDiag1 = self.grille.grille[jeton.x - elmD2][jeton.y - elmD2]
-            caseDiag2 = self.grille.grille[jeton.x + elmD2][jeton.y - elmD2]
-            if(caseDiag1 == jeton.idJoueur):
-                compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(caseDiag2 == jeton.idJoueur):
-                compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(compteur1 == 5 or compteur2 == 5):
-                return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
-            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):
-                print(compteur1," ",compteur2)
-                print("STOP")    #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
-                break
+        return 0
 
 class Grille:
     def __init__(self):
                     #y  0 1 2 3 4 5 6 7  8     x
-        self.grille = [[0,0,1,0,0,0,0,0,-1],  #0
-                       [0,0,0,1,0,0,0,0,-1],  #1
-                       [0,0,0,0,1,0,0,0,-1],  #2
+        self.grille = [[0,0,0,0,0,0,0,0,-1],  #0
+                       [0,0,0,0,0,0,0,0,-1],  #1
+                       [0,0,0,0,0,0,0,0,-1],  #2
                        [0,0,0,0,0,0,0,0,-1],  #3
-                       [0,0,0,0,0,0,1,0,-1],  #4
+                       [0,0,0,0,0,0,0,0,-1],  #4
                        [0,0,0,0,0,0,0,0,-1],  #5
                        [0,0,0,0,0,0,0,0,-1],  #6
-                       [0,0,0,0,0,0,0,0,-1],  #7
+                       [0,0,0,0,1,1,1,1,-1],  #7
                        [0,0,0,0,0,0,0,0,-1]]  #8
         self.largeur = 9
         self.hauteur = 8
@@ -102,7 +107,7 @@ class Jeton:
 if __name__ == "__main__":
     Grille1 = Grille()
     Moteur1 = MoteurJeu()
-    Jeton1 = Jeton(3,5)
+    Jeton1 = Jeton(7,3)
 
     print("Coordonnées des cases vides: ",Grille1.CasesVides())
     Moteur1.Placer(Jeton1)
