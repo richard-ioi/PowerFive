@@ -2,21 +2,21 @@ import pygame
 import os
 
 class MoteurJeu:
+    
     def __init__(self, grille, clock):
         #self.joueur = Joueur()
         #self.ia = IA()
         self.grille = grille
         self.clock = clock
-
+    
     # A tester
     def Placer(self,jeton):
         timeEffective = self.clock.get_time()
         timeLimit = 0.5
         if not self.grille.ColonnePleine():
             self.grille.grilleAttente[jeton.x] = jeton.idJoueur
-            for i in range(self.grille.hauteur):
-                while timeEffective < timeLimit:
-                    timeEffective += self.clock.get_time()
+            for i in range(self.grille.hauteur - NbJetonColonne(self,jeton.x)):
+                self.delai(timeLimit)
                 self.grille.grillePrincipal[jeton.x][i] = jeton.idJoueur
 
         #self.grille.grille[jeton.x][jeton.y] = jeton.idJoueur
@@ -117,12 +117,15 @@ class Grille:
                     break
         return casesVides
     
-    def ColonnePleine(self,colonne):
+    def NbJetonColonne(self,colonne):
         nbJeton = 0
         for jeton in colonne:
             if jeton == 1:
                 nbJeton += 1
-        return nbJeton == self.hauteur
+        return nbJeton
+    
+    def ColonnePleine(self,colonne):
+        return NbJetonColonne == self.hauteur
 
 class Jeton: 
     #Classe Jeton très temporaire juste pour tester le bon fonctionnement de MoteurJeu

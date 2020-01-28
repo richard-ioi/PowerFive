@@ -40,6 +40,9 @@ while not done:
         #print("Then ",AnimTest.speed)
         #print("ANIMATION FROGGY")
     
+    print(pygame)
+            
+    
 
     #posSouris = JoueurH.CliqueSouris(event, MOUSEBUTTONDOWN)
     #MoteurDeJeu.Placer(posSouris)
