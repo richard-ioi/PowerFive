@@ -1,27 +1,31 @@
 import pygame
 import os
 from moteurJeu import *
-from joueur import Joueur
-from affichage import Animation
+from modeles import *
+from vue import *
 
 pygame.init()
 Clock = pygame.time.Clock()
 done = False
 
+screenLargeur = 1280
+screenHauteur = 720
+screen = pygame.display.set_mode((screenLargeur,screenHauteur))
+pygame.display.set_caption("Test Animation Forggy")
+
 GrilleDeJeu = Grille()
 MoteurDeJeu = MoteurJeu(GrilleDeJeu, Clock)
+InterfaceJeu = Interface(screen,GrilleDeJeu)
 JoueurH = Joueur()
 #JetonActuel = None
 
-screen = pygame.display.set_mode((1280,720))
-pygame.display.set_caption("Test Animation Forggy")
-AnimTest = Animation(screen,"froggy\char.png",0,24,5)
-
+imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
+posJeton = -10
 
 while not done:
     Clock.tick(60)
     FPS = Clock.get_fps()
-    print(FPS)
+    #print(FPS)
     event = pygame.event.Event(pygame.USEREVENT)
     pygame.event.pump()
 
@@ -30,19 +34,8 @@ while not done:
             done = True
     pygame.display.flip()
     
-    if( pygame.mouse.get_pressed() ):
-        AnimTest.play = True
-        #print("CLIC DE LA SOURIS")
-    if( AnimTest.play ):
-        #print("First ",AnimTest.speed)
-        AnimTest.update(AnimTest.x_pos,AnimTest.y_pos)
-        AnimTest.affiche(1000,520,Clock)
-        #print("Then ",AnimTest.speed)
-        #print("ANIMATION FROGGY")
-    
-    print(pygame)
-            
-    
+    #posJeton += 5
 
-    #posSouris = JoueurH.CliqueSouris(event, MOUSEBUTTONDOWN)
-    #MoteurDeJeu.Placer(posSouris)
+    #Affichage
+    #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
+    InterfaceJeu.Affichage()

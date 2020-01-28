@@ -1,5 +1,6 @@
 import pygame
 import os
+from pygame.transform import scale
 
 class MoteurJeu:
     
@@ -11,16 +12,11 @@ class MoteurJeu:
     
     # A tester
     def Placer(self,jeton):
-        timeEffective = self.clock.get_time()
-        timeLimit = 0.5
+        colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
         if not self.grille.ColonnePleine():
             self.grille.grilleAttente[jeton.x] = jeton.idJoueur
-            for i in range(self.grille.hauteur - NbJetonColonne(self,jeton.x)):
-                self.delai(timeLimit)
-                self.grille.grillePrincipal[jeton.x][i] = jeton.idJoueur
-
-        #self.grille.grille[jeton.x][jeton.y] = jeton.idJoueur
-        #print("Jeton placé en (",jeton.x,",",jeton.y,")")
+        self.grille.grille[jeton.x][colonneJeton] = jeton.idJoueur
+        print("Jeton placé en (",jeton.x,",",colonneJeton,")")
     
     def Gagnant(self, jeton):
         compteur = 0
@@ -81,67 +77,3 @@ class MoteurJeu:
         compteur1 = 0
         compteur2 = 0
         return 0
-
-class Grille:
-    def __init__(self):
-                                     #x
-        self.grilleAttente = [ [0],  #0
-                               [0],  #1
-                               [0],  #2
-                               [0],  #3
-                               [0],  #4
-                               [0],  #5
-                               [0],  #6
-                               [0],  #7
-                               [0] ] #8
-                             #y  0 1 2 3 4 5 6 7  8     x
-        self.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
-                                [0,0,0,0,0,0,0,0,-1],  #1
-                                [0,0,0,0,0,0,0,0,-1],  #2
-                                [0,0,0,0,0,0,0,0,-1],  #3
-                                [0,0,0,0,0,0,0,0,-1],  #4
-                                [0,0,0,0,0,0,0,0,-1],  #5
-                                [0,0,0,0,0,0,0,0,-1],  #6
-                                [0,0,0,0,1,1,1,1,-1],  #7
-                                [0,0,0,0,0,0,0,0,-1]]  #8
-        self.largeur = 9
-        self.hauteur = 8
-        self.image = pygame.image.load(os.path.join("data","graphismes","grille.png"))
-
-    def CasesVides(self):
-        casesVides = []
-        for colonne in range(len(self.grillePrincipal)):
-            for elm in range(self.hauteur, -1, -1):
-                if(self.grillePrincipal[colonne][elm] == 0):
-                    casesVides.append( (colonne, elm) )
-                    break
-        return casesVides
-    
-    def NbJetonColonne(self,colonne):
-        nbJeton = 0
-        for jeton in colonne:
-            if jeton == 1:
-                nbJeton += 1
-        return nbJeton
-    
-    def ColonnePleine(self,colonne):
-        return NbJetonColonne == self.hauteur
-
-class Jeton: 
-    #Classe Jeton très temporaire juste pour tester le bon fonctionnement de MoteurJeu
-    def __init__(self):
-        self.x = 0
-        self.y = 0
-        self.idJoueur = 1
-
-
-"""#Test des classes et de leurs méthodes
-if __name__ == "__main__":
-    Grille1 = Grille()
-    Moteur1 = MoteurJeu(Grille1)
-    Jeton1 = Jeton(7,3)
-
-    print("Coordonnées des cases vides: ",Grille1.CasesVides())
-    Moteur1.Placer(Jeton1)
-    print("Id du Joueur gagnant: ",Moteur1.Gagnant(Jeton1))
-    print(Moteur1.grille.grille)"""
