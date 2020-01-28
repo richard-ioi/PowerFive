@@ -1,10 +1,25 @@
+#! /usr/bin/env python3
+
+"""
+    Module regroupant les contrôleurs du jeu.
+"""
+
 import pygame
 import os
 from pygame.transform import scale
 
 class MoteurJeu:
-    
+    """
+        Classe regroupant les méthodes effectuant toute les actions disponibles du jeu.
+    """
     def __init__(self, grille, clock):
+        """
+            Constructeur de la classe.
+
+            Args:
+                grille: Objet Grille utilisé et manipulé par le jeu
+                clock: Horloge pygame du jeu.
+        """
         #self.joueur = Joueur()
         #self.ia = IA()
         self.grille = grille
@@ -12,6 +27,12 @@ class MoteurJeu:
     
     # A tester
     def Placer(self,jeton):
+        """
+            Méthode permettant la placement d'un jeton dans la grille.
+
+            Args:
+                jeton: Jeton à placer dans la grille
+        """
         colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
         if not self.grille.ColonnePleine():
             self.grille.grilleAttente[jeton.x] = jeton.idJoueur
@@ -19,6 +40,13 @@ class MoteurJeu:
         print("Jeton placé en (",jeton.x,",",colonneJeton,")")
     
     def Gagnant(self, jeton):
+        """
+            Méthode permttant de déterminer s'il y a un gagnant.
+            Elle vérifie la colonne, la diagonale et la ligne ou se trouve la jeton.
+
+            Args:
+                jeton: Jeton servant de référentiel pour la vérification.
+        """
         compteur = 0
         # Vérification colonne
         for elmC in range(jeton.y, self.grille.hauteur, 1):

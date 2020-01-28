@@ -1,3 +1,9 @@
+#! /usr/bin/env python3
+
+"""
+    Fichier principal initialisant l'ensemble des classes du jeu.
+"""
+
 import pygame
 import os
 from moteurJeu import *
