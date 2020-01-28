@@ -1,5 +1,6 @@
 import pygame
 import os
+from joueur import IA
 
 class MoteurJeu:
     def __init__(self, grille, clock):
@@ -82,6 +83,11 @@ class MoteurJeu:
         compteur2 = 0
         return 0
 
+    def PlayIA(grille):
+        grille[joueur.IA.Simulation(2)[1][0]][joueur.IA.Simulation(2)[1][1]]=2
+
+
+
 class Grille:
     def __init__(self):
                                      #x
@@ -132,7 +138,7 @@ class Jeton:
         self.idJoueur = 1
 
 
-"""#Test des classes et de leurs méthodes
+'''#Test des classes et de leurs méthodes
 if __name__ == "__main__":
     Grille1 = Grille()
     Moteur1 = MoteurJeu(Grille1)
@@ -141,4 +147,4 @@ if __name__ == "__main__":
     print("Coordonnées des cases vides: ",Grille1.CasesVides())
     Moteur1.Placer(Jeton1)
     print("Id du Joueur gagnant: ",Moteur1.Gagnant(Jeton1))
-    print(Moteur1.grille.grille)"""
+    print(Moteur1.grille.grille)'''
