@@ -14,19 +14,25 @@ pygame.init()
 Clock = pygame.time.Clock()
 done = False
 
-screenLargeur = 1280
-screenHauteur = 720
-screen = pygame.display.set_mode((screenLargeur,screenHauteur))
-pygame.display.set_caption("Test Animation Forggy")
+largeurFenetre = 1280
+hauteurFenetre = 720
+Fenetre = pygame.display.set_mode( (largeurFenetre, hauteurFenetre) )
+pygame.display.set_caption("PowerFive")
+
+AnimBase = {  "Froggy": Animation(Fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
+             "Wheatle": Animation(Fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
+             "Jurassy": Animation(Fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72) }
+AnimSpec = {}
 
 GrilleDeJeu = Grille()
 MoteurDeJeu = MoteurJeu(GrilleDeJeu, Clock)
-InterfaceJeu = Interface(screen,GrilleDeJeu)
-JoueurH = Joueur()
-#JetonActuel = None
+InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
 
-imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
-posJeton = -10
+Joueur = Joueur()
+Jeton = Jeton(0,1)
+
+#imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
+#posJeton = -10
 
 while not done:
     Clock.tick(60)

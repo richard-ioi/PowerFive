@@ -33,11 +33,13 @@ class MoteurJeu:
             Args:
                 jeton: Jeton à placer dans la grille
         """
-        colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
-        if not self.grille.ColonnePleine():
-            self.grille.grilleAttente[jeton.x] = jeton.idJoueur
-        self.grille.grille[jeton.x][colonneJeton] = jeton.idJoueur
-        print("Jeton placé en (",jeton.x,",",colonneJeton,")")
+        # colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
+        # if not self.grille.ColonnePleine():
+        #     self.grille.grilleAttente[jeton.x] = jeton.idJoueur
+        # self.grille.grille[jeton.x][colonneJeton] = jeton.idJoueur
+        # print("Jeton placé en (",jeton.x,",",colonneJeton,")")
+        
+        self.grille.RemplirCase(jeton)
     
     def Gagnant(self, jeton):
         """
@@ -60,7 +62,7 @@ class MoteurJeu:
         compteur = 0
         # Vérificaion ligne
         for elmL in range(self.grille.largeur):
-            if( self.grille.grille[elmL][jeton.y] == jeton.idJoueur ):
+            if( self.grille.grillePrincipal[elmL][jeton.y] == jeton.idJoueur ):
                 compteur += 1
             else:
                 compteur = 0
@@ -72,9 +74,9 @@ class MoteurJeu:
         # Vérification diagonale 1
         for elmD1 in range(self.grille.hauteur):
             print(elmD1)
-            try: caseDiag1 = self.grille.grille[jeton.x + elmD1][jeton.y + elmD1]
+            try: caseDiag1 = self.grille.grillePrincipal[jeton.x + elmD1][jeton.y + elmD1]
             except IndexError: pass
-            try: caseDiag2 = self.grille.grille[jeton.x - elmD1][jeton.y + elmD1]
+            try: caseDiag2 = self.grille.grillePrincipal[jeton.x - elmD1][jeton.y + elmD1]
             except IndexError: pass
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
@@ -89,9 +91,9 @@ class MoteurJeu:
         compteur1 -= 1
         compteur2 -= 1
         for elmD2 in range(self.grille.hauteur):
-            try: caseDiag1 = self.grille.grille[jeton.x - elmD2][jeton.y - elmD2]
+            try: caseDiag1 = self.grille.grillePrincipal[jeton.x - elmD2][jeton.y - elmD2]
             except IndexError: pass
-            try: caseDiag2 = self.grille.grille[jeton.x + elmD2][jeton.y - elmD2]
+            try: caseDiag2 = self.grille.grillePrincipal[jeton.x + elmD2][jeton.y - elmD2]
             except IndexError: pass
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur

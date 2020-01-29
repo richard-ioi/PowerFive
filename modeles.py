@@ -47,27 +47,42 @@ class Grille:
                                 [0,0,0,0,0,0,0,0,-1]]  #8
         self.largeur = 9
         self.hauteur = 8
-        self.image = scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (150*4,150*4))
-        self.imageBack = scale(pygame.image.load(os.path.join("data","graphismes","grille_back.png")), (150*4,150*4))
-        self.largeurImage = self.image.get_width()
-        self.hauteurImage = self.image.get_height()
+        self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (150*4,150*4)),
+                         "back": scale(pygame.image.load(os.path.join("data","graphismes","grille_back.png")), (150*4,150*4)) }
+        self.dimSprites = ( self.sprites["top"].get_width(), self.sprites["top"].get_height() )
 
+    def __str__(self):
+        cases = [case for colonne in list(zip(*self.grillePrincipal)) for case in colonne]
+        return """Grille(largeur={}, hauteur={})
+ ___________________________________
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+| {} | {} | {} | {} | {} | {} | {} | {} | {} |
+ ‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾‾
+        """.format(self.largeur, self.hauteur, *cases)
+
+    
     def CasesVides(self):
         """
             Méthode donnant l'ensemble des cases vides disponible dans la grille.
 
             Return:
-                Une liste de tuples contenant la la colonne et le contenue de la case.
+                Une liste de tuples contenant l'index des colonnes et des cases disponibles.
         """
         casesVides = []
         for colonne in range(len(self.grillePrincipal)):
-            for elm in range(self.hauteur, -1, -1):
-                if(self.grillePrincipal[colonne][elm] == 0):
-                    casesVides.append( (colonne, elm) )
+            for case in range(self.hauteur, -1, -1):
+                if(self.grillePrincipal[colonne][case] == 0):
+                    casesVides.append( (colonne, case) )
                     break
         return casesVides
     
-    def NbJetonColonne(self,colonne):
+    def NbJetonColonne(self, colonne):
         """
             Méthode donnant le nombre de jetons dans la colonne donnée en paramètre.
 
@@ -83,7 +98,7 @@ class Grille:
                 nbJeton += 1
         return nbJeton
     
-    def ColonnePleine(self,colonne):
+    def ColonnePleine(self, colonne):
         """
             Méthode booléenne indiquant si la colonne est pleine.
 
@@ -95,21 +110,50 @@ class Grille:
         """
         return NbJetonColonne == self.hauteur
 
+    def RemplirCase(self, jeton):
+        """
+            Méthode remplissant une case de la grille
+
+            Arg:
+                jeton: Jeton devant être placé dans la grille.
+        """
+        case = self.CasesVides()[jeton.colonne][1]
+        self.grillePrincipal[jeton.colonne][case] = jeton.idJoueur
+        jeton.case = case - 1
+
 class Jeton:
     """
         Classe représentant les jetons du jeu.
     """
-    def __init__(self, x, y, idJ):
+    def __init__(self, colonne, idJoueur):
         """
             Constructeur de la classe.
 
             Args:
-                x: coordonnée horizontale du jeton
-                y: coordonnée verticale du jeton
+                col: colonne du jeton dans la grille
+                case: case du jeton
                 idJoueur: Identifiant du joueur
                 image: Sprite du jeton
         """
-        self.x = x
-        self.y = y
-        self.idJoueur = idJ
-        self.image = 0
+        self.colonne = colonne
+        self.case = 0
+        self.idJoueur = idJoueur
+        self.image = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (32*4,32*4) )
+        self.visible = False
+    
+    def __str__(self):
+        return f"Jeton({colonne}, {case}, {idJoueur})"
+    
+    def deplacer(self, coord):
+        pass
+
+
+if __name__ == "__main__":
+    maGrille = Grille()
+    monJeton = Jeton(1, 1)
+    print(maGrille.CasesVides())
+    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
+    maGrille.RemplirCase(monJeton)
+    print(maGrille.CasesVides())
+    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
+    print(str(maGrille))
