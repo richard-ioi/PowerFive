@@ -28,11 +28,9 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
-<<<<<<< HEAD
-        self.rectList = self.InitRect()
-=======
-        self.rectList = InitRect()
->>>>>>> df54f475ea758e021b164c1356573717865ce0e8
+        self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 )
+        self.coordGrilleTop = ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 )
+        self.rectList = self.InitRect(self.coordGrilleBack)
         self.animBase = animBase
         self.animSpec = animSpec
     
@@ -41,14 +39,11 @@ class Interface:
             Méthode exécutant les procédure d'affichages sur l'écran
         """
         self.fenetre.fill([255,255,255])
-        self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
-        self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
+        self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
+        self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
         
-<<<<<<< HEAD
         #!! rectList a ajouter
 
-=======
->>>>>>> df54f475ea758e021b164c1356573717865ce0e8
         #for animation in self.animBase.values():
             #animation.play = True
 
@@ -85,10 +80,12 @@ class Interface:
         #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
         #     self.AnimJurassy.affiche(1000,250)
 
-    def InitRect(self):
+    def InitRect(self, coordGrille):
         #Rect pour les cases de la grille
+        xGrille = coordGrille[0]
+        yGrille = coordGrille[1]
         rectList = [
-            {"coord":(0, 0),  "rect": pygame.Rect(10, 18, 60, 68)},
+            {"coord":(0, 0),  "rect": pygame.Rect(xGrille+10, yGrille+18, 60, 68)},
             {"coord":(1, 0),  "rect": pygame.Rect(70, 18, 60, 68)},
             {"coord":(2, 0),  "rect": pygame.Rect(130, 18, 60, 68)},
             {"coord":(3, 0),  "rect": pygame.Rect(190, 18, 60, 68)},

@@ -108,7 +108,7 @@ class Grille:
             Return:
                 Un booléen
         """
-        return NbJetonColonne == self.hauteur
+        return self.NbJetonColonne(colonne) == self.hauteur
 
     def RemplirCase(self, jeton):
         """
@@ -138,7 +138,7 @@ class Jeton:
         self.colonne = colonne
         self.case = 0
         self.idJoueur = idJoueur
-        self.image = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (32*4,32*4) )
+        self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (32*4,32*4) )
         self.visible = False
     
     def __str__(self):
