@@ -33,7 +33,7 @@ AnimSpec = {}
 
 GrilleDeJeu = Grille()
 MoteurDeJeu = MoteurJeu(GrilleDeJeu, Clock)
-InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
+InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, rectList, AnimBase, AnimSpec)
 
 Joueur = Joueur()
 Jeton = Jeton(0,1)

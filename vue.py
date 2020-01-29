@@ -12,7 +12,7 @@ class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec):
+    def __init__(self, fenetre, largeur, hauteur, grille, rectList, animBase, animSpec):
         """
             Constructeur de la classe.
 
@@ -38,6 +38,8 @@ class Interface:
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
         self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
+        
+        self.InitRect()
         
         #for animation in self.animBase.values():
             #animation.play = True
@@ -76,10 +78,80 @@ class Interface:
         #     self.AnimJurassy.affiche(1000,250)
 
     def InitRect(self):
-        for xColonne in range(self.grille.grille.largeur):
-            for yLigne in range(self.grille.grille.hauteur):
-                pass
-
+        rectList = [
+            {"coord":(0, 0),  "rect": pygame.Rect(10, 18, 60, 68)}
+            {"coord":(1, 0),  "rect": pygame.Rect(70, 18, 60, 68)}
+            {"coord":(2, 0),  "rect": pygame.Rect(130, 18, 60, 68)}
+            {"coord":(3, 0),  "rect": pygame.Rect(190, 18, 60, 68)}
+            {"coord":(4, 0),  "rect": pygame.Rect(250, 18, 60, 68)}
+            {"coord":(5, 0),  "rect": pygame.Rect(310, 18, 60, 68)}
+            {"coord":(6, 0),  "rect": pygame.Rect(370, 18, 60, 68)}
+            {"coord":(7, 0),  "rect": pygame.Rect(430, 18, 60, 68)}
+            {"coord":(8, 0),  "rect": pygame.Rect(490, 18, 60, 68)}
+            {"coord":(0, 1),  "rect": pygame.Rect(10, 86, 60, 68)}
+            {"coord":(1, 1),  "rect": pygame.Rect(70, 86, 60, 68)}
+            {"coord":(2, 1),  "rect": pygame.Rect(130, 86, 60, 68)}
+            {"coord":(3, 1),  "rect": pygame.Rect(190, 86, 60, 68)}
+            {"coord":(4, 1),  "rect": pygame.Rect(250, 86, 60, 68)}
+            {"coord":(5, 1),  "rect": pygame.Rect(310, 86, 60, 68)}
+            {"coord":(6, 1),  "rect": pygame.Rect(370, 86, 60, 68)}
+            {"coord":(7, 1),  "rect": pygame.Rect(430, 86, 60, 68)}
+            {"coord":(8, 1),  "rect": pygame.Rect(490, 86, 60, 68)}
+            {"coord":(0, 2),  "rect": pygame.Rect(10, 154, 60, 68)}
+            {"coord":(1, 2),  "rect": pygame.Rect(70, 154, 60, 68)}
+            {"coord":(2, 2),  "rect": pygame.Rect(130, 154, 60, 68)}
+            {"coord":(3, 2),  "rect": pygame.Rect(190, 154, 60, 68)}
+            {"coord":(4, 2),  "rect": pygame.Rect(250, 154, 60, 68)}
+            {"coord":(5, 2),  "rect": pygame.Rect(310, 154, 60, 68)}
+            {"coord":(6, 2),  "rect": pygame.Rect(370, 154, 60, 68)}
+            {"coord":(7, 2),  "rect": pygame.Rect(430, 154, 60, 68)}
+            {"coord":(8, 2),  "rect": pygame.Rect(490, 154, 60, 68)}
+            {"coord":(0, 3),  "rect": pygame.Rect(10, 222, 60, 68)}
+            {"coord":(1, 3),  "rect": pygame.Rect(70, 222, 60, 68)}
+            {"coord":(2, 3),  "rect": pygame.Rect(130, 222, 60, 68)}
+            {"coord":(3, 3),  "rect": pygame.Rect(190, 222, 60, 68)}
+            {"coord":(4, 3),  "rect": pygame.Rect(250, 222, 60, 68)}
+            {"coord":(5, 3),  "rect": pygame.Rect(310, 222, 60, 68)}
+            {"coord":(6, 3),  "rect": pygame.Rect(370, 222, 60, 68)}
+            {"coord":(7, 3),  "rect": pygame.Rect(430, 222, 60, 68)}
+            {"coord":(8, 3),  "rect": pygame.Rect(490, 222, 60, 68)}
+            {"coord":(0, 4),  "rect": pygame.Rect(10, 290, 60, 68)}
+            {"coord":(1, 4),  "rect": pygame.Rect(70, 290, 60, 68)}
+            {"coord":(2, 4),  "rect": pygame.Rect(130, 290, 60, 68)}
+            {"coord":(3, 4),  "rect": pygame.Rect(190, 290, 60, 68)}
+            {"coord":(4, 4),  "rect": pygame.Rect(250, 290, 60, 68)}
+            {"coord":(5, 4),  "rect": pygame.Rect(310, 290, 60, 68)}
+            {"coord":(6, 4),  "rect": pygame.Rect(370, 290, 60, 68)}
+            {"coord":(7, 4),  "rect": pygame.Rect(430, 290, 60, 68)}
+            {"coord":(8, 4),  "rect": pygame.Rect(490, 290, 60, 68)}
+            {"coord":(0, 5),  "rect": pygame.Rect(10, 358, 60, 68)}
+            {"coord":(1, 5),  "rect": pygame.Rect(70, 358, 60, 68)}
+            {"coord":(2, 5),  "rect": pygame.Rect(130, 358, 60, 68)}
+            {"coord":(3, 5),  "rect": pygame.Rect(190, 358, 60, 68)}
+            {"coord":(4, 5),  "rect": pygame.Rect(250, 358, 60, 68)}
+            {"coord":(5, 5),  "rect": pygame.Rect(310, 358, 60, 68)}
+            {"coord":(6, 5),  "rect": pygame.Rect(370, 358, 60, 68)}
+            {"coord":(7, 5),  "rect": pygame.Rect(430, 358, 60, 68)}
+            {"coord":(8, 5),  "rect": pygame.Rect(490, 358, 60, 68)}
+            {"coord":(0, 6),  "rect": pygame.Rect(10, 426, 60, 68)}
+            {"coord":(1, 6),  "rect": pygame.Rect(70, 426, 60, 68)}
+            {"coord":(2, 6),  "rect": pygame.Rect(130, 426, 60, 68)}
+            {"coord":(3, 6),  "rect": pygame.Rect(190, 426, 60, 68)}
+            {"coord":(4, 6),  "rect": pygame.Rect(250, 426, 60, 68)}
+            {"coord":(5, 6),  "rect": pygame.Rect(310, 426, 60, 68)}
+            {"coord":(6, 6),  "rect": pygame.Rect(370, 426, 60, 68)}
+            {"coord":(7, 6),  "rect": pygame.Rect(430, 426, 60, 68)}
+            {"coord":(8, 6),  "rect": pygame.Rect(490, 426, 60, 68)}
+            {"coord":(0, 7),  "rect": pygame.Rect(10, 494, 60, 68)}
+            {"coord":(1, 7),  "rect": pygame.Rect(70, 494, 60, 68)}
+            {"coord":(2, 7),  "rect": pygame.Rect(130, 494, 60, 68)}
+            {"coord":(3, 7),  "rect": pygame.Rect(190, 494, 60, 68)}
+            {"coord":(4, 7),  "rect": pygame.Rect(250, 494, 60, 68)}
+            {"coord":(5, 7),  "rect": pygame.Rect(310, 494, 60, 68)}
+            {"coord":(6, 7),  "rect": pygame.Rect(370, 494, 60, 68)}
+            {"coord":(7, 7),  "rect": pygame.Rect(430, 494, 60, 68)}
+            {"coord":(8, 7),  "rect": pygame.Rect(490, 494, 60, 68)}
+        ]
 
 class Animation:
     """
