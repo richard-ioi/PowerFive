@@ -26,25 +26,25 @@ class Grille:
                 hauteurImage: hauteur du sprite.
         """
                                      #x
-        self.grilleAttente = [ [0],  #0
-                               [0],  #1
-                               [0],  #2
-                               [0],  #3
-                               [0],  #4
-                               [0],  #5
-                               [0],  #6
-                               [0],  #7
-                               [0] ] #8
+        self.grilleAttente = [ [None],  #0
+                               [None],  #1
+                               [None],  #2
+                               [None],  #3
+                               [None],  #4
+                               [None],  #5
+                               [None],  #6
+                               [None],  #7
+                               [None] ] #8
                              #y  0 1 2 3 4 5 6 7  8     x
-        self.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
-                                [0,0,0,0,0,0,0,0,-1],  #1
-                                [0,0,0,0,0,0,0,0,-1],  #2
-                                [0,0,0,0,0,0,0,0,-1],  #3
-                                [0,0,0,0,0,0,0,0,-1],  #4
-                                [0,0,0,0,0,0,0,0,-1],  #5
-                                [0,0,0,0,0,0,0,0,-1],  #6
-                                [0,0,0,0,1,1,1,1,-1],  #7
-                                [0,0,0,0,0,0,0,0,-1]]  #8
+        self.grillePrincipal = [[None,None,None,None,None,None,None,None,-1],  #0
+                                [None,None,None,None,None,None,None,None,-1],  #1
+                                [None,None,None,None,None,None,None,None,-1],  #2
+                                [None,None,None,None,None,None,None,None,-1],  #3
+                                [None,None,None,None,None,None,None,None,-1],  #4
+                                [None,None,None,None,None,None,None,None,-1],  #5
+                                [None,None,None,None,None,None,None,None,-1],  #6
+                                [None,None,None,None,None,None,None,None,-1],  #7
+                                [None,None,None,None,None,None,None,None,-1]]  #8
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (150*4,150*4)),
@@ -77,7 +77,7 @@ class Grille:
         casesVides = []
         for colonne in range(len(self.grillePrincipal)):
             for case in range(self.hauteur, -1, -1):
-                if(self.grillePrincipal[colonne][case] == 0):
+                if(self.grillePrincipal[colonne][case] == None):
                     casesVides.append( (colonne, case) )
                     break
         return casesVides
@@ -94,7 +94,7 @@ class Grille:
         """
         nbJeton = 0
         for jeton in colonne:
-            if jeton == 1:
+            if jeton != None:
                 nbJeton += 1
         return nbJeton
     
@@ -110,22 +110,21 @@ class Grille:
         """
         return self.NbJetonColonne(colonne) == self.hauteur
 
-    def RemplirCase(self, jeton):
+    def RemplirCase(self, colonne, idJoueur):
         """
             Méthode remplissant une case de la grille
 
             Arg:
                 jeton: Jeton devant être placé dans la grille.
         """
-        case = self.CasesVides()[jeton.colonne][1]
-        self.grillePrincipal[jeton.colonne][case] = jeton.idJoueur
-        jeton.case = case - 1
+        case = self.CasesVides()[colonne][1]
+        self.grillePrincipal[colonne][case] = Jeton(idJoueur)
 
 class Jeton:
     """
         Classe représentant les jetons du jeu.
     """
-    def __init__(self, colonne, idJoueur):
+    def __init__(self, idJoueur):
         """
             Constructeur de la classe.
 
@@ -135,14 +134,16 @@ class Jeton:
                 idJoueur: Identifiant du joueur
                 image: Sprite du jeton
         """
-        self.colonne = colonne
-        self.case = 0
         self.idJoueur = idJoueur
-        self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (32*4,32*4) )
+        self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) ) if idJoueur == 1 \
+                     else scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
         self.visible = False
     
     def __str__(self):
-        return "Jeton({}, {}, {})".format(colonne,case,idJoueur)
+        return idJoueur
+    
+    def __repr__(self):
+        return "Jeton({}, {})".format(idJoueur, visible)
     
     def deplacer(self, coord):
         pass

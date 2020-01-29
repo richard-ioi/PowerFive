@@ -30,7 +30,7 @@ class Interface:
         self.grille = grille
         self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 )
         self.coordGrilleTop = ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 )
-        self.rectList = self.InitRect(self.coordGrilleBack)
+        self.rectColonne, self.rectList = self.InitRect()
         self.animBase = animBase
         self.animSpec = animSpec
     
@@ -80,85 +80,102 @@ class Interface:
         #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
         #     self.AnimJurassy.affiche(1000,250)
 
-    def InitRect(self, coordGrille):
-        #Rect pour les cases de la grille
-        xGrille = coordGrille[0]
-        yGrille = coordGrille[1]
-        rectList = [
-            {"coord":(0, 0),  "rect": pygame.Rect(xGrille+10, yGrille+18, 60, 68)},
-            {"coord":(1, 0),  "rect": pygame.Rect(70, 18, 60, 68)},
-            {"coord":(2, 0),  "rect": pygame.Rect(130, 18, 60, 68)},
-            {"coord":(3, 0),  "rect": pygame.Rect(190, 18, 60, 68)},
-            {"coord":(4, 0),  "rect": pygame.Rect(250, 18, 60, 68)},
-            {"coord":(5, 0),  "rect": pygame.Rect(310, 18, 60, 68)},
-            {"coord":(6, 0),  "rect": pygame.Rect(370, 18, 60, 68)},
-            {"coord":(7, 0),  "rect": pygame.Rect(430, 18, 60, 68)},
-            {"coord":(8, 0),  "rect": pygame.Rect(490, 18, 60, 68)},
-            {"coord":(0, 1),  "rect": pygame.Rect(10, 86, 60, 68)},
-            {"coord":(1, 1),  "rect": pygame.Rect(70, 86, 60, 68)},
-            {"coord":(2, 1),  "rect": pygame.Rect(130, 86, 60, 68)},
-            {"coord":(3, 1),  "rect": pygame.Rect(190, 86, 60, 68)},
-            {"coord":(4, 1),  "rect": pygame.Rect(250, 86, 60, 68)},
-            {"coord":(5, 1),  "rect": pygame.Rect(310, 86, 60, 68)},
-            {"coord":(6, 1),  "rect": pygame.Rect(370, 86, 60, 68)},
-            {"coord":(7, 1),  "rect": pygame.Rect(430, 86, 60, 68)},
-            {"coord":(8, 1),  "rect": pygame.Rect(490, 86, 60, 68)},
-            {"coord":(0, 2),  "rect": pygame.Rect(10, 154, 60, 68)},
-            {"coord":(1, 2),  "rect": pygame.Rect(70, 154, 60, 68)},
-            {"coord":(2, 2),  "rect": pygame.Rect(130, 154, 60, 68)},
-            {"coord":(3, 2),  "rect": pygame.Rect(190, 154, 60, 68)},
-            {"coord":(4, 2),  "rect": pygame.Rect(250, 154, 60, 68)},
-            {"coord":(5, 2),  "rect": pygame.Rect(310, 154, 60, 68)},
-            {"coord":(6, 2),  "rect": pygame.Rect(370, 154, 60, 68)},
-            {"coord":(7, 2),  "rect": pygame.Rect(430, 154, 60, 68)},
-            {"coord":(8, 2),  "rect": pygame.Rect(490, 154, 60, 68)},
-            {"coord":(0, 3),  "rect": pygame.Rect(10, 222, 60, 68)},
-            {"coord":(1, 3),  "rect": pygame.Rect(70, 222, 60, 68)},
-            {"coord":(2, 3),  "rect": pygame.Rect(130, 222, 60, 68)},
-            {"coord":(3, 3),  "rect": pygame.Rect(190, 222, 60, 68)},
-            {"coord":(4, 3),  "rect": pygame.Rect(250, 222, 60, 68)},
-            {"coord":(5, 3),  "rect": pygame.Rect(310, 222, 60, 68)},
-            {"coord":(6, 3),  "rect": pygame.Rect(370, 222, 60, 68)},
-            {"coord":(7, 3),  "rect": pygame.Rect(430, 222, 60, 68)},
-            {"coord":(8, 3),  "rect": pygame.Rect(490, 222, 60, 68)},
-            {"coord":(0, 4),  "rect": pygame.Rect(10, 290, 60, 68)},
-            {"coord":(1, 4),  "rect": pygame.Rect(70, 290, 60, 68)},
-            {"coord":(2, 4),  "rect": pygame.Rect(130, 290, 60, 68)},
-            {"coord":(3, 4),  "rect": pygame.Rect(190, 290, 60, 68)},
-            {"coord":(4, 4),  "rect": pygame.Rect(250, 290, 60, 68)},
-            {"coord":(5, 4),  "rect": pygame.Rect(310, 290, 60, 68)},
-            {"coord":(6, 4),  "rect": pygame.Rect(370, 290, 60, 68)},
-            {"coord":(7, 4),  "rect": pygame.Rect(430, 290, 60, 68)},
-            {"coord":(8, 4),  "rect": pygame.Rect(490, 290, 60, 68)},
-            {"coord":(0, 5),  "rect": pygame.Rect(10, 358, 60, 68)},
-            {"coord":(1, 5),  "rect": pygame.Rect(70, 358, 60, 68)},
-            {"coord":(2, 5),  "rect": pygame.Rect(130, 358, 60, 68)},
-            {"coord":(3, 5),  "rect": pygame.Rect(190, 358, 60, 68)},
-            {"coord":(4, 5),  "rect": pygame.Rect(250, 358, 60, 68)},
-            {"coord":(5, 5),  "rect": pygame.Rect(310, 358, 60, 68)},
-            {"coord":(6, 5),  "rect": pygame.Rect(370, 358, 60, 68)},
-            {"coord":(7, 5),  "rect": pygame.Rect(430, 358, 60, 68)},
-            {"coord":(8, 5),  "rect": pygame.Rect(490, 358, 60, 68)},
-            {"coord":(0, 6),  "rect": pygame.Rect(10, 426, 60, 68)},
-            {"coord":(1, 6),  "rect": pygame.Rect(70, 426, 60, 68)},
-            {"coord":(2, 6),  "rect": pygame.Rect(130, 426, 60, 68)},
-            {"coord":(3, 6),  "rect": pygame.Rect(190, 426, 60, 68)},
-            {"coord":(4, 6),  "rect": pygame.Rect(250, 426, 60, 68)},
-            {"coord":(5, 6),  "rect": pygame.Rect(310, 426, 60, 68)},
-            {"coord":(6, 6),  "rect": pygame.Rect(370, 426, 60, 68)},
-            {"coord":(7, 6),  "rect": pygame.Rect(430, 426, 60, 68)},
-            {"coord":(8, 6),  "rect": pygame.Rect(490, 426, 60, 68)},
-            {"coord":(0, 7),  "rect": pygame.Rect(10, 494, 60, 68)},
-            {"coord":(1, 7),  "rect": pygame.Rect(70, 494, 60, 68)},
-            {"coord":(2, 7),  "rect": pygame.Rect(130, 494, 60, 68)},
-            {"coord":(3, 7),  "rect": pygame.Rect(190, 494, 60, 68)},
-            {"coord":(4, 7),  "rect": pygame.Rect(250, 494, 60, 68)},
-            {"coord":(5, 7),  "rect": pygame.Rect(310, 494, 60, 68)},
-            {"coord":(6, 7),  "rect": pygame.Rect(370, 494, 60, 68)},
-            {"coord":(7, 7),  "rect": pygame.Rect(430, 494, 60, 68)},
-            {"coord":(8, 7),  "rect": pygame.Rect(490, 494, 60, 68)}
+    def AttentePlacement(posSouris):
+
+
+
+    def lacherJeton(self, jeton, coordCase):
+        center = ()
+        while ()
+    
+    def InitRect(self):
+        xGrille, yGrille = self.coordGrille[0], self.coordGrille[1]
+        rectColonne = [
+            {"colonne": 0,  "rect": pygame.Rect(xGrille + 10, yGrille - 68, 60, 612)},
+            {"colonne": 1,  "rect": pygame.Rect(xGrille + 70, yGrille - 68, 60, 612)},
+            {"colonne": 2,  "rect": pygame.Rect(xGrille + 130, yGrille - 68, 60, 612)},
+            {"colonne": 3,  "rect": pygame.Rect(xGrille + 190, yGrille - 68, 60, 612)},
+            {"colonne": 4,  "rect": pygame.Rect(xGrille + 250, yGrille - 68, 60, 612)},
+            {"colonne": 5,  "rect": pygame.Rect(xGrille + 310, yGrille - 68, 60, 612)},
+            {"colonne": 6,  "rect": pygame.Rect(xGrille + 370, yGrille - 68, 60, 612)},
+            {"colonne": 7,  "rect": pygame.Rect(xGrille + 430, yGrille - 68, 60, 612)},
+            {"colonne": 8,  "rect": pygame.Rect(xGrille + 490, yGrille - 68, 60, 612)},
         ]
-        return rectList
+        rectList = [
+            {"coord":(0, 0),  "rect": pygame.Rect(xGrille + 10, yGrille + 18, 60, 68)},
+            {"coord":(1, 0),  "rect": pygame.Rect(xGrille + 70, yGrille + 18, 60, 68)},
+            {"coord":(2, 0),  "rect": pygame.Rect(xGrille + 130, yGrille + 18, 60, 68)},
+            {"coord":(3, 0),  "rect": pygame.Rect(xGrille + 190, yGrille + 18, 60, 68)},
+            {"coord":(4, 0),  "rect": pygame.Rect(xGrille + 250, yGrille + 18, 60, 68)},
+            {"coord":(5, 0),  "rect": pygame.Rect(xGrille + 310, yGrille + 18, 60, 68)},
+            {"coord":(6, 0),  "rect": pygame.Rect(xGrille + 370, yGrille + 18, 60, 68)},
+            {"coord":(7, 0),  "rect": pygame.Rect(xGrille + 430, yGrille + 18, 60, 68)},
+            {"coord":(8, 0),  "rect": pygame.Rect(xGrille + 490, yGrille + 18, 60, 68)},
+            {"coord":(0, 1),  "rect": pygame.Rect(xGrille + 10, yGrille + 86, 60, 68)},
+            {"coord":(1, 1),  "rect": pygame.Rect(xGrille + 70, yGrille + 86, 60, 68)},
+            {"coord":(2, 1),  "rect": pygame.Rect(xGrille + 130, yGrille + 86, 60, 68)},
+            {"coord":(3, 1),  "rect": pygame.Rect(xGrille + 190, yGrille + 86, 60, 68)},
+            {"coord":(4, 1),  "rect": pygame.Rect(xGrille + 250, yGrille + 86, 60, 68)},
+            {"coord":(5, 1),  "rect": pygame.Rect(xGrille + 310, yGrille + 86, 60, 68)},
+            {"coord":(6, 1),  "rect": pygame.Rect(xGrille + 370, yGrille + 86, 60, 68)},
+            {"coord":(7, 1),  "rect": pygame.Rect(xGrille + 430, yGrille + 86, 60, 68)},
+            {"coord":(8, 1),  "rect": pygame.Rect(xGrille + 490, yGrille + 86, 60, 68)},
+            {"coord":(0, 2),  "rect": pygame.Rect(xGrille + 10, yGrille + 154, 60, 68)},
+            {"coord":(1, 2),  "rect": pygame.Rect(xGrille + 70, yGrille + 154, 60, 68)},
+            {"coord":(2, 2),  "rect": pygame.Rect(xGrille + 130, yGrille + 154, 60, 68)},
+            {"coord":(3, 2),  "rect": pygame.Rect(xGrille + 190, yGrille + 154, 60, 68)},
+            {"coord":(4, 2),  "rect": pygame.Rect(xGrille + 250, yGrille + 154, 60, 68)},
+            {"coord":(5, 2),  "rect": pygame.Rect(xGrille + 310, yGrille + 154, 60, 68)},
+            {"coord":(6, 2),  "rect": pygame.Rect(xGrille + 370, yGrille + 154, 60, 68)},
+            {"coord":(7, 2),  "rect": pygame.Rect(xGrille + 430, yGrille + 154, 60, 68)},
+            {"coord":(8, 2),  "rect": pygame.Rect(xGrille + 490, yGrille + 154, 60, 68)},
+            {"coord":(0, 3),  "rect": pygame.Rect(xGrille + 10, yGrille + 222, 60, 68)},
+            {"coord":(1, 3),  "rect": pygame.Rect(xGrille + 70, yGrille + 222, 60, 68)},
+            {"coord":(2, 3),  "rect": pygame.Rect(xGrille + 130, yGrille + 222, 60, 68)},
+            {"coord":(3, 3),  "rect": pygame.Rect(xGrille + 190, yGrille + 222, 60, 68)},
+            {"coord":(4, 3),  "rect": pygame.Rect(xGrille + 250, yGrille + 222, 60, 68)},
+            {"coord":(5, 3),  "rect": pygame.Rect(xGrille + 310, yGrille + 222, 60, 68)},
+            {"coord":(6, 3),  "rect": pygame.Rect(xGrille + 370, yGrille + 222, 60, 68)},
+            {"coord":(7, 3),  "rect": pygame.Rect(xGrille + 430, yGrille + 222, 60, 68)},
+            {"coord":(8, 3),  "rect": pygame.Rect(xGrille + 490, yGrille + 222, 60, 68)},
+            {"coord":(0, 4),  "rect": pygame.Rect(xGrille + 10, yGrille + 290, 60, 68)},
+            {"coord":(1, 4),  "rect": pygame.Rect(xGrille + 70, yGrille + 290, 60, 68)},
+            {"coord":(2, 4),  "rect": pygame.Rect(xGrille + 130, yGrille + 290, 60, 68)},
+            {"coord":(3, 4),  "rect": pygame.Rect(xGrille + 190, yGrille + 290, 60, 68)},
+            {"coord":(4, 4),  "rect": pygame.Rect(xGrille + 250, yGrille + 290, 60, 68)},
+            {"coord":(5, 4),  "rect": pygame.Rect(xGrille + 310, yGrille + 290, 60, 68)},
+            {"coord":(6, 4),  "rect": pygame.Rect(xGrille + 370, yGrille + 290, 60, 68)},
+            {"coord":(7, 4),  "rect": pygame.Rect(xGrille + 430, yGrille + 290, 60, 68)},
+            {"coord":(8, 4),  "rect": pygame.Rect(xGrille + 490, yGrille + 290, 60, 68)},
+            {"coord":(0, 5),  "rect": pygame.Rect(xGrille + 10, yGrille + 358, 60, 68)},
+            {"coord":(1, 5),  "rect": pygame.Rect(xGrille + 70, yGrille + 358, 60, 68)},
+            {"coord":(2, 5),  "rect": pygame.Rect(xGrille + 130, yGrille + 358, 60, 68)},
+            {"coord":(3, 5),  "rect": pygame.Rect(xGrille + 190, yGrille + 358, 60, 68)},
+            {"coord":(4, 5),  "rect": pygame.Rect(xGrille + 250, yGrille + 358, 60, 68)},
+            {"coord":(5, 5),  "rect": pygame.Rect(xGrille + 310, yGrille + 358, 60, 68)},
+            {"coord":(6, 5),  "rect": pygame.Rect(xGrille + 370, yGrille + 358, 60, 68)},
+            {"coord":(7, 5),  "rect": pygame.Rect(xGrille + 430, yGrille + 358, 60, 68)},
+            {"coord":(8, 5),  "rect": pygame.Rect(xGrille + 490, yGrille + 358, 60, 68)},
+            {"coord":(0, 6),  "rect": pygame.Rect(xGrille + 10, yGrille + 426, 60, 68)},
+            {"coord":(1, 6),  "rect": pygame.Rect(xGrille + 70, yGrille + 426, 60, 68)},
+            {"coord":(2, 6),  "rect": pygame.Rect(xGrille + 130, yGrille + 426, 60, 68)},
+            {"coord":(3, 6),  "rect": pygame.Rect(xGrille + 190, yGrille + 426, 60, 68)},
+            {"coord":(4, 6),  "rect": pygame.Rect(xGrille + 250, yGrille + 426, 60, 68)},
+            {"coord":(5, 6),  "rect": pygame.Rect(xGrille + 310, yGrille + 426, 60, 68)},
+            {"coord":(6, 6),  "rect": pygame.Rect(xGrille + 370, yGrille + 426, 60, 68)},
+            {"coord":(7, 6),  "rect": pygame.Rect(xGrille + 430, yGrille + 426, 60, 68)},
+            {"coord":(8, 6),  "rect": pygame.Rect(xGrille + 490, yGrille + 426, 60, 68)},
+            {"coord":(0, 7),  "rect": pygame.Rect(xGrille + 10, yGrille + 494, 60, 68)},
+            {"coord":(1, 7),  "rect": pygame.Rect(xGrille + 70, yGrille + 494, 60, 68)},
+            {"coord":(2, 7),  "rect": pygame.Rect(xGrille + 130, yGrille + 494, 60, 68)},
+            {"coord":(3, 7),  "rect": pygame.Rect(xGrille + 190, yGrille + 494, 60, 68)},
+            {"coord":(4, 7),  "rect": pygame.Rect(xGrille + 250, yGrille + 494, 60, 68)},
+            {"coord":(5, 7),  "rect": pygame.Rect(xGrille + 310, yGrille + 494, 60, 68)},
+            {"coord":(6, 7),  "rect": pygame.Rect(xGrille + 370, yGrille + 494, 60, 68)},
+            {"coord":(7, 7),  "rect": pygame.Rect(xGrille + 430, yGrille + 494, 60, 68)},
+            {"coord":(8, 7),  "rect": pygame.Rect(xGrille + 490, yGrille + 494, 60, 68)}
+        ]
+        return rectColonne, rectList
 
 class Animation:
     """

@@ -12,7 +12,7 @@ class MoteurJeu:
     """
         Classe regroupant les méthodes effectuant toute les actions disponibles du jeu.
     """
-    def __init__(self, grille, clock):
+    def __init__(self, interface, grille, clock):
         """
             Constructeur de la classe.
 
@@ -22,24 +22,30 @@ class MoteurJeu:
         """
         #self.joueur = Joueur()
         #self.ia = IA()
+        self.interface = interface
         self.grille = grille
         self.clock = clock
     
     # A tester
-    def Placer(self,jeton):
+    def Placer(self, colonne, idJoueur):
         """
             Méthode permettant la placement d'un jeton dans la grille.
 
             Args:
                 jeton: Jeton à placer dans la grille
         """
-        # colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
-        # if not self.grille.ColonnePleine():
-        #     self.grille.grilleAttente[jeton.x] = jeton.idJoueur
-        # self.grille.grille[jeton.x][colonneJeton] = jeton.idJoueur
-        # print("Jeton placé en (",jeton.x,",",colonneJeton,")")
-        
-        self.grille.RemplirCase(jeton)
+        if not self.grille.ColonnePleine(colonne):
+            caseDispo = self.grille.CasesVides()[colonne]
+            rectCase = None
+            for rect in self.interface.rectList:
+                if rect["coord"] = caseDispo:
+                    rectCase = rect["rect"]
+            jeton = Jeton(idJoueur)
+            self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
+            jetonRect = jeton.sprite.get_rect(center = rectCase.center)
+            self.interface.lacherJeton(jeton, (colonne,caseDispo) )
+        else:
+            print("Vous ne pouvez pas placer de jetons dans cette colonne.")
     
     def Gagnant(self, jeton):
         """

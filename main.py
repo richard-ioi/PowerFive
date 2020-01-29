@@ -36,7 +36,9 @@ InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, A
 
 Joueur = Joueur()
 Jeton = Jeton(0,1)
-    
+
+posSouris = (0,0)
+
 #imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
 #posJeton = -10
 
@@ -51,10 +53,16 @@ while True:
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-    pygame.display.flip()
+        if event.type == MOUSEBUTTONDOWN:
+            print("Placer jeton")
+    
+    posSouris = pygame.mouse.get_pos()
+    
+    
     
     #posJeton += 5
-
+    InterfaceJeu.AttentePlacement(posSouris)
     #Affichage
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     InterfaceJeu.Affichage()
+    pygame.display.update()
