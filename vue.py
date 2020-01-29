@@ -28,7 +28,11 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
+<<<<<<< HEAD
         self.rectList = self.InitRect()
+=======
+        self.rectList = InitRect()
+>>>>>>> df54f475ea758e021b164c1356573717865ce0e8
         self.animBase = animBase
         self.animSpec = animSpec
     
@@ -40,8 +44,11 @@ class Interface:
         self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
         self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
         
+<<<<<<< HEAD
         #!! rectList a ajouter
 
+=======
+>>>>>>> df54f475ea758e021b164c1356573717865ce0e8
         #for animation in self.animBase.values():
             #animation.play = True
 
