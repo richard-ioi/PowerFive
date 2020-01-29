@@ -39,18 +39,28 @@ class Interface:
         self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
         self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
         
-        for animation in self.animBase.values():
-            animation.play = True
+        #for animation in self.animBase.values():
+            #animation.play = True
+
+        self.animBase["Sheriff"].play = True
+        self.animBase["Pingu"].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
+            #print(animation.play)
             if animation.play:
                 animation.update( animation.x_pos, animation.y_pos )
+                if animation == self.animBase["Sheriff"]:
+                    animation.affiche(50,720-64*3-50)
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
-                if animation == self.animBase["Wheatle"]:
+                if animation == self.animBase["Weasel"]:
                     animation.affiche(1000,0)
                 if animation == self.animBase["Jurassy"]:
                     animation.affiche(1000,250)
+                if animation == self.animBase["Pingu"]:
+                    animation.affiche(1280-62*3-50,720-96*3-50)
+                if animation == self.animBase["PinguBad"]:
+                    animation.affiche(50,300)
 
         # if( self.AnimFroggy.play ):
         #     #print("First ",AnimTest.speed)
@@ -64,6 +74,12 @@ class Interface:
         #     #print("First ",AnimTest.speed)
         #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
         #     self.AnimJurassy.affiche(1000,250)
+
+    def InitRect(self):
+        for xColonne in range(self.grille.grille.largeur):
+            for yLigne in range(self.grille.grille.hauteur):
+                pass
+
 
 class Animation:
     """

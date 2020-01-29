@@ -142,7 +142,7 @@ class Jeton:
         self.visible = False
     
     def __str__(self):
-        return f"Jeton({colonne}, {case}, {idJoueur})"
+        return "Jeton({}, {}, {})".format(colonne,case,idJoueur)
     
     def deplacer(self, coord):
         pass
