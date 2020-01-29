@@ -28,6 +28,7 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
+        self.rectList = InitRect()
         self.animBase = animBase
         self.animSpec = animSpec
     
@@ -38,8 +39,6 @@ class Interface:
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
         self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
-        
-        self.InitRect()
         
         #for animation in self.animBase.values():
             #animation.play = True
