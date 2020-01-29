@@ -31,11 +31,10 @@ AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 
 AnimSpec = {}
 
 GrilleDeJeu = Grille()
-MoteurDeJeu = MoteurJeu(GrilleDeJeu, Clock)
 InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
+MoteurDeJeu = MoteurJeu(InterfaceJeu, GrilleDeJeu, Clock)
 
 Joueur = Joueur()
-Jeton = Jeton(0,1)
 
 posSouris = (0,0)
 
@@ -46,15 +45,16 @@ while True:
     Clock.tick(60)
     FPS = Clock.get_fps()
     #print(FPS)
-    event = pygame.event.Event(pygame.USEREVENT)
-    pygame.event.pump()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
-        if event.type == MOUSEBUTTONDOWN:
+        if event.type == pygame.MOUSEBUTTONDOWN:
             print("Placer jeton")
+            for rect in InterfaceJeu.rectColonne:
+                if rect["rect"].collidepoint(posSouris):
+                    MoteurDeJeu.Placer(rect["colonne"],1)
     
     posSouris = pygame.mouse.get_pos()
     
@@ -63,6 +63,6 @@ while True:
     #posJeton += 5
     InterfaceJeu.AttentePlacement(posSouris)
     #Affichage
-    #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     InterfaceJeu.Affichage()
+    #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     pygame.display.update()

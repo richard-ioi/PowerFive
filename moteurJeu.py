@@ -7,6 +7,7 @@
 import pygame
 import os
 from pygame.transform import scale
+from modeles import Jeton
 
 class MoteurJeu:
     """
@@ -34,14 +35,14 @@ class MoteurJeu:
             Args:
                 jeton: Jeton à placer dans la grille
         """
-        if not self.grille.ColonnePleine(colonne):
+        if not self.grille.ColonnePleine(self.grille.grillePrincipal[colonne]):
             caseDispo = self.grille.CasesVides()[colonne]
             rectCase = None
             for rect in self.interface.rectList:
-                if rect["coord"] = caseDispo:
+                if rect["coord"] == caseDispo:
                     rectCase = rect["rect"]
             jeton = Jeton(idJoueur)
-            self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
+            self.grille.grillePrincipal[ colonne ][ caseDispo[1] ] = jeton
             jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, (colonne,caseDispo) )
         else:

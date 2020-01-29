@@ -33,6 +33,11 @@ class Interface:
         self.rectColonne, self.rectList = self.InitRect()
         self.animBase = animBase
         self.animSpec = animSpec
+
+        self.jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
+        self.yJeton = 0
+        self.lacher = False
+        self.colonneXCenter = 0
     
     def Affichage(self):
         """
@@ -40,6 +45,9 @@ class Interface:
         """
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
+        if(self.lacher): 
+            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter-self.jetonSprite.get_width(), self.yJeton) )
+            self.yJeton += 1
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
         
         #!! rectList a ajouter
@@ -80,16 +88,24 @@ class Interface:
         #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
         #     self.AnimJurassy.affiche(1000,250)
 
-    def AttentePlacement(posSouris):
-
+    def AttentePlacement(self,posSouris):
+        pass
 
 
     def lacherJeton(self, jeton, coordCase):
-        center = ()
-        while ()
+        rectCol = None
+        for rectC in self.rectColonne:
+            if rectC["colonne"] == coordCase[0]:
+                rectCol = rectC["rect"]
+        self.colonneXCenter = rectCol.center[0]
+        self.yJeton = rectCol.y+68-self.jetonSprite.get_height()
+        self.lacher = True
+        #while(self.yJeton < rectCol.y+rectCol.h-68):
+            #self.yJeton += 1
+
     
     def InitRect(self):
-        xGrille, yGrille = self.coordGrille[0], self.coordGrille[1]
+        xGrille, yGrille = self.coordGrilleBack[0], self.coordGrilleBack[1]
         rectColonne = [
             {"colonne": 0,  "rect": pygame.Rect(xGrille + 10, yGrille - 68, 60, 612)},
             {"colonne": 1,  "rect": pygame.Rect(xGrille + 70, yGrille - 68, 60, 612)},
