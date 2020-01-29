@@ -33,11 +33,11 @@ AnimSpec = {}
 
 GrilleDeJeu = Grille()
 MoteurDeJeu = MoteurJeu(GrilleDeJeu, Clock)
-InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, rectList, AnimBase, AnimSpec)
+InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
 
 Joueur = Joueur()
 Jeton = Jeton(0,1)
-
+    
 #imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
 #posJeton = -10
 
