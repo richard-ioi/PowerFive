@@ -88,6 +88,7 @@ class Interface:
 
         self.animBase["Sheriff"].play = True
         self.animBase["Pingu"].play = True
+        self.animBase["Weasel"].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #print(animation.play)
@@ -98,7 +99,7 @@ class Interface:
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
                 if animation == self.animBase["Weasel"]:
-                    animation.affiche(1000,0)
+                    animation.affiche(1000,20)
                 if animation == self.animBase["Jurassy"]:
                     animation.affiche(1000,250)
                 if animation == self.animBase["Pingu"]:

@@ -24,9 +24,9 @@ pygame.mixer.music.play(loops=-1,start=0.0)
 
 AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
              "Froggy": Animation(Fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
-             "Weasel": Animation(Fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
              "Jurassy": Animation(Fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72),
              "Pingu": Animation(Fenetre, os.path.join("pingu","char.png"), 0,27,5,True,62,96),
+             "Weasel": Animation(Fenetre, os.path.join("weasel","char.png"),0,13,7,True,62,72),
              "PinguBad": Animation(Fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96) }
 AnimSpec = {}
 
