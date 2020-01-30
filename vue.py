@@ -28,7 +28,7 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
-        self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2, self.hauteur//2 - self.grille.dimSprites[1]//2)
+        self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 )
         self.coordGrilleTop = ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 )
         self.rectColonne, self.rectList = self.InitRect()
         self.animBase = animBase
@@ -56,7 +56,7 @@ class Interface:
                 if rectC["colonne"] == coordCase[0]:
                     rectCol = rectC["rect"]
             colonneXCenter = rectCol.center[0]
-            derniereCaseY = rectCase.y
+            derniereCaseY = rectCase.y + 8
             yJeton = rectCol.y+68-16-jeton.sprite.get_height() + self.distance
             if( yJeton < derniereCaseY ):
                 self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )

@@ -92,12 +92,12 @@ class MoteurJeu:
             if(jetonCaseDiag1 != None):
                 if(jetonCaseDiag1.idJoueur == jeton.idJoueur):
                     print("11: ",jetonCaseDiag1.idJoueur)
-                    #print("diag1 compteur1: ",compteur1)
+                    print("diag1 compteur1: ",compteur1)
                     compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(jetonCaseDiag2 != None):
                 if(jetonCaseDiag2.idJoueur == jeton.idJoueur):
                     print("12: ",jetonCaseDiag2.idJoueur)
-                    #print("diag1 compteur2: ",compteur2)
+                    print("diag1 compteur2: ",compteur2)
                     compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(compteur1 == 5 or compteur2 == 5):
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
@@ -115,12 +115,12 @@ class MoteurJeu:
             if(jetonCaseDiag1 != None):
                 if(jetonCaseDiag1.idJoueur == jeton.idJoueur):
                     print("21: ",jetonCaseDiag1.idJoueur)
-                    #print("diag2 compteur1: ",compteur1)
+                    print("diag2 compteur1: ",compteur1)
                     compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(jetonCaseDiag2 != None):
                 if(jetonCaseDiag2.idJoueur == jeton.idJoueur):
                     print("22: ",jetonCaseDiag2.idJoueur)
-                    #print("diag2 compteur2: ",compteur1)
+                    print("diag2 compteur2: ",compteur1)
                     compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(compteur1 == 5 or compteur2 == 5):
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne

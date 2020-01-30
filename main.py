@@ -52,7 +52,7 @@ while True:
         if event.type == pygame.MOUSEBUTTONDOWN:
             #print(GrilleDeJeu.grillePrincipal)
             for rect in InterfaceJeu.rectColonne:
-                if rect["rect"].collidepoint(posSouris):
+                if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
                     MoteurDeJeu.Placer(rect["colonne"],idJoueur)
 
     if(InterfaceJeu.tourJoueur): idJoueur = 1
