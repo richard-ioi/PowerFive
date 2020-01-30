@@ -34,6 +34,7 @@ class Interface:
         self.animBase = animBase
         self.animSpec = animSpec
 
+        self.tourJoueur = True
         self.jetonsPlaces = []
         self.lacherInfos = (0,0)
         self.lacher = False
@@ -56,7 +57,7 @@ class Interface:
                     rectCol = rectC["rect"]
             colonneXCenter = rectCol.center[0]
             derniereCaseY = rectCase.y
-            yJeton = rectCol.y+68-jeton.sprite.get_height() + self.distance
+            yJeton = rectCol.y+68-16-jeton.sprite.get_height() + self.distance
             if( yJeton < derniereCaseY ):
                 self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )
             else:
@@ -64,6 +65,7 @@ class Interface:
                 yJeton = derniereCaseY+2
                 self.distance = 0
                 self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
+                self.tourJoueur = not self.tourJoueur
                 self.lacher = False
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
@@ -106,8 +108,18 @@ class Interface:
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
 
-    def AttentePlacement(self,posSouris):
-        pass
+    def AttentePlacement(self,posSouris,idJoueur):
+        if(not self.lacher):
+            if( self.coordGrilleBack[0] <= posSouris[0] and posSouris[0] <= self.coordGrilleBack[0]+self.grille.sprites["back"].get_width()  ):
+                rectColonne = pygame.Rect(0,0,0,0)
+                for rect in self.rectColonne:
+                    if rect["rect"].collidepoint((posSouris[0]-5,posSouris[1])):
+                        rectColonne = rect["rect"]
+                        break
+                if(idJoueur == 1): jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
+                else: jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
+                posXColonne = rectColonne.x + rectColonne.w - jetonSprite.get_width()//2-10
+                self.fenetre.blit( jetonSprite, (posXColonne-jetonSprite.get_width()//2,17) )
 
 
     def lacherJeton(self, jeton, rectCase, coordCase):

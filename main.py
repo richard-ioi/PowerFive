@@ -3,7 +3,6 @@
 """
     Fichier principal initialisant l'ensemble des classes du jeu.
 """
-
 import pygame
 import os
 from moteurJeu import *
@@ -34,7 +33,7 @@ GrilleDeJeu = Grille()
 InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
 MoteurDeJeu = MoteurJeu(InterfaceJeu, GrilleDeJeu, Clock)
 
-Joueur = Joueur()
+idJoueur = 0
 
 posSouris = (0,0)
 
@@ -51,18 +50,19 @@ while True:
             pygame.quit()
             quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print("Placer jeton")
+            #print(GrilleDeJeu.grillePrincipal)
             for rect in InterfaceJeu.rectColonne:
                 if rect["rect"].collidepoint(posSouris):
-                    MoteurDeJeu.Placer(rect["colonne"],1)
-    
+                    MoteurDeJeu.Placer(rect["colonne"],idJoueur)
+
+    if(InterfaceJeu.tourJoueur): idJoueur = 1
+    else: idJoueur = 2
+
     posSouris = pygame.mouse.get_pos()
     
-    
-    
-    #posJeton += 5
-    InterfaceJeu.AttentePlacement(posSouris)
     #Affichage
     InterfaceJeu.Affichage()
+    InterfaceJeu.AttentePlacement(posSouris,idJoueur)
+    
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     pygame.display.update()

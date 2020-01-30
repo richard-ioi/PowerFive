@@ -36,15 +36,17 @@ class Grille:
                                [None],  #7
                                [None] ] #8
                              #y  0 1 2 3 4 5 6 7  8     x
-        self.grillePrincipal = [[None,None,None,None,None,None,None,None,-1],  #0
-                                [None,None,None,None,None,None,None,None,-1],  #1
-                                [None,None,None,None,None,None,None,None,-1],  #2
-                                [None,None,None,None,None,None,None,None,-1],  #3
-                                [None,None,None,None,None,None,None,None,-1],  #4
-                                [None,None,None,None,None,None,None,None,-1],  #5
-                                [None,None,None,None,None,None,None,None,-1],  #6
-                                [None,None,None,None,None,None,None,None,-1],  #7
-                                [None,None,None,None,None,None,None,None,-1]]  #8
+        vide = Jeton(0)
+        mur = Jeton(-1)
+        self.grillePrincipal = [[None,None,None,None,None,None,None,None,mur],  #0
+                                [None,None,None,None,None,None,None,None,mur],  #1
+                                [None,None,None,None,None,None,None,None,mur],  #2
+                                [None,None,None,None,None,None,None,None,mur],  #3
+                                [None,None,None,None,None,None,None,None,mur],  #4
+                                [None,None,None,None,None,None,None,None,mur],  #5
+                                [None,None,None,None,None,None,None,None,mur],  #6
+                                [None,None,None,None,None,None,None,None,mur],  #7
+                                [None,None,None,None,None,None,None,None,mur]]  #8
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
@@ -81,6 +83,17 @@ class Grille:
                     casesVides.append( (colonne, case) )
                     break
         return casesVides
+
+    def CaseVideColonne(self,colonne):
+        """
+            Méthode donnant l'ensemble des cases vides disponible dans la grille.
+
+            Return:
+                Une liste de tuples contenant l'index des colonnes et des cases disponibles.
+        """
+        for case in range(self.hauteur, -1, -1):
+            if(self.grillePrincipal[colonne][case] == None):
+                return (colonne, case)
     
     def NbJetonColonne(self, colonne):
         """
@@ -138,7 +151,7 @@ class Jeton:
         self.x = 0
         self.y = 0
         self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) ) if idJoueur == 1 \
-                     else scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
+                     else scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
         self.speed = 2
         self.acceleration = 1.5
         self.visible = False
@@ -151,14 +164,3 @@ class Jeton:
     
     def deplacer(self, coord):
         pass
-
-
-if __name__ == "__main__":
-    maGrille = Grille()
-    monJeton = Jeton(1, 1)
-    print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    maGrille.RemplirCase(monJeton)
-    print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    print(str(maGrille))
