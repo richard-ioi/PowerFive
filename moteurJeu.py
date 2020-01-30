@@ -44,7 +44,8 @@ class MoteurJeu:
             jeton = Jeton(idJoueur)
             self.grille.grillePrincipal[ colonne ][ caseDispo[1] ] = jeton
             jetonRect = jeton.sprite.get_rect(center = rectCase.center)
-            self.interface.lacherJeton(jeton, (colonne,caseDispo) )
+            self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
+            print(caseDispo)
         else:
             print("Vous ne pouvez pas placer de jetons dans cette colonne.")
     

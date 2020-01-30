@@ -34,10 +34,10 @@ class Interface:
         self.animBase = animBase
         self.animSpec = animSpec
 
-        self.jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
-        self.yJeton = 0
+        self.jetonsPlaces = []
+        self.lacherInfos = (0,0)
         self.lacher = False
-        self.colonneXCenter = 0
+        self.distance = 0
     
     def Affichage(self):
         """
@@ -45,9 +45,30 @@ class Interface:
         """
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
-        if(self.lacher): 
-            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter-self.jetonSprite.get_width()//2, self.yJeton) )
-            self.yJeton += 8
+
+        if(self.lacher):
+            rectCol = None
+            jeton = self.lacherInfos[0]
+            rectCase = self.lacherInfos[1]
+            coordCase = self.lacherInfos[2]
+            for rectC in self.rectColonne:
+                if rectC["colonne"] == coordCase[0]:
+                    rectCol = rectC["rect"]
+            colonneXCenter = rectCol.center[0]
+            derniereCaseY = rectCase.y
+            yJeton = rectCol.y+68-jeton.sprite.get_height() + self.distance
+            if( yJeton < derniereCaseY ):
+                self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )
+            else:
+                yJeton = derniereCaseY+2
+                self.distance = 0
+                self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
+                self.lacher = False
+            self.distance += 8
+
+        for iJeton in self.jetonsPlaces:
+            self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
+
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
 
         """for i in range(len(self.rectColonne)):
@@ -57,7 +78,8 @@ class Interface:
             else: 
                 pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))"""
         
-        #!! rectList a ajouter
+
+        #rectList a ajouter
 
         #for animation in self.animBase.values():
             #animation.play = True
@@ -82,40 +104,17 @@ class Interface:
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
 
-        # if( self.AnimFroggy.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimFroggy.update(self.AnimFroggy.x_pos,self.AnimFroggy.y_pos)
-        #     self.AnimFroggy.affiche(1000,520)
-        # if( self.AnimWheatle.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimWheatle.update(self.AnimWheatle.x_pos,self.AnimWheatle.y_pos)
-        #     self.AnimWheatle.affiche(1000,0)
-        # if( self.AnimJurassy.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
-        #     self.AnimJurassy.affiche(1000,250)
-
     def AttentePlacement(self,posSouris):
         pass
 
 
-    def lacherJeton(self, jeton, coordCase):
-        rectCol = None
-        for rectC in self.rectColonne:
-            if rectC["colonne"] == coordCase[0]:
-                rectCol = rectC["rect"]
-        self.colonneXCenter = rectCol.center[0]
-        print("rectCenter = ",self.colonneXCenter)
-        self.yJeton = rectCol.y+68-self.jetonSprite.get_height()
-        print("xJeton = ",self.colonneXCenter-self.jetonSprite.get_width()//2," -- yJeton = ",self.yJeton)
+    def lacherJeton(self, jeton, rectCase, coordCase):
         self.lacher = True
-        #while(self.yJeton < rectCol.y+rectCol.h-68):
-            #self.yJeton += 1
+        self.lacherInfos = (jeton,rectCase,coordCase)
 
     
     def InitRect(self):
         xGrille, yGrille = self.coordGrilleBack[0], self.coordGrilleBack[1]
-        print((xGrille, yGrille))
         rectColonne = [
             {"colonne": 0,  "rect": pygame.Rect(xGrille + 10, yGrille - 68, 60, 612)},
             {"colonne": 1,  "rect": pygame.Rect(xGrille + 70, yGrille - 68, 60, 612)},
