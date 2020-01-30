@@ -28,7 +28,7 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
-        self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 )
+        self.coordGrilleBack = ( self.largeur//2 - self.grille.dimSprites[0]//2, self.hauteur//2 - self.grille.dimSprites[1]//2)
         self.coordGrilleTop = ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 )
         self.rectColonne, self.rectList = self.InitRect()
         self.animBase = animBase
@@ -46,9 +46,16 @@ class Interface:
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
         if(self.lacher): 
-            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter-self.jetonSprite.get_width(), self.yJeton) )
-            self.yJeton += 1
+            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter+4, self.yJeton) )
+            self.yJeton += 8
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
+
+        for i in range(len(self.rectColonne)):
+            rectangle = self.rectColonne[i]["rect"]
+            if( i%2 == 0 ):
+                pygame.draw.rect(self.fenetre,[255,0,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
+            else: 
+                pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
         
         #!! rectList a ajouter
 
@@ -98,7 +105,9 @@ class Interface:
             if rectC["colonne"] == coordCase[0]:
                 rectCol = rectC["rect"]
         self.colonneXCenter = rectCol.center[0]
+        print("rectCenter = ",self.colonneXCenter)
         self.yJeton = rectCol.y+68-self.jetonSprite.get_height()
+        print("xJeton = ",self.colonneXCenter+4," -- yJeton = ",self.yJeton)
         self.lacher = True
         #while(self.yJeton < rectCol.y+rectCol.h-68):
             #self.yJeton += 1
@@ -106,6 +115,7 @@ class Interface:
     
     def InitRect(self):
         xGrille, yGrille = self.coordGrilleBack[0], self.coordGrilleBack[1]
+        print((xGrille, yGrille))
         rectColonne = [
             {"colonne": 0,  "rect": pygame.Rect(xGrille + 10, yGrille - 68, 60, 612)},
             {"colonne": 1,  "rect": pygame.Rect(xGrille + 70, yGrille - 68, 60, 612)},
