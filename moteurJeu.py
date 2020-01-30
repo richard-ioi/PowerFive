@@ -35,7 +35,7 @@ class MoteurJeu:
             Args:
                 jeton: Jeton à placer dans la grille
         """
-        if not self.grille.ColonnePleine(self.grille.grillePrincipal[colonne]):
+        if (not self.grille.ColonnePleine(self.grille.grillePrincipal[colonne]) and not self.interface.lacher):
             caseDispo = self.grille.CasesVides()[colonne]
             rectCase = None
             for rect in self.interface.rectList:
@@ -43,9 +43,12 @@ class MoteurJeu:
                     rectCase = rect["rect"]
             jeton = Jeton(idJoueur)
             self.grille.grillePrincipal[ colonne ][ caseDispo[1] ] = jeton
-            jetonRect = jeton.sprite.get_rect(center = rectCase.center)
+            #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             print(caseDispo)
+            jeton.x = caseDispo[0]
+            jeton.y = caseDispo[1]
+            print("Gagnant : Joueur ",self.Gagnant(jeton))
         else:
             print("Vous ne pouvez pas placer de jetons dans cette colonne.")
     
@@ -60,22 +63,24 @@ class MoteurJeu:
         compteur = 0
         # Vérification colonne
         for elmC in range(jeton.y, self.grille.hauteur, 1):
-            if( self.grille.grillePrincipal[jeton.x][elmC] == jeton.idJoueur ):
-                compteur += 1
-            else:
-                compteur = 0
-                break
-            if compteur == 5:
-                return jeton.idJoueur
+            if( self.grille.grillePrincipal[jeton.x][elmC] != None ):
+                if( self.grille.grillePrincipal[jeton.x][elmC].idJoueur == jeton.idJoueur ):
+                    compteur += 1
+                else:
+                    compteur = 0
+                    break
+                if compteur == 5:
+                    return jeton.idJoueur
         compteur = 0
         # Vérificaion ligne
         for elmL in range(self.grille.largeur):
-            if( self.grille.grillePrincipal[elmL][jeton.y] == jeton.idJoueur ):
-                compteur += 1
-            else:
-                compteur = 0
-            if compteur == 5:
-                return jeton.idJoueur
+            if( self.grille.grillePrincipal[elmL][jeton.y] != None ):
+                if( self.grille.grillePrincipal[elmL][jeton.y].idJoueur == jeton.idJoueur ):
+                    compteur += 1
+                else:
+                    compteur = 0
+                if compteur == 5:
+                    return jeton.idJoueur
         compteur = 0
         compteur1 = 0
         compteur2 = 0
@@ -92,10 +97,8 @@ class MoteurJeu:
                 compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(compteur1 == 5 or compteur2 == 5):
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
-            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):
-                print("STOP")    #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
+            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):   #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
                 break
-        print("###")
         compteur1 -= 1
         compteur2 -= 1
         for elmD2 in range(self.grille.hauteur):
@@ -109,8 +112,7 @@ class MoteurJeu:
                 compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(compteur1 == 5 or compteur2 == 5):
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
-            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):
-                print("STOP")    #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
+            elif(caseDiag1 != jeton.idJoueur and caseDiag2 != jeton.idJoueur):   #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
                 break
         compteur1 = 0
         compteur2 = 0

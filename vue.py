@@ -60,11 +60,13 @@ class Interface:
             if( yJeton < derniereCaseY ):
                 self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )
             else:
+                #self.rebondJeton(derniereCaseY+2,jeton)
                 yJeton = derniereCaseY+2
                 self.distance = 0
                 self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
                 self.lacher = False
-            self.distance += 8
+            jeton.speed += jeton.acceleration
+            self.distance += jeton.speed
 
         for iJeton in self.jetonsPlaces:
             self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
@@ -112,6 +114,9 @@ class Interface:
         self.lacher = True
         self.lacherInfos = (jeton,rectCase,coordCase)
 
+    """def rebondJeton(self, yMax, jeton):
+        jeton.acceleration = -2
+        jeton.speed = -1"""
     
     def InitRect(self):
         xGrille, yGrille = self.coordGrilleBack[0], self.coordGrilleBack[1]
