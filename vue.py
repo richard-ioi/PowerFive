@@ -74,8 +74,8 @@ class Interface:
 
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
 
-        if (self.ultimatetat==0):
-            self.fenetre.blit( self.grille.sprites["ultimate1"], (80,250))
+        #if (self.ultimatetat==0):
+            #self.fenetre.blit( self.grille.sprites["ultimate1"], (80,250))
         #elif (self.ultimatetat==1):
             #self.animBase["Ultimateboucle0"].play= True
         #elif (self.ultimatetat==2)
@@ -95,7 +95,8 @@ class Interface:
 
         self.animBase["Sheriff"].play = True
         self.animBase["Pingu"].play = True
-        self.animBase["Weasel"].play = True
+        #self.animBase["Weasel"].play = True
+        #self.animBase["Ultimatebouton"].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #print(animation.play)
@@ -103,8 +104,8 @@ class Interface:
                 animation.update( animation.x_pos, animation.y_pos )
                 if animation == self.animBase["Sheriff"]:
                     animation.affiche(50,720-64*3-50)
-                #if animation == self.animBase["Ultimateboucle0"]:
-                  #  animation.affiche(80,250)
+                if animation == self.animBase["Ultimatebouton"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
                 if animation == self.animBase["Weasel"]:
@@ -115,6 +116,11 @@ class Interface:
                     animation.affiche(1280-62*3-50,720-96*3-50)
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
+                #AnimSpec
+                if animation == self.animSpec["bouton"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
+                if animation == self.animSpec["bouton2"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
 
     def AttentePlacement(self,posSouris):
         pass
@@ -221,7 +227,7 @@ class Animation:
     """
         Classe définissant les animations du jeu.
     """
-    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64):
+    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False):
         """
             Constructeur de la classe
 
@@ -246,9 +252,15 @@ class Animation:
         self.sprite_list = []
         self.speed = speed
         self.isLoop = loop
-        self.play = False
+        self.coeffAgrandir = coeffAgrandir
+        self.play = playAtStart
         self.play_count = 0
         self.update(self.x_pos,self.y_pos)
+        self.rect = None
+        self.nextAnim = nextAnim
+
+    def creerRect(self, x, y):
+        self.rect = pygame.Rect(x, y, self.larg_sprite*self.coeffAgrandir, self.haut_sprite*self.coeffAgrandir)
 
     def update(self, x_sprites=1, y_sprites=1):
         """
@@ -265,10 +277,10 @@ class Animation:
             #print(x_sprites+(self.larg_sprite+1)*i_sprite)
             sprite = self.palette.subsurface(x_sprites+(self.larg_sprite+2)*i_sprite, y_sprites, self.larg_sprite-1, self.haut_sprite-1)
             #if self.palette_name == "microman_sprites.png":
-            sprite = scale(sprite, (self.larg_sprite*3,self.haut_sprite*3))
+            sprite = scale(sprite, (self.larg_sprite*self.coeffAgrandir,self.haut_sprite*self.coeffAgrandir))
             self.sprite_list.append(sprite)
 
-    def affiche(self, x, y):
+    def affiche(self, x, y, nouveauRect=False):
         """
             Méhode affichant l'animation.
 
@@ -276,13 +288,20 @@ class Animation:
                 x:
                 y: 
         """
-        #print(new_speed)
+        if nouveauRect:
+            #Si on le demande on cree un Rect correspondant à l'image affichée
+            self.creerRect(x,y)
+
         if self.play_count >= self.nb_sprites * self.speed:
             if self.isLoop:
                 self.play_count = 0
             else:
                 self.play_count = 0
                 self.play = False
+                if(self.nextAnim != None): 
+                    self.nextAnim.play = True
+                    #self.nextAnim.affiche(x,y-200)
+                    print("Affiche nextAnim")
         if self.play:
             sprite = self.sprite_list[self.play_count//self.speed]
             self.fenetre.blit(sprite, (x,y))
