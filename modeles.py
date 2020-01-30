@@ -38,7 +38,7 @@ class Grille:
                              #y  0 1 2 3 4 5 6 7  8     x
         vide = Jeton(0)
         mur = Jeton(-1)
-        self.grillePrincipal = [[None,None,None,None,None,None,None,None,mur],  #0
+        """self.grillePrincipal = [[None,None,None,None,None,None,None,None,mur],  #0
                                 [None,None,None,None,None,None,None,None,mur],  #1
                                 [None,None,None,None,None,None,None,None,mur],  #2
                                 [None,None,None,None,None,None,None,None,mur],  #3
@@ -46,7 +46,16 @@ class Grille:
                                 [None,None,None,None,None,None,None,None,mur],  #5
                                 [None,None,None,None,None,None,None,None,mur],  #6
                                 [None,None,None,None,None,None,None,None,mur],  #7
-                                [None,None,None,None,None,None,None,None,mur]]  #8
+                                [None,None,None,None,None,None,None,None,mur]]  #8"""
+        self.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
+                                [0,0,0,0,0,0,0,0,-1],  #1
+                                [0,0,0,0,0,0,0,0,-1],  #2
+                                [0,0,0,0,0,0,0,0,-1],  #3
+                                [0,0,0,0,0,0,0,0,-1],  #4
+                                [0,0,0,0,0,0,0,0,-1],  #5
+                                [0,0,0,0,0,0,0,0,-1],  #6
+                                [0,0,0,0,0,0,0,0,-1],  #7
+                                [0,0,0,0,0,0,0,0,-1]]  #8
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
@@ -92,7 +101,7 @@ class Grille:
                 Une liste de tuples contenant l'index des colonnes et des cases disponibles.
         """
         for case in range(self.hauteur, -1, -1):
-            if(self.grillePrincipal[colonne][case] == None):
+            if(self.grillePrincipal[colonne][case] == 0):
                 return (colonne, case)
     
     def NbJetonColonne(self, colonne):
@@ -107,7 +116,7 @@ class Grille:
         """
         nbJeton = 0
         for jeton in colonne:
-            if jeton != None:
+            if jeton != 0:
                 nbJeton += 1
         return nbJeton
     
