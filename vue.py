@@ -46,16 +46,16 @@ class Interface:
         self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
         if(self.lacher): 
-            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter+4, self.yJeton) )
+            self.fenetre.blit(self.jetonSprite, (self.colonneXCenter-self.jetonSprite.get_width()//2, self.yJeton) )
             self.yJeton += 8
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
 
-        for i in range(len(self.rectColonne)):
+        """for i in range(len(self.rectColonne)):
             rectangle = self.rectColonne[i]["rect"]
             if( i%2 == 0 ):
                 pygame.draw.rect(self.fenetre,[255,0,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
             else: 
-                pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
+                pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))"""
         
         #!! rectList a ajouter
 
@@ -107,7 +107,7 @@ class Interface:
         self.colonneXCenter = rectCol.center[0]
         print("rectCenter = ",self.colonneXCenter)
         self.yJeton = rectCol.y+68-self.jetonSprite.get_height()
-        print("xJeton = ",self.colonneXCenter+4," -- yJeton = ",self.yJeton)
+        print("xJeton = ",self.colonneXCenter-self.jetonSprite.get_width()//2," -- yJeton = ",self.yJeton)
         self.lacher = True
         #while(self.yJeton < rectCol.y+rectCol.h-68):
             #self.yJeton += 1
