@@ -27,8 +27,11 @@ AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 
              "Jurassy": Animation(Fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72),
              "Pingu": Animation(Fenetre, os.path.join("pingu","char.png"), 0,27,5,True,62,96),
              "Weasel": Animation(Fenetre, os.path.join("weasel","char.png"),0,13,7,True,62,72),
+             "Ultimateboucle0": Animation(Fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,1,True,58,46),
+             #"Ultimateboucle": Animation(Fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,1,True,58,46),
              "PinguBad": Animation(Fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96) }
-AnimSpec = {}
+
+AnimSpec = { }
 
 GrilleDeJeu = Grille()
 InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)

@@ -38,6 +38,7 @@ class Interface:
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
+        self.ultimatetat = 0
     
     def Affichage(self):
         """
@@ -73,6 +74,13 @@ class Interface:
 
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
 
+        if (self.ultimatetat==0):
+            self.fenetre.blit( self.grille.sprites["ultimate1"], (80,250))
+        #elif (self.ultimatetat==1):
+            #self.animBase["Ultimateboucle0"].play= True
+        #elif (self.ultimatetat==2)
+
+
         """for i in range(len(self.rectColonne)):
             rectangle = self.rectColonne[i]["rect"]
             if( i%2 == 0 ):
@@ -80,8 +88,7 @@ class Interface:
             else: 
                 pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))"""
         
-
-        #rectList a ajouter
+        #!! rectList a ajouter
 
         #for animation in self.animBase.values():
             #animation.play = True
@@ -96,6 +103,8 @@ class Interface:
                 animation.update( animation.x_pos, animation.y_pos )
                 if animation == self.animBase["Sheriff"]:
                     animation.affiche(50,720-64*3-50)
+                #if animation == self.animBase["Ultimateboucle0"]:
+                  #  animation.affiche(80,250)
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
                 if animation == self.animBase["Weasel"]:

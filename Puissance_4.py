@@ -184,7 +184,7 @@ def MouseClick(event):
 
 # fenetre
 window = tkinter.Tk()
-window.geometry("300x500") 
+window.geometry("1280x720") 
 window.title('Mon Super Jeu')
 window.protocol("WM_DELETE_WINDOW", lambda : window.destroy())
 window.bind("<Button-1>", MouseClick)

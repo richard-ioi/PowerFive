@@ -48,7 +48,8 @@ class Grille:
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
-                         "back": scale(pygame.image.load(os.path.join("data","graphismes","grille_back.png")), (140*4,141*4)) }
+                         "back": scale(pygame.image.load(os.path.join("data","graphismes","grille_back.png")), (140*4,141*4)),
+                         "ultimate1":scale(pygame.image.load(os.path.join("data","graphismes","ultimate","ultimate1.png")), (58*3,46*3)) }
         self.dimSprites = ( self.sprites["top"].get_width(), self.sprites["top"].get_height() )
 
     def __str__(self):
