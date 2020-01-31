@@ -12,6 +12,7 @@ from vue import *
 pygame.init()
 Clock = pygame.time.Clock()
 
+
 largeurFenetre = 1280
 hauteurFenetre = 720
 Fenetre = pygame.display.set_mode( (largeurFenetre, hauteurFenetre) )
@@ -69,11 +70,12 @@ while True:
     if(InterfaceJeu.tourJoueur): idJoueur = 1
     else: idJoueur = 2
     posSouris = pygame.mouse.get_pos()
-
     #Affichage
     boutonUlti.updateCurrentAnim(condition=boutonUlti.clicked)
     InterfaceJeu.Affichage()
     InterfaceJeu.AttentePlacement(posSouris,idJoueur)
     
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
+    
+    InterfaceJeu.afficheTexte(1,"YEEEEEEEEEEEHAW SALUT LA TEAM JE VIENS DEFONCER VOS SALES GUEULES ! OH TU FAIS QUOI LA? ESPECE DE SOUS MERDE JE VAIS TE DEFONCER LA GUEULE A COUP DE CLE A MOLETTE T'ES AUSSI MOCHE QUE GUILLAIME BAZIN")
     pygame.display.update()

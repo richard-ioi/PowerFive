@@ -6,6 +6,7 @@
 
 import pygame
 import os
+import unicodedata
 from pygame.transform import scale
 
 class Interface:
@@ -39,7 +40,68 @@ class Interface:
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
-        self.ultimatetat = 0
+        self.compteur=0
+        self.texteFini=False
+        self.texteFinal=""
+        self.texteFinal2=""
+        self.texteFinal3=""
+        self.texteSuite=""
+
+    def afficheTexte(self,idJoueur,aTexte):
+        if idJoueur==1:
+            img=scale(pygame.image.load(os.path.join("data","graphismes","speech_gauche.png")),(62*4,23*4))
+            x=180
+            y=400
+        elif idJoueur==2:
+            img=img=scale(pygame.image.load(os.path.join("data","graphismes","speech_droite.png")),(62*4,23*4))
+            x=815
+            y=400
+
+        police = pygame.font.Font(None,20)
+        policespeciale=pygame.font.Font("data/polices/arial.ttf",9)
+        texteRendu = police.render(self.texteFinal,True,pygame.Color("#000000"))
+        texteRendu2 = police.render(self.texteFinal2,True,pygame.Color("#000000"))
+        texteRendu3 = police.render(self.texteFinal3,True,pygame.Color("#000000"))
+        texteSuiteRendu = policespeciale.render(self.texteSuite,True,pygame.Color("#000000"))
+        
+        if self.compteur!=len(aTexte):
+
+            if (self.texteFini!=True):
+                if(texteRendu.get_width()<=(62-9)*4):
+                    self.texteFinal+=aTexte[self.compteur]
+                elif((texteRendu.get_width()>=((62-9)*4)) and (texteRendu2.get_width()<(62-9)*4)):
+                    if (aTexte[self.compteur]!=' ' and (texteRendu2.get_width()<5)):
+                        self.texteFinal+="-"
+                    self.texteFinal2+=aTexte[self.compteur]
+                elif (texteRendu2.get_width()>=((62-9)*4) and texteRendu3.get_width()<(62-9)*4):
+                    if (aTexte[self.compteur]!=' ' and (texteRendu3.get_width()<5)):
+                        self.texteFinal2+="-"
+                    self.texteFinal3+=aTexte[self.compteur]
+                elif (texteRendu3.get_width()>=(62-9)*4):
+                    self.texteSuite = "suite"
+                    self.compteur-=1
+                    self.texteFini=True
+                    for event in pygame.event.get():
+                        if event.type==pygame.KEYDOWN:
+                            if event.key==pygame.K_RETURN:
+                                print("ENTREE")
+                                self.texteSuite=""
+                                self.texteFinal=""
+                                self.texteFinal2=""
+                                self.texteFinal3=""
+            self.compteur+=1
+        else:
+            self.compteur=0
+            self.texteFini=True
+        
+        if self.texteFini:
+            print("TRUE")
+
+        self.fenetre.blit(img, (x,y))
+        self.fenetre.blit(texteRendu,(x+10,y+10))
+        self.fenetre.blit(texteRendu2,(x+10,y+25))
+        self.fenetre.blit(texteRendu3,(x+10,y+40))
+        self.fenetre.blit(texteSuiteRendu,(x+(62-7)*4,y+55))
     
     def Affichage(self):
         """
@@ -318,12 +380,15 @@ class Animation:
             self.fenetre.blit(sprite, (x,y))
             self.play_count += 1
 
+            
+
 class Personnage:
     """
         Classe représentant un personnage.
     """
     def __init__(self, idJoueur):
         self.idJoueur = idJoueur
+
 
 
 class Joueur(Personnage):
