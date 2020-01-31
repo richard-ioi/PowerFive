@@ -6,6 +6,7 @@
 
 import pygame
 import os
+import time
 from pygame.transform import scale
 
 class Interface:
@@ -33,12 +34,28 @@ class Interface:
         self.rectColonne, self.rectList = self.InitRect()
         self.animBase = animBase
         self.animSpec = animSpec
+        self.moteurJeu = None
 
         self.tourJoueur = True
         self.jetonsPlaces = []
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
+
+    def Reinitialiser(self):
+        #On réinitialise la grille de jeu après 1sec
+        time.sleep(1)
+        self.tourJoueur = True
+        self.jetonsPlaces = []
+        self.grille.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
+                                    [0,0,0,0,0,0,0,0,-1],  #1
+                                    [0,0,0,0,0,0,0,0,-1],  #2
+                                    [0,0,0,0,0,0,0,0,-1],  #3
+                                    [0,0,0,0,0,0,0,0,-1],  #4
+                                    [0,0,0,0,0,0,0,0,-1],  #5
+                                    [0,0,0,0,0,0,0,0,-1],  #6
+                                    [0,0,0,0,0,0,0,0,-1],  #7
+                                    [0,0,0,0,0,0,0,0,-1]]  #8
     
     def Affichage(self):
         """
@@ -64,9 +81,13 @@ class Interface:
                 #self.rebondJeton(derniereCaseY+2,jeton)
                 yJeton = derniereCaseY+2
                 self.distance = 0
-                self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
+                self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2, yJeton)))
                 self.tourJoueur = not self.tourJoueur
                 self.lacher = False
+                gagnant = self.moteurJeu.Gagnant(jeton)
+                if(gagnant != 0):
+                    self.Reinitialiser()
+                    print("Gagnant : Joueur ",gagnant)
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
 
@@ -109,18 +130,18 @@ class Interface:
                     animation.affiche(50,300)
 
     def AttentePlacement(self,posSouris,idJoueur):
-        if(not self.lacher):
+        if(not self.lacher and idJoueur == 1):
             if( self.coordGrilleBack[0] <= posSouris[0] and posSouris[0] <= self.coordGrilleBack[0]+self.grille.sprites["back"].get_width()  ):
                 rectColonne = pygame.Rect(0,0,0,0)
                 for rect in self.rectColonne:
                     if rect["rect"].collidepoint((posSouris[0]-5,posSouris[1])):
                         rectColonne = rect["rect"]
                         break
-                if(idJoueur == 1): jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
-                else: jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
+                #if(idJoueur == 1): jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
+                #else: jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
+                jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
                 posXColonne = rectColonne.x + rectColonne.w - jetonSprite.get_width()//2-10
                 self.fenetre.blit( jetonSprite, (posXColonne-jetonSprite.get_width()//2,17) )
-
 
     def lacherJeton(self, jeton, rectCase, coordCase):
         self.lacher = True

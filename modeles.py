@@ -79,7 +79,7 @@ class Grille:
         casesVides = []
         for colonne in range(len(self.grillePrincipal)):
             for case in range(self.hauteur, -1, -1):
-                if(self.grillePrincipal[colonne][case] == None):
+                if(self.grillePrincipal[colonne][case] == 0):
                     casesVides.append( (colonne, case) )
                     break
         return casesVides

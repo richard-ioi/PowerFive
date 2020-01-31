@@ -6,6 +6,7 @@
 
 import pygame
 import os
+import random
 from pygame.transform import scale
 from modeles import Jeton
 
@@ -24,8 +25,10 @@ class MoteurJeu:
         #self.joueur = Joueur()
         #self.ia = IA()
         self.interface = interface
+        self.interface.moteurJeu = self
         self.grille = grille
         self.clock = clock
+
     
     # A tester
     def Placer(self, colonne, idJoueur):
@@ -47,10 +50,7 @@ class MoteurJeu:
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             jeton.x = caseDispo[0]
             jeton.y = caseDispo[1]
-            print(jeton)
-            print("Gagnant : Joueur ",self.Gagnant(jeton))
-        else:
-            print("Vous ne pouvez pas placer de jetons dans cette colonne.")
+            #print(jeton)
     
     def Gagnant(self, jeton):
         """
@@ -210,11 +210,49 @@ class Jukebox:
     def exist(self, titre):
         return titre in self.musics.keys() or titre in self.sounds.keys()
 
-    def playMusic(self, music = self.currentMusic, loop = -1, start = 0.0):
+    def playMusic(self, music, loop = -1, start = 0.0):
         if music != self.currentMusic and self.exist(music):
             pygame.mixer.music.load(self.musics[music])
             pygame.mixer.music.play(loops = loop, start = start)
     
-    def playSound(self, sound)
+    def playSound(self, sound):
         if self.exist(sound):
             self.sounds.play()
+
+class IA:
+    def __init__(self, moteurJeu):
+        self.idIA = 2
+        self.moteurJeu = moteurJeu
+
+    def IAPlay(self):
+        coupPossibles = self.moteurJeu.grille.CasesVides()
+        randomCoup = random.randrange(len(coupPossibles))
+        self.moteurJeu.Placer( coupPossibles[randomCoup][0], self.idIA )
+        
+
+    """def CalculScore():
+        gagnant = MoteurJeu.Gagnant(Jeton)
+        if gagnant == 1:
+            return (1,0)
+        elif gagnant == 2:
+            return (0,1)
+        else:
+            return(0,0)
+
+    def Simulation(self,jeton):
+        if self.MoteurJeu.Gagnant(jeton):
+            return (CalculScore(), None)
+        L=self.grille.CasesVides()
+        resultat=[]
+        for K in L:
+            self.grille[K[0]][K[1]]=jeton.idJoueur
+            if jeton.idJoueur==2:
+                score = Simulation(1)[0]
+                gain = score[1] - score[0]
+            else:
+                score = Simulation(2)[0]
+                gain = score[0] - score[1]
+            resultat.append((score,gain,K))
+            self.grille[K[0]][K[1]]=0
+        gainmax=max(resultat, key=lambda res: res[1])
+        return (gainmax[0], gainmax[2])"""

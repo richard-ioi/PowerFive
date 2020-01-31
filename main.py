@@ -2,6 +2,7 @@
 
 import pygame
 import os
+import sys
 from controleur import *
 from modeles import *
 from vue import *
@@ -23,11 +24,11 @@ class Main:
         self.hauteur = 720
         self.titre = "PowerFive"
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
-        self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",
+        """self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",
                                          "Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
                               sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
                                          "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
-        self.music.playMusic("Pingu")
+        self.music.playMusic("Pingu")"""
         self.animBase = { "Sheriff": Animation(self.fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
                           "Froggy": Animation(self.fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
                           "Weasel": Animation(self.fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
@@ -38,6 +39,7 @@ class Main:
         self.grille = Grille()
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
+        self.ia = IA(self.moteur)
     
     def mainLoop(self):
         while True:
@@ -45,7 +47,7 @@ class Main:
             pygame.display.set_caption(self.titre)
 
             posSouris = pygame.mouse.get_pos()
-            
+            #print(self.interface.finiPlacer)
             if self.interface.tourJoueur:
                 idJoueur = 1
             else:
@@ -57,9 +59,11 @@ class Main:
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
                     for rect in self.interface.rectColonne:
-                        if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
-                            self.moteur.Placer(rect["colonne"], idJoueur)
-
+                        if(self.interface.tourJoueur):
+                            if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
+                                self.moteur.Placer(rect["colonne"], idJoueur)
+            if(not self.interface.tourJoueur):
+                self.ia.IAPlay()
             self.interface.Affichage()
             self.interface.AttentePlacement(posSouris, idJoueur)
 
