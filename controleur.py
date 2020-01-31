@@ -218,3 +218,35 @@ class Jukebox:
     def playSound(self, sound)
         if self.exist(sound):
             self.sounds.play()
+
+class IA:
+    def __init__(self, jeton, grille):
+        self.jeton = jeton
+        self.grille = grille
+
+    def CalculScore():
+        gagnant = MoteurJeu.Gagnant(Jeton)
+        if gagnant == 1:
+            return (1,0)
+        elif gagnant == 2:
+            return (0,1)
+        else:
+            return(0,0)
+
+    def Simulation(self,jeton):
+        if self.MoteurJeu.Gagnant(jeton):
+            return (CalculScore(), None)
+        L=self.grille.CasesVides()
+        resultat=[]
+        for K in L:
+            self.grille[K[0]][K[1]]=jeton.idJoueur
+            if jeton.idJoueur==2:
+                score = Simulation(1)[0]
+                gain = score[1] - score[0]
+            else:
+                score = Simulation(2)[0]
+                gain = score[0] - score[1]
+            resultat.append((score,gain,K))
+            self.grille[K[0]][K[1]]=0
+        gainmax=max(resultat, key=lambda res: res[1])
+        return (gainmax[0], gainmax[2])

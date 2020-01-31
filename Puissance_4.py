@@ -23,9 +23,12 @@ TourJoueur = True
 def Initialisation():
     global Grille
     time.sleep(1.5)
-    Grille = [ [0,0,0], 
-               [0,0,0], 
-               [0,0,0] ] # attention les lignes représentent les colonnes de la grille
+    Grille = [ [0,0,0,0,0,0,0], 
+               [0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0],
+               [0,0,0,0,0,0,0], 
+               [0,0,0,0,0,0,0] ] # attention les lignes représentent les colonnes de la grille
     Affiche()
 
 #
