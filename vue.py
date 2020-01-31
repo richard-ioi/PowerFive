@@ -65,8 +65,8 @@ class Interface:
         texteSuiteRendu = policespeciale.render(self.texteSuite,True,pygame.Color("#000000"))
         
         if self.compteur!=len(aTexte):
-
             if (self.texteFini!=True):
+                self.texteFini=False
                 if(texteRendu.get_width()<=(62-9)*4):
                     self.texteFinal+=aTexte[self.compteur]
                 elif((texteRendu.get_width()>=((62-9)*4)) and (texteRendu2.get_width()<(62-9)*4)):
@@ -81,15 +81,18 @@ class Interface:
                     self.texteSuite = "suite"
                     self.compteur-=1
                     self.texteFini=True
-                    for event in pygame.event.get():
-                        if event.type==pygame.KEYDOWN:
-                            if event.key==pygame.K_RETURN:
-                                print("ENTREE")
-                                self.texteSuite=""
-                                self.texteFinal=""
-                                self.texteFinal2=""
-                                self.texteFinal3=""
-            self.compteur+=1
+                self.compteur+=1
+
+            elif (self.texteFini):
+                for event in pygame.event.get():
+                    if event.type==pygame.KEYDOWN:
+                        if event.key==pygame.K_RETURN:
+                            print("ENTREE")
+                            self.texteSuite=""
+                            self.texteFinal=""
+                            self.texteFinal2=""
+                            self.texteFinal3=""
+                            self.texteFini=False
         else:
             self.compteur=0
             self.texteFini=True
