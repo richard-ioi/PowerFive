@@ -2,7 +2,7 @@
 
 import pygame
 import os
-from moteurJeu import *
+from controleur import *
 from modeles import *
 from vue import *
 
@@ -27,6 +27,7 @@ class Main:
                                          "Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
                               sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
                                          "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
+        self.music.playMusic("Pingu")
         self.animBase = { "Sheriff": Animation(self.fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
                           "Froggy": Animation(self.fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
                           "Weasel": Animation(self.fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),

@@ -202,7 +202,7 @@ class Jukebox:
         Classe permettant la manipulation de la musique et des sons du jeu.
     """
 
-    def __init__(musics, sounds):
+    def __init__(self, musics, sounds):
         self.musics = musics
         self.sounds = sounds
         self.currentMusic = self.musics["Pingu"]
