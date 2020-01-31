@@ -56,7 +56,6 @@ while True:
             pygame.quit()
             quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            print("Placer jeton")
             if( AnimBase["Ultimatebouton"].rect.collidepoint(posSouris) ):
                 print("Button pressed")
                 boutonUlti_animActuel.play = False

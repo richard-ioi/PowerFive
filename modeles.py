@@ -121,6 +121,7 @@ class Grille:
         case = self.CasesVides()[colonne][1]
         self.grillePrincipal[colonne][case] = Jeton(idJoueur)
 
+
 class Jeton:
     """
         Classe représentant les jetons du jeu.
@@ -152,6 +153,18 @@ class Jeton:
     
     def deplacer(self, coord):
         pass
+
+class Bouton:
+    def __init__(self,posX,posY,animList):
+        self.posX = posX
+        self.posY = posY
+        self.animList = animList
+        self.currentAnim = self.animList[0]
+
+    def selectAnim(self, indice):
+        self.currentAnim = self.animList[indice]
+        self.currentAnim.creerRect(self.posX, self.posY)
+
 
 
 if __name__ == "__main__":
