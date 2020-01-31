@@ -164,3 +164,25 @@ class Jeton:
     
     def deplacer(self, coord):
         pass
+
+    class Jukebox:
+        """
+            Classe permettant la manipulation de la musique et des sons du jeu.
+        """
+
+        def __init__(musics, sounds):
+            self.musics = musics
+            self.sounds = sounds
+            self.currentMusic = self.musics["Pingu"]
+        
+        def exist(self, titre):
+            return titre in self.musics.keys() or titre in self.sounds.keys()
+
+        def playMusic(self, music = self.currentMusic, loop = -1, start = 0.0):
+            if music != self.currentMusic and self.exist(music):
+                pygame.mixer.music.load(self.musics[music])
+                pygame.mixer.music.play(loops = loop, start = start)
+        
+        def playSound(self, sound)
+            if self.exist(sound):
+                self.sounds.play()
