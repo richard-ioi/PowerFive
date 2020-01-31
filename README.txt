@@ -1,1 +1,0 @@
-Jeu du Puissance 4, contre une IA
