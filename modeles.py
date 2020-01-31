@@ -167,20 +167,57 @@ class Jeton:
     def deplacer(self, coord):
         pass
 
-class Bouton:
-    def __init__(self,posX,posY,animList):
+class ObjetAnimMultiple:
+    """Classe ObjetAnimMultiple qui permet de gerer les differents etats, par exemple pour un bouton,
+    notamment les changement d'animation avec updateCurrentAnim()"""
+
+    def __init__(self,posX,posY,animList,listGlobale,name="Bouton"):
         self.posX = posX
         self.posY = posY
         self.animList = animList
-        self.currentAnim = self.animList[0]
+        self.idAnim = 0
+        self.currentAnim = self.animList[self.idAnim]
+        self.name = name
+        self.listGlobale = listGlobale
+        self.listGlobale.update( {self.name:self.currentAnim} )
+        self.clicked = False
+
+    def Reinitialiser(self):
+        for anim in self.animList:
+            anim.Reinitialiser()
+        self.idAnim = 0
+        self.currentAnim = self.animList[self.idAnim]
+        self.listGlobale.update( {self.name:self.currentAnim} )
+        self.listGlobale[self.name].play = True
+        self.clicked = False
 
     def selectAnim(self, indice):
         self.currentAnim = self.animList[indice]
-        self.currentAnim.creerRect(self.posX, self.posY)
+        #self.currentAnim.creerRect(self.posX, self.posY)
+        self.listGlobale.update( {self.name:self.currentAnim} )
+        self.listGlobale[self.name].play = True
+
+    def updateCurrentAnim(self, condition=True, conditions=None, indice=-1):
+        #Update l'animation courante pour la suivante dans la liste d'animation, selon une condition en parametre
+        if(self.idAnim >= len(self.animList)-1): self.idAnim = len(self.animList)-1
+        else:
+            if(conditions != None): condition = conditions[self.idAnim] # PROBLEME!!! Les conditions ne s'update pas !
+            if( indice != -1 ):
+                self.selectAnim(indice)
+            if not self.currentAnim.isLoop :
+                if condition and self.currentAnim.done:
+                    self.idAnim += 1
+            elif self.currentAnim.isLoop:
+                if condition:
+                    self.idAnim += 1
+        self.currentAnim = self.animList[self.idAnim]
+        self.listGlobale.update( {self.name:self.currentAnim} )
+        self.listGlobale[self.name].play = True
 
 
 
-if __name__ == "__main__":
+
+"""if __name__ == "__main__":
     maGrille = Grille()
     monJeton = Jeton(1, 1)
     print(maGrille.CasesVides())
@@ -188,4 +225,4 @@ if __name__ == "__main__":
     maGrille.RemplirCase(monJeton)
     print(maGrille.CasesVides())
     print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    print(str(maGrille))
+    print(str(maGrille))"""

@@ -26,12 +26,13 @@ AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 
              "Jurassy": Animation(Fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72),
              "Pingu": Animation(Fenetre, os.path.join("pingu","char.png"), 0,27,5,True,62,96),
              "Weasel": Animation(Fenetre, os.path.join("weasel","char.png"),0,13,7,True,62,72),
-             "PinguBad": Animation(Fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96),
-             "Ultimatebouton": Animation(Fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,46,None,3,True),
-             "Ultimateboucle": Animation(Fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,46),
-             "Ultimateboucle0": Animation(Fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,3,False,56,46) }
+             "PinguBad": Animation(Fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96) }
 
 AnimSpec = { "test":Animation(Fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64) }
+
+AnimBoutonUlti = [ Animation(Fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,46,None,3,True),
+                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,46),
+                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,46) ]
 
 GrilleDeJeu = Grille()
 InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
@@ -41,38 +42,36 @@ idJoueur = 0
 
 posSouris = (0,0)
 
-boutonUlti_animActuel = AnimBase["Ultimatebouton"]
-AnimSpec.update(bouton=boutonUlti_animActuel, bouton2=AnimBase["Ultimateboucle0"])
-print(AnimSpec)
-
+boutonUlti = ObjetAnimMultiple(85,240,AnimBoutonUlti,AnimBase)   #Creation du bouton d'ultime à partir de la classe Bouton
+conditionsAnimBouton = [False,False,False]
 print(GrilleDeJeu)
 
 while True:
     Clock.tick(60)
     FPS = Clock.get_fps()
     #print(FPS)
-
+    #print(boutonUlti.currentAnim.play)
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             pygame.quit()
             quit()
         if event.type == pygame.MOUSEBUTTONDOWN:
-            if( AnimBase["Ultimatebouton"].rect.collidepoint(posSouris) ):
-                print("Button pressed")
-                boutonUlti_animActuel.play = False
-                boutonUlti_animActuel = AnimBase["Ultimateboucle0"]
-                AnimSpec["bouton"] = boutonUlti_animActuel
-                AnimSpec["bouton"].play = True
+            
+            if( boutonUlti.currentAnim.rect.collidepoint(posSouris) ):
+                boutonUlti.clicked = True
+
             for rect in InterfaceJeu.rectColonne:
                 if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
                     MoteurDeJeu.Placer(rect["colonne"],idJoueur)
+                    boutonUlti.Reinitialiser()
                     print(GrilleDeJeu)
 
     if(InterfaceJeu.tourJoueur): idJoueur = 1
     else: idJoueur = 2
     posSouris = pygame.mouse.get_pos()
-    
+
     #Affichage
+    boutonUlti.updateCurrentAnim(condition=boutonUlti.clicked)
     InterfaceJeu.Affichage()
     InterfaceJeu.AttentePlacement(posSouris,idJoueur)
     

@@ -82,16 +82,6 @@ class Interface:
             #self.animBase["Ultimateboucle0"].play= True
         #elif (self.ultimatetat==2)
 
-
-        """for i in range(len(self.rectColonne)):
-            rectangle = self.rectColonne[i]["rect"]
-            if( i%2 == 0 ):
-                pygame.draw.rect(self.fenetre,[255,0,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
-            else: 
-                pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))"""
-        
-        #!! rectList a ajouter
-
         #for animation in self.animBase.values():
             #animation.play = True
 
@@ -101,13 +91,11 @@ class Interface:
         #self.animBase["Ultimatebouton"].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
-            #print(animation.play)
+            #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
                 animation.update( animation.x_pos, animation.y_pos )
                 if animation == self.animBase["Sheriff"]:
                     animation.affiche(50,720-64*3-50)
-                if animation == self.animBase["Ultimatebouton"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
                 if animation == self.animBase["Weasel"]:
@@ -118,11 +106,13 @@ class Interface:
                     animation.affiche(1280-62*3-50,720-96*3-50)
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
+                if animation == self.animBase["Bouton"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
                 #AnimSpec
-                if animation == self.animSpec["bouton"]:
+                """if animation == self.animSpec["bouton"]:
                     animation.affiche(80+5,250-10 , nouveauRect=True)
                 if animation == self.animSpec["bouton2"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
+                    animation.affiche(80+5,250-10 , nouveauRect=True)"""
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher):
@@ -265,11 +255,19 @@ class Animation:
         self.speed = speed
         self.isLoop = loop
         self.coeffAgrandir = coeffAgrandir
-        self.play = playAtStart
+        self.playAtStart = playAtStart
+        self.play = self.playAtStart
         self.play_count = 0
         self.update(self.x_pos,self.y_pos)
         self.rect = None
+        self.done = False
         self.nextAnim = nextAnim
+
+    def Reinitialiser(self):
+        self.x_pos = 2
+        self.play_count = 0
+        self.done = False
+        self.play = self.playAtStart
 
     def creerRect(self, x, y):
         self.rect = pygame.Rect(x, y, self.larg_sprite*self.coeffAgrandir, self.haut_sprite*self.coeffAgrandir)
@@ -308,6 +306,7 @@ class Animation:
             if self.isLoop:
                 self.play_count = 0
             else:
+                self.done = True
                 self.play_count = 0
                 self.play = False
                 if(self.nextAnim != None): 
