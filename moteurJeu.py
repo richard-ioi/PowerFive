@@ -47,6 +47,7 @@ class MoteurJeu:
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             jeton.x = caseDispo[0]
             jeton.y = caseDispo[1]
+            print(jeton)
             print("Gagnant : Joueur ",self.Gagnant(jeton))
         else:
             print("Vous ne pouvez pas placer de jetons dans cette colonne.")
@@ -94,7 +95,7 @@ class MoteurJeu:
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(caseDiag2 == jeton.idJoueur):
                 compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            print("1 ",compteur1," 2 ",compteur2)
+            #print("1 ",compteur1," 2 ",compteur2)
             if(compteur1 == 5 or compteur2 == 5):
                 print("Win Diag1")
                 return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne

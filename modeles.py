@@ -25,20 +25,9 @@ class Grille:
                 largeurImage: largeur du sprite.
                 hauteurImage: hauteur du sprite.
         """
-                                     #x
-        self.grilleAttente = [ [None],  #0
-                               [None],  #1
-                               [None],  #2
-                               [None],  #3
-                               [None],  #4
-                               [None],  #5
-                               [None],  #6
-                               [None],  #7
-                               [None] ] #8
-                             #y  0 1 2 3 4 5 6 7  8     x
-        vide = Jeton(0)
+        """vide = Jeton(0)
         mur = Jeton(-1)
-        """self.grillePrincipal = [[None,None,None,None,None,None,None,None,mur],  #0
+        self.grillePrincipal = [[None,None,None,None,None,None,None,None,mur],  #0
                                 [None,None,None,None,None,None,None,None,mur],  #1
                                 [None,None,None,None,None,None,None,None,mur],  #2
                                 [None,None,None,None,None,None,None,None,mur],  #3
@@ -47,6 +36,8 @@ class Grille:
                                 [None,None,None,None,None,None,None,None,mur],  #6
                                 [None,None,None,None,None,None,None,None,mur],  #7
                                 [None,None,None,None,None,None,None,None,mur]]  #8"""
+
+                              #y 0 1 2 3 4 5 6 7  8     x
         self.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
                                 [0,0,0,0,0,0,0,0,-1],  #1
                                 [0,0,0,0,0,0,0,0,-1],  #2
@@ -166,10 +157,10 @@ class Jeton:
         self.visible = False
     
     def __str__(self):
-        return idJoueur
+        return str(self.idJoueur)
     
     def __repr__(self):
-        return "Jeton({}, {})".format(idJoueur, visible)
+        return "Jeton({}, {})".format(self.idJoueur, self.visible)
     
     def deplacer(self, coord):
         pass

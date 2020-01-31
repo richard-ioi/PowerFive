@@ -40,6 +40,8 @@ posSouris = (0,0)
 #imageJeton = scale(pygame.image.load(os.path.join("data","graphismes","jeton_jaune.png")), (32*4,32*4))
 #posJeton = -10
 
+print(GrilleDeJeu)
+
 while True:
     Clock.tick(60)
     FPS = Clock.get_fps()
@@ -54,10 +56,10 @@ while True:
             for rect in InterfaceJeu.rectColonne:
                 if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
                     MoteurDeJeu.Placer(rect["colonne"],idJoueur)
+                    print(GrilleDeJeu)
 
     if(InterfaceJeu.tourJoueur): idJoueur = 1
     else: idJoueur = 2
-
     posSouris = pygame.mouse.get_pos()
     
     #Affichage
