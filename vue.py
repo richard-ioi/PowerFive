@@ -145,6 +145,7 @@ class Interface:
                 self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
                 self.tourJoueur = not self.tourJoueur
                 self.lacher = False
+
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
 
