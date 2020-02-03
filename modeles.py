@@ -52,6 +52,7 @@ class Grille:
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
                          "back": scale(pygame.image.load(os.path.join("data","graphismes","grille_back.png")), (140*4,141*4)) }
         self.dimSprites = ( self.sprites["top"].get_width(), self.sprites["top"].get_height() )
+        self.coupPossible = []
 
     def __str__(self):
         cases = [case for colonne in list(zip(*self.grillePrincipal)) for case in colonne]
@@ -82,6 +83,7 @@ class Grille:
                 if(self.grillePrincipal[colonne][case] == 0):
                     casesVides.append( (colonne, case) )
                     break
+        #self.coupPossible = casesVides
         return casesVides
 
     def CaseVideColonne(self,colonne):
@@ -131,7 +133,7 @@ class Grille:
                 jeton: Jeton devant être placé dans la grille.
         """
         case = self.CasesVides()[colonne][1]
-        self.grillePrincipal[colonne][case] = Jeton(idJoueur)
+        self.grillePrincipal[colonne][case] = idJoueur
 
 class Jeton:
     """

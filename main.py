@@ -47,7 +47,9 @@ class Main:
             pygame.display.set_caption(self.titre)
 
             posSouris = pygame.mouse.get_pos()
-            #print(self.interface.finiPlacer)
+
+            #self.grille.CasesVides()
+
             if self.interface.tourJoueur:
                 idJoueur = 1
             else:

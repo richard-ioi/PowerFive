@@ -110,6 +110,10 @@ class MoteurJeu:
             except IndexError: caseDiag1 = 0
             try: caseDiag2 = self.grille.grillePrincipal[jeton.x + elmD2][jeton.y - elmD2]
             except IndexError: caseDiag2 = 0
+            #POUR LE SCORE DU COUP
+
+
+            #POUR LE GAGNANT
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
             if(caseDiag2 == jeton.idJoueur):
@@ -124,78 +128,6 @@ class MoteurJeu:
         compteur2 = 0
         return 0
 
-        """compteur = 0
-        # Vérification colonne
-        for elmC in range(jeton.y, self.grille.hauteur, 1):
-            if( self.grille.grillePrincipal[jeton.x][elmC] != None ):
-                if( self.grille.grillePrincipal[jeton.x][elmC].idJoueur == jeton.idJoueur ):
-                    compteur += 1
-                else:
-                    compteur = 0
-                    break
-                if compteur == 5:
-                    return jeton.idJoueur
-        compteur = 0
-        # Vérificaion ligne
-        for elmL in range(self.grille.largeur):
-            if( self.grille.grillePrincipal[elmL][jeton.y] != None ):
-                if( self.grille.grillePrincipal[elmL][jeton.y].idJoueur == jeton.idJoueur ):
-                    compteur += 1
-                else:
-                    compteur = 0
-                if compteur == 5:
-                    return jeton.idJoueur
-        compteur = 0
-        compteur1 = 0
-        compteur2 = 0
-        # Vérification diagonale 1
-        for elmD1 in range(self.grille.hauteur):
-            try: jetonCaseDiag1 = self.grille.grillePrincipal[jeton.x + elmD1][jeton.y + elmD1]
-            except IndexError: pass
-            try: jetonCaseDiag2 = self.grille.grillePrincipal[jeton.x - elmD1][jeton.y + elmD1]
-            except IndexError: pass
-            if(jetonCaseDiag1 != None):
-                if(jetonCaseDiag1.idJoueur == jeton.idJoueur):
-                    print("11: ",jetonCaseDiag1.idJoueur)
-                    print("diag1 compteur1: ",compteur1)
-                    compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(jetonCaseDiag2 != None):
-                if(jetonCaseDiag2.idJoueur == jeton.idJoueur):
-                    print("12: ",jetonCaseDiag2.idJoueur)
-                    print("diag1 compteur2: ",compteur2)
-                    compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(compteur1 == 5 or compteur2 == 5):
-                return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
-            elif(jetonCaseDiag1 != None and jetonCaseDiag2 != None):
-                if(jetonCaseDiag1.idJoueur != jeton.idJoueur and jetonCaseDiag2.idJoueur != jeton.idJoueur):
-                    break
-            else: break
-        compteur1 -= 1
-        compteur2 -= 1
-        for elmD2 in range(self.grille.hauteur):
-            try: jetonCaseDiag1 = self.grille.grillePrincipal[jeton.x - elmD2][jeton.y - elmD2]
-            except IndexError: pass
-            try: jetonCaseDiag2 = self.grille.grillePrincipal[jeton.x + elmD2][jeton.y - elmD2]
-            except IndexError: pass
-            if(jetonCaseDiag1 != None):
-                if(jetonCaseDiag1.idJoueur == jeton.idJoueur):
-                    print("21: ",jetonCaseDiag1.idJoueur)
-                    print("diag2 compteur1: ",compteur1)
-                    compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(jetonCaseDiag2 != None):
-                if(jetonCaseDiag2.idJoueur == jeton.idJoueur):
-                    print("22: ",jetonCaseDiag2.idJoueur)
-                    print("diag2 compteur2: ",compteur1)
-                    compteur2 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
-            if(compteur1 == 5 or compteur2 == 5):
-                return jeton.idJoueur   #Si le compteur est a 5 le joueur id gagne
-            elif(jetonCaseDiag1 != None and jetonCaseDiag2 != None):
-                if(jetonCaseDiag1.idJoueur != jeton.idJoueur and jetonCaseDiag2.idJoueur != jeton.idJoueur):   #Si on a déjà changer de direction et qu'il y a une case différente le joueur ne gagne pas
-                    break
-            else: break
-        compteur1 = 0
-        compteur2 = 0
-        return 0"""
 
 class Jukebox:
     """
@@ -219,6 +151,7 @@ class Jukebox:
         if self.exist(sound):
             self.sounds.play()
 
+
 class IA:
     def __init__(self, moteurJeu):
         self.idIA = 2
@@ -229,6 +162,13 @@ class IA:
         randomCoup = random.randrange(len(coupPossibles))
         self.moteurJeu.Placer( coupPossibles[randomCoup][0], self.idIA )
         
+    def ScoreCoup(self, coup):
+        self.moteurJeu.grille.RemplirCase(coup[1],2)
+        #Calcul du score
+        for caseLigne in range(self.moteurJeu.grille.largeur):
+            def
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
+        return ( score, colonne )
 
     """def CalculScore():
         gagnant = MoteurJeu.Gagnant(Jeton)
