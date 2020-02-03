@@ -56,7 +56,7 @@ class MoteurJeu:
         compteurL=0
         compteurC=0
         compteurD1=0
-        compteurD2=O
+        compteurD2=0
         colonne=EtatPlacemet()["colonne"]
         ligne=EtatPlacemet()["ligne"]
         diag1=EtatPlacemet()["diag1"]
