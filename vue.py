@@ -41,6 +41,14 @@ class Interface:
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
+        
+        self.compteur=0
+        self.texteFini=False
+        self.texteFinal=""
+        self.texteFinal2=""
+        self.texteFinal3=""
+        self.texteSuite=""
+        self.dialogueFini=False
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -56,6 +64,76 @@ class Interface:
                                     [0,0,0,0,0,0,0,0,-1],  #6
                                     [0,0,0,0,0,0,0,0,-1],  #7
                                     [0,0,0,0,0,0,0,0,-1]]  #8
+
+    def afficheTexte(self,idJoueur,aTexte):
+        if idJoueur==1:
+            img=scale(pygame.image.load(os.path.join("data","graphismes","speech_gauche.png")),(62*4,23*4))
+            x=180
+            y=400
+        elif idJoueur==2:
+            img=scale(pygame.image.load(os.path.join("data","graphismes","speech_droite.png")),(62*4,23*4))
+            x=815
+            y=400
+
+        police = pygame.font.Font(None,20)
+        policespeciale = pygame.font.Font("data/polices/arial.ttf",9)
+        texteRendu = police.render(self.texteFinal,True,pygame.Color("#000000"))
+        texteRendu2 = police.render(self.texteFinal2,True,pygame.Color("#000000"))
+        texteRendu3 = police.render(self.texteFinal3,True,pygame.Color("#000000"))
+        texteSuiteRendu = policespeciale.render(self.texteSuite,True,pygame.Color("#000000"))
+        
+        if self.compteur!=len(aTexte):
+            if (self.texteFini!=True):
+                self.texteFini=False
+                if(texteRendu.get_width()<=(62-9)*4):
+                    self.texteFinal+=aTexte[self.compteur]
+                elif((texteRendu.get_width()>=((62-9)*4)) and (texteRendu2.get_width()<(62-9)*4)):
+                    if (aTexte[self.compteur]!=' ' and (texteRendu2.get_width()<5)):
+                        self.texteFinal+="-"
+                    self.texteFinal2+=aTexte[self.compteur]
+                elif (texteRendu2.get_width()>=((62-9)*4) and texteRendu3.get_width()<(62-9)*4):
+                    if (aTexte[self.compteur]!=' ' and (texteRendu3.get_width()<5)):
+                        self.texteFinal2+="-"
+                    self.texteFinal3+=aTexte[self.compteur]
+                elif (texteRendu3.get_width()>=(62-9)*4):
+                    self.texteSuite = "suite"
+                    self.texteFini=True
+                if (texteRendu3.get_width()<(62-9)*4):
+                    self.compteur+=1
+
+            elif (self.texteFini):
+                for event in pygame.event.get():
+                    if event.type==pygame.MOUSEBUTTONDOWN:
+                        print("ENTREE")
+                        self.texteSuite=""
+                        self.texteFinal=""
+                        self.texteFinal2=""
+                        self.texteFinal3=""
+                        self.texteFini=False
+
+        elif self.compteur==len(aTexte):
+            for event in pygame.event.get():
+                    if event.type==pygame.MOUSEBUTTONDOWN:
+                        print("ENTREE")
+                        self.texteSuite=""
+                        self.texteFinal=""
+                        self.texteFinal2=""
+                        self.texteFinal3=""
+                        self.texteFini=False
+                        self.dialogueFini=True
+                        self.compteur=0
+        """else:
+            self.compteur=0
+            self.texteSuite=""
+            self.texteFinal=""
+            self.texteFinal2=""
+            self.texteFinal3="""""
+
+        self.fenetre.blit(img, (x,y))
+        self.fenetre.blit(texteRendu,(x+10,y+10))
+        self.fenetre.blit(texteRendu2,(x+10,y+25))
+        self.fenetre.blit(texteRendu3,(x+10,y+40))
+        self.fenetre.blit(texteSuiteRendu,(x+(62-7)*4,y+55))
     
     def Affichage(self):
         """
@@ -96,24 +174,22 @@ class Interface:
 
         self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
 
-        """for i in range(len(self.rectColonne)):
-            rectangle = self.rectColonne[i]["rect"]
-            if( i%2 == 0 ):
-                pygame.draw.rect(self.fenetre,[255,0,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))
-            else: 
-                pygame.draw.rect(self.fenetre,[0,255,0],(rectangle.x,rectangle.y,rectangle.w,rectangle.h))"""
-        
-
-        #rectList a ajouter
+        #if (self.ultimatetat==0):
+            #self.fenetre.blit( self.grille.sprites["ultimate1"], (80,250))
+        #elif (self.ultimatetat==1):
+            #self.animBase["Ultimateboucle0"].play= True
+        #elif (self.ultimatetat==2)
 
         #for animation in self.animBase.values():
             #animation.play = True
 
         self.animBase["Sheriff"].play = True
         self.animBase["Pingu"].play = True
+        #self.animBase["Weasel"].play = True
+        #self.animBase["Ultimatebouton"].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
-            #print(animation.play)
+            #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
                 animation.update( animation.x_pos, animation.y_pos )
                 if animation == self.animBase["Sheriff"]:
@@ -121,13 +197,20 @@ class Interface:
                 if animation == self.animBase["Froggy"]:
                     animation.affiche(1000,520)
                 if animation == self.animBase["Weasel"]:
-                    animation.affiche(1000,0)
+                    animation.affiche(1000,20)
                 if animation == self.animBase["Jurassy"]:
                     animation.affiche(1000,250)
                 if animation == self.animBase["Pingu"]:
                     animation.affiche(1280-62*3-50,720-96*3-50)
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
+                if animation == self.animBase["Bouton"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
+                #AnimSpec
+                """if animation == self.animSpec["bouton"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)
+                if animation == self.animSpec["bouton2"]:
+                    animation.affiche(80+5,250-10 , nouveauRect=True)"""
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
@@ -244,7 +327,7 @@ class Animation:
     """
         Classe définissant les animations du jeu.
     """
-    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64):
+    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False):
         """
             Constructeur de la classe
 
@@ -269,9 +352,23 @@ class Animation:
         self.sprite_list = []
         self.speed = speed
         self.isLoop = loop
-        self.play = False
+        self.coeffAgrandir = coeffAgrandir
+        self.playAtStart = playAtStart
+        self.play = self.playAtStart
         self.play_count = 0
         self.update(self.x_pos,self.y_pos)
+        self.rect = None
+        self.done = False
+        self.nextAnim = nextAnim
+
+    def Reinitialiser(self):
+        self.x_pos = 2
+        self.play_count = 0
+        self.done = False
+        self.play = self.playAtStart
+
+    def creerRect(self, x, y):
+        self.rect = pygame.Rect(x, y, self.larg_sprite*self.coeffAgrandir, self.haut_sprite*self.coeffAgrandir)
 
     def update(self, x_sprites=1, y_sprites=1):
         """
@@ -288,10 +385,10 @@ class Animation:
             #print(x_sprites+(self.larg_sprite+1)*i_sprite)
             sprite = self.palette.subsurface(x_sprites+(self.larg_sprite+2)*i_sprite, y_sprites, self.larg_sprite-1, self.haut_sprite-1)
             #if self.palette_name == "microman_sprites.png":
-            sprite = scale(sprite, (self.larg_sprite*3,self.haut_sprite*3))
+            sprite = scale(sprite, (self.larg_sprite*self.coeffAgrandir,self.haut_sprite*self.coeffAgrandir))
             self.sprite_list.append(sprite)
 
-    def affiche(self, x, y):
+    def affiche(self, x, y, nouveauRect=False):
         """
             Méhode affichant l'animation.
 
@@ -299,13 +396,21 @@ class Animation:
                 x:
                 y: 
         """
-        #print(new_speed)
+        if nouveauRect:
+            #Si on le demande on cree un Rect correspondant à l'image affichée
+            self.creerRect(x,y)
+
         if self.play_count >= self.nb_sprites * self.speed:
             if self.isLoop:
                 self.play_count = 0
             else:
+                self.done = True
                 self.play_count = 0
                 self.play = False
+                if(self.nextAnim != None): 
+                    self.nextAnim.play = True
+                    #self.nextAnim.affiche(x,y-200)
+                    print("Affiche nextAnim")
         if self.play:
             sprite = self.sprite_list[self.play_count//self.speed]
             self.fenetre.blit(sprite, (x,y))
@@ -331,6 +436,20 @@ class Personnage:
     """
     def __init__(self, idJoueur):
         self.idJoueur = idJoueur
+
+class Dialogue:
+    """
+        Classe représentant un dialogue
+    """
+    def __init__(self, fichier):
+        self.fichier = fichier
+        self.root = ET.parse(self.fichier).getroot()
+    
+    def getDialogues(self, nomPerso):
+        dialogues = []
+        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
+            dialogues.append(dial.text.strip())
+        return dialogues
 
 
 class Joueur(Personnage):

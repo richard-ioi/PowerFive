@@ -162,7 +162,7 @@ class IA:
         randomCoup = random.randrange(len(coupPossibles))
         self.moteurJeu.Placer( coupPossibles[randomCoup][0], self.idIA )
         
-    def ScoreCoup(self, coup):
+    """def ScoreCoup(self, coup):
         self.moteurJeu.grille.RemplirCase(coup[1],2)
         #Calcul du score
         for caseLigne in range(self.moteurJeu.grille.largeur):
@@ -170,7 +170,7 @@ class IA:
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return ( score, colonne )
 
-    """def CalculScore():
+    def CalculScore():
         gagnant = MoteurJeu.Gagnant(Jeton)
         if gagnant == 1:
             return (1,0)

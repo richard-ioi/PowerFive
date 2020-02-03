@@ -35,40 +35,53 @@ class Main:
                           "Jurassy": Animation(self.fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72),
                           "Pingu": Animation(self.fenetre, os.path.join("pingu","char.png"), 0,27,5,True,62,96),
                           "PinguBad": Animation(self.fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96) }
+        self.animBoutonUlti = [ Animation(self.fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,47,None,3,True),
+                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,47),
+                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,47) ]
         self.animSpec = {}
         self.grille = Grille()
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur)
+        self.posSouris = (0,0)
+        self.idJoueur = 1
+        self.boutonUlti = ObjetAnimMultiple(85,240,self.animBoutonUlti,self.animBase)
+
     
     def mainLoop(self):
         while True:
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
 
-            posSouris = pygame.mouse.get_pos()
-
-            #self.grille.CasesVides()
-
-            if self.interface.tourJoueur:
-                idJoueur = 1
-            else:
-                idJoueur = 2
-
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if event.type == pygame.MOUSEBUTTONDOWN:
-                    for rect in self.interface.rectColonne:
-                        if(self.interface.tourJoueur):
-                            if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
-                                self.moteur.Placer(rect["colonne"], idJoueur)
-            if(not self.interface.tourJoueur):
-                self.ia.IAPlay()
-            self.interface.Affichage()
-            self.interface.AttentePlacement(posSouris, idJoueur)
+                if self.interface.compteur==0:
+                    if event.type == pygame.MOUSEBUTTONDOWN:
+                        
+                        if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) ):
+                            self.boutonUlti.clicked = True
 
+                        for rect in self.interface.rectColonne:
+                            if rect["rect"].collidepoint( (self.posSouris[0]-5, self.posSouris[1]) ):
+                                self.moteur.Placer(rect["colonne"],self.idJoueur)
+                                self.boutonUlti.Reinitialiser()
+                                print(self.grille)
+
+            if(self.interface.tourJoueur): self.idJoueur = 1
+            else: self.idJoueur = 2
+            self.posSouris = pygame.mouse.get_pos()
+            if(not self.interface.tourJoueur): self.ia.IAPlay()
+            #Affichage
+            self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked)
+            self.interface.Affichage()
+            self.interface.AttentePlacement(self.posSouris,self.idJoueur)
+            
+            #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
+            
+            if(self.interface.dialogueFini==False):
+                self.interface.afficheTexte(2,"Bonjour je m'appelle Pingu")
             pygame.display.update()
 
 if __name__ == "__main__":
