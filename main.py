@@ -78,8 +78,6 @@ while True:
     
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     
-    if(InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")==True):
-        test = True
-    if (test!=True):
-        InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")
+    
+    InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")
     pygame.display.update()

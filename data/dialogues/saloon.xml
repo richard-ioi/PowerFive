@@ -1,0 +1,72 @@
+<dialogue niveau="Saloon">
+    <personnage nom="Froggy">
+        <ligne number="0">
+            Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
+        </ligne>
+        <ligne number="1">
+            Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
+        </ligne>
+        <ligne number="2">
+            Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
+        </ligne>
+        <ligne number="3">
+            Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
+        </ligne>
+    </personnage>
+    <personnage nom="Jurassy">
+        <ligne number="0">
+            Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
+        </ligne>
+        <ligne number="0=1">
+            Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
+        </ligne>
+        <ligne number="2">
+            Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
+        </ligne>
+        <ligne number="3">
+            Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
+        </ligne>
+    </personnage>
+    <personnage nom="Pingu">
+        <ligne number="0">
+            Bonjour, je m'appelle Pingu et je suis le mastermind du Jeu. J'ai le moyen de vous faire parler.
+        </ligne>
+        <ligne number="1">
+            Bonjour, je m'appelle Pingu et je suis le mastermind du Jeu. J'ai le moyen de vous faire parler.
+        </ligne>
+        <ligne number="2">
+            Bonjour, je m'appelle Pingu et je suis le mastermind du Jeu. J'ai le moyen de vous faire parler.
+        </ligne>
+        <ligne number="3">
+            Bonjour, je m'appelle Pingu et je suis le mastermind du Jeu. J'ai le moyen de vous faire parler.
+        </ligne>
+    </personnage>
+    <personnage nom="Sheriff">
+        <ligne number="0">
+            Bonjour, je suis le sheriff et je protège ce village contre des raclures dans ton genre.
+        </ligne>
+        <ligne number="1">
+            Bonjour, je suis le sheriff et je protège ce village contre des raclures dans ton genre.
+        </ligne>
+        <ligne number="2">
+            Bonjour, je suis le sheriff et je protège ce village contre des raclures dans ton genre.
+        </ligne>
+        <ligne number="3">
+            Bonjour, je suis le sheriff et je protège ce village contre des raclures dans ton genre.
+        </ligne>
+    </personnage>
+    <personnage nom="Weasel">
+        <ligne number="0">
+            Bonjour, je suis Weasel et j'ai peur des flingues et des pirates
+        </ligne>
+        <ligne number="1">
+            Bonjour, je suis Weasel et j'ai peur des flingues et des pirates
+        </ligne>
+        <ligne number="2">
+            Bonjour, je suis Weasel et j'ai peur des flingues et des pirates
+        </ligne>
+        <ligne number="3">
+            Bonjour, je suis Weasel et j'ai peur des flingues et des pirates
+        </ligne>
+    </personnage>
+</dialogue>
