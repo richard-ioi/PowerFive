@@ -311,6 +311,20 @@ class Animation:
             self.fenetre.blit(sprite, (x,y))
             self.play_count += 1
 
+class Dialogue:
+    """
+        Classe représentant un dialogue
+    """
+    def __init__(self, fichier):
+        self.fichier = fichier
+        self.root = ET.parse(self.fichier).getroot()
+    
+    def getDialogues(self, nomPerso):
+        dialogues = []
+        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
+            dialogues.append(dial.text.strip())
+        return dialogues
+
 class Personnage:
     """
         Classe représentant un personnage.
