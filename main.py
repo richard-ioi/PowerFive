@@ -53,20 +53,21 @@ while True:
     FPS = Clock.get_fps()
     #print(FPS)
     #print(boutonUlti.currentAnim.play)
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            quit()
-        if event.type == pygame.MOUSEBUTTONDOWN:
-            
-            if( boutonUlti.currentAnim.rect.collidepoint(posSouris) ):
-                boutonUlti.clicked = True
+    if InterfaceJeu.compteur==0:
+        for event in pygame.event.get():
+            if event.type == pygame.QUIT:
+                pygame.quit()
+                quit()
+            if event.type == pygame.MOUSEBUTTONDOWN:
+                
+                if( boutonUlti.currentAnim.rect.collidepoint(posSouris) ):
+                    boutonUlti.clicked = True
 
-            for rect in InterfaceJeu.rectColonne:
-                if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
-                    MoteurDeJeu.Placer(rect["colonne"],idJoueur)
-                    boutonUlti.Reinitialiser()
-                    print(GrilleDeJeu)
+                for rect in InterfaceJeu.rectColonne:
+                    if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
+                        MoteurDeJeu.Placer(rect["colonne"],idJoueur)
+                        boutonUlti.Reinitialiser()
+                        print(GrilleDeJeu)
 
     if(InterfaceJeu.tourJoueur): idJoueur = 1
     else: idJoueur = 2
@@ -78,6 +79,6 @@ while True:
     
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     
-    
-    InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")
+    if(InterfaceJeu.dialogueFini==False):
+        InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")
     pygame.display.update()

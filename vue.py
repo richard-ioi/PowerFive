@@ -46,6 +46,7 @@ class Interface:
         self.texteFinal2=""
         self.texteFinal3=""
         self.texteSuite=""
+        self.dialogueFini=False
 
     def afficheTexte(self,idJoueur,aTexte):
         if idJoueur==1:
@@ -85,26 +86,25 @@ class Interface:
 
             elif (self.texteFini):
                 for event in pygame.event.get():
-                    if event.type==pygame.KEYDOWN:
-                        if event.key==pygame.K_RETURN:
-                            print("ENTREE")
-                            self.texteSuite=""
-                            self.texteFinal=""
-                            self.texteFinal2=""
-                            self.texteFinal3=""
-                            self.texteFini=False
+                    if event.type==pygame.MOUSEBUTTONDOWN:
+                        print("ENTREE")
+                        self.texteSuite=""
+                        self.texteFinal=""
+                        self.texteFinal2=""
+                        self.texteFinal3=""
+                        self.texteFini=False
 
         elif self.compteur==len(aTexte):
             for event in pygame.event.get():
-                    if (event.type==pygame.KEYDOWN):
-                        if (event.key==pygame.K_RETURN):
-                            print("ENTREE")
-                            self.texteSuite=""
-                            self.texteFinal=""
-                            self.texteFinal2=""
-                            self.texteFinal3=""
-                            self.texteFini=False
-                            return True
+                    if event.type==pygame.MOUSEBUTTONDOWN:
+                        print("ENTREE")
+                        self.texteSuite=""
+                        self.texteFinal=""
+                        self.texteFinal2=""
+                        self.texteFinal3=""
+                        self.texteFini=False
+                        self.dialogueFini=True
+                        self.compteur=0
         """else:
             self.compteur=0
             self.texteSuite=""
