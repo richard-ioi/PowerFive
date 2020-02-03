@@ -41,6 +41,11 @@ class Interface:
         self.lacher = False
         self.distance = 0
         self.compteur=0
+
+        self.plusOuMoins = 1
+        self.tremble = 0
+        self.yTremble = 0
+
         self.texteFini=False
         self.texteFinal=""
         self.texteFinal2=""
@@ -122,8 +127,15 @@ class Interface:
         """
             Méthode exécutant les procédure d'affichages sur l'écran
         """
+        self.plusOuMoins *= -1
+        print(self.tremble," ",self.plusOuMoins)
+        if(self.tremble > 0): 
+            self.yTremble = self.plusOuMoins * 2
+            self.tremble -= 1
+        else: self.yTremble = 0
+
         self.fenetre.fill([255,255,255])
-        self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
+        self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
 
         if(self.lacher):
             rectCol = None
@@ -145,6 +157,7 @@ class Interface:
                 self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2,yJeton)))
                 self.tourJoueur = not self.tourJoueur
                 self.lacher = False
+                self.tremble = 3
 
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
@@ -152,7 +165,7 @@ class Interface:
         for iJeton in self.jetonsPlaces:
             self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
 
-        self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
+        self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleTop[0], self.coordGrilleTop[1]+self.yTremble) )
 
         #if (self.ultimatetat==0):
             #self.fenetre.blit( self.grille.sprites["ultimate1"], (80,250))

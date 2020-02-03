@@ -21,7 +21,7 @@ pygame.display.set_caption("PowerFive")
 
 music_pinguTheme = os.path.join("data","sons","pingu_theme.wav")
 pygame.mixer.music.load(music_pinguTheme)
-pygame.mixer.music.play(loops=-1,start=0.0)
+#pygame.mixer.music.play(loops=-1,start=0.0)
 
 AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
              "Froggy": Animation(Fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
