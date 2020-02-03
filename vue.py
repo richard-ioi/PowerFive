@@ -53,12 +53,12 @@ class Interface:
             x=180
             y=400
         elif idJoueur==2:
-            img=img=scale(pygame.image.load(os.path.join("data","graphismes","speech_droite.png")),(62*4,23*4))
+            img=scale(pygame.image.load(os.path.join("data","graphismes","speech_droite.png")),(62*4,23*4))
             x=815
             y=400
 
         police = pygame.font.Font(None,20)
-        policespeciale=pygame.font.Font("data/polices/arial.ttf",9)
+        policespeciale = pygame.font.Font("data/polices/arial.ttf",9)
         texteRendu = police.render(self.texteFinal,True,pygame.Color("#000000"))
         texteRendu2 = police.render(self.texteFinal2,True,pygame.Color("#000000"))
         texteRendu3 = police.render(self.texteFinal3,True,pygame.Color("#000000"))
@@ -79,9 +79,9 @@ class Interface:
                     self.texteFinal3+=aTexte[self.compteur]
                 elif (texteRendu3.get_width()>=(62-9)*4):
                     self.texteSuite = "suite"
-                    self.compteur-=1
                     self.texteFini=True
-                self.compteur+=1
+                if (texteRendu3.get_width()<(62-9)*4):
+                    self.compteur+=1
 
             elif (self.texteFini):
                 for event in pygame.event.get():
@@ -93,12 +93,24 @@ class Interface:
                             self.texteFinal2=""
                             self.texteFinal3=""
                             self.texteFini=False
-        else:
+
+        elif self.compteur==len(aTexte):
+            for event in pygame.event.get():
+                    if (event.type==pygame.KEYDOWN):
+                        if (event.key==pygame.K_RETURN):
+                            print("ENTREE")
+                            self.texteSuite=""
+                            self.texteFinal=""
+                            self.texteFinal2=""
+                            self.texteFinal3=""
+                            self.texteFini=False
+                            return True
+        """else:
             self.compteur=0
-            self.texteFini=True
-        
-        if self.texteFini:
-            print("TRUE")
+            self.texteSuite=""
+            self.texteFinal=""
+            self.texteFinal2=""
+            self.texteFinal3="""""
 
         self.fenetre.blit(img, (x,y))
         self.fenetre.blit(texteRendu,(x+10,y+10))

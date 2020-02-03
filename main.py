@@ -12,6 +12,7 @@ from vue import *
 pygame.init()
 Clock = pygame.time.Clock()
 
+test = False
 
 largeurFenetre = 1280
 hauteurFenetre = 720
@@ -31,9 +32,9 @@ AnimBase = { "Sheriff": Animation(Fenetre, os.path.join("sheriff", "char.png"), 
 
 AnimSpec = { "test":Animation(Fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64) }
 
-AnimBoutonUlti = [ Animation(Fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,46,None,3,True),
-                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,46),
-                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,46) ]
+AnimBoutonUlti = [ Animation(Fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,47,None,3,True),
+                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,47),
+                   Animation(Fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,47) ]
 
 GrilleDeJeu = Grille()
 InterfaceJeu = Interface(Fenetre, largeurFenetre, hauteurFenetre, GrilleDeJeu, AnimBase, AnimSpec)
@@ -77,5 +78,8 @@ while True:
     
     #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
     
-    InterfaceJeu.afficheTexte(1,"YEEEEEEEEEEEHAW SALUT LA TEAM JE VIENS DEFONCER VOS SALES GUEULES ! OH TU FAIS QUOI LA? ESPECE DE SOUS MERDE JE VAIS TE DEFONCER LA GUEULE A COUP DE CLE A MOLETTE T'ES AUSSI MOCHE QUE GUILLAIME BAZIN")
+    if(InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")==True):
+        test = True
+    if (test!=True):
+        InterfaceJeu.afficheTexte(2,"Bonjour je m'appelle Pingu")
     pygame.display.update()
