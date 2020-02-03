@@ -41,6 +41,9 @@ class Interface:
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
+        self.plusOuMoins = -1
+        self.tremble = 0
+        self.yTremble = 0
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -61,8 +64,14 @@ class Interface:
         """
             Méthode exécutant les procédure d'affichages sur l'écran
         """
+        self.plusOuMoins *= -1
+        if(self.tremble > 0): 
+            self.yTremble = self.plusOuMoins * 5
+            self.tremble -= 1
+        else: self.yTremble = 0
+
         self.fenetre.fill([255,255,255])
-        self.fenetre.blit( self.grille.sprites["back"], self.coordGrilleBack )
+        self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
 
         if(self.lacher):
             rectCol = None
@@ -88,13 +97,14 @@ class Interface:
                 if(gagnant != 0):
                     self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
+                self.tremble = 10
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
 
         for iJeton in self.jetonsPlaces:
             self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
 
-        self.fenetre.blit( self.grille.sprites["top"], self.coordGrilleTop )
+        self.fenetre.blit( self.grille.sprites["top"], (self.coordGrilleTop[0], self.coordGrilleTop[1]+self.yTremble) )
 
         """for i in range(len(self.rectColonne)):
             rectangle = self.rectColonne[i]["rect"]
