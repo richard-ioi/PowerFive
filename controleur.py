@@ -57,11 +57,18 @@ class MoteurJeu:
         compteurC=0
         compteurD1=0
         compteurD2=0
+<<<<<<< HEAD
         EP=self.EtatPlacement(jeton.x, jeton.y)
         colonne=EP["colonne"]
         ligne=EP["ligne"]
         diag1=EP["diag1"]
         diag2=EP["diag2"]
+=======
+        colonne=EtatPlacemet()["colonne"]
+        ligne=EtatPlacemet()["ligne"]
+        diag1=EtatPlacemet()["diag1"]
+        diag2=EtatPlacemet()["diag2"]
+>>>>>>> cd376d999402b2d79adb945fff61f3a16b8057df
         for i in range(9):
             try: caseDiag1 = diag1[i]
             except IndexError: caseDiag1=0
