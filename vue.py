@@ -8,6 +8,7 @@ import pygame
 import os
 import time
 from pygame.transform import scale
+import xml.etree.ElementTree as ET
 
 class Interface:
     """
@@ -53,6 +54,8 @@ class Interface:
         self.texteFinal3=""
         self.texteSuite=""
         self.dialogueFini=False
+
+        self.compteurJeton=0
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -218,6 +221,8 @@ class Interface:
                     animation.affiche(50,300)
                 if animation == self.animBase["Bouton"]:
                     animation.affiche(80+5,250-10 , nouveauRect=True)
+                if animation == self.animBase["Mana"]:
+                    animation.affiche(90,215 , nouveauRect=False)
                 #AnimSpec
                 """if animation == self.animSpec["bouton"]:
                     animation.affiche(80+5,250-10 , nouveauRect=True)
@@ -438,7 +443,7 @@ class Dialogue:
     
     def getDialogues(self, nomPerso):
         dialogues = []
-        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
+        for dial in self.root.find(f"./personnage[@nom='{nomPerso}']").getchildren():
             dialogues.append(dial.text.strip())
         return dialogues
 
@@ -446,22 +451,9 @@ class Personnage:
     """
         Classe représentant un personnage.
     """
-    def __init__(self, idJoueur):
+    def __init__(self, idJoueur, nomPerso):
         self.idJoueur = idJoueur
-
-class Dialogue:
-    """
-        Classe représentant un dialogue
-    """
-    def __init__(self, fichier):
-        self.fichier = fichier
-        self.root = ET.parse(self.fichier).getroot()
-    
-    def getDialogues(self, nomPerso):
-        dialogues = []
-        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
-            dialogues.append(dial.text.strip())
-        return dialogues
+        self.nomPerso = nomPerso
 
 
 class Joueur(Personnage):
