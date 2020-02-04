@@ -190,7 +190,7 @@ class IA:
         for coup in coupPossibles:
             listeCoups.append(self.ScoreCoup(coup))
         coupIA=max(listeCoups, key=lambda score: score[0])
-        self.MoteurJeu.Placer(coupIA[1][0], self.idIA)
+        self.moteurJeu.Placer(coupIA[1], self.idIA)
         
     def ScoreCoup(self, coup):
         self.moteurJeu.grille.RemplirCase(coup[1],2)
@@ -228,12 +228,14 @@ class IA:
                 elif( compteurJ2 == 2 and compteurJ1 == 0 ):
                     scores.append(20)
                 #Cas complexes (avec blocage)
-                if( compteurJ1 == 4 and compteurJ2 == 1 ):
+                elif( compteurJ1 == 4 and compteurJ2 == 1 ):
                     scores.append(70)
-                if( compteurJ1 == 3 and compteurJ2 != 0 ):
+                elif( compteurJ1 == 3 and compteurJ2 != 0 ):
                     scores.append(50)
-                if( compteurJ1 == 2 and compteurJ2 != 0 ):
+                elif( compteurJ1 == 2 and compteurJ2 != 0 ):
                     scores.append(30)
+                else:
+                    scores.append(15)
             
 
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
