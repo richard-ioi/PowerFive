@@ -8,7 +8,7 @@ import pygame
 import os
 import random
 from pygame.transform import scale
-from modeles import Jeton
+from modeles import Jeton,Grille
 
 class MoteurJeu:
     """
@@ -57,7 +57,7 @@ class MoteurJeu:
         compteurC=0
         compteurD1=0
         compteurD2=0
-        EP = self.EtatPlacement()
+        EP = self.grille.EtatPlacement(jeton.x, jeton.y)
         colonne=EP["colonne"]
         ligne=EP["ligne"]
         diag1=EP["diag1"]
@@ -68,7 +68,8 @@ class MoteurJeu:
             try: caseDiag2 = diag2[i]
             except IndexError: caseDiag2=0
             caseLigne = ligne[i]
-            caseColonne = ligne[i]
+            try: caseColonne = colonne[i]
+            except IndexError: caseColonne=0
             #verif ligne
             if caseLigne==jeton.idJoueur:
                 compteurL+=1
@@ -80,6 +81,7 @@ class MoteurJeu:
             #verif colonne
             if caseColonne==jeton.idJoueur:
                 compteurC+=1
+                print(compteurC)
             else:
                 compteurC=0
             if compteurC==5:
@@ -103,7 +105,6 @@ class MoteurJeu:
                 return jeton.idJoueur
         #par défaut
         return 0
-
 
 class Jukebox:
     """
@@ -137,53 +138,63 @@ class IA:
         coupPossibles = self.moteurJeu.grille.CasesVides()
         listeCoups=[]
         for coup in coupPossibles:
-            listeCoups.append(ScoreCoup(coup))
+            listeCoups.append(self.ScoreCoup(coup))
         coupIA=max(listeCoups, key=lambda score: score[0])
-        self.MoteurJeu.Placer(coupIA[1][0], self.idIA)
+        self.moteurJeu.Placer(coupIA[1], self.idIA)
+
+    def ScoreCompteurs(self, compteurJ1, compteurJ2, compteur0, elmCase, scores):
+        if( elmCase == 2 ):
+            compteur0 = compteurJ1 = 0
+            compteurJ2 += 1
+        elif( elmCase == 1):
+            compteur0 = compteurJ2 = 0
+            compteurJ1 += 1
+        elif( elmCase == 0):
+            compteur0 += 1
+            if( compteur0 >= 4):
+                compteurJ1 = compteurJ2 = 0
+        else:
+            compteur0 = compteurJ1 = compteurJ2 = 0
+        #Cas simples (pas de blocage)
+        if( compteurJ2 == 5 ):
+            scores.append(100)
+        elif( compteurJ2 == 4 and compteurJ1 == 0 ):
+            scores.append(60)
+        elif( compteurJ2 == 3 and compteurJ1 == 0 ):
+            scores.append(40)
+        elif( compteurJ2 == 2 and compteurJ1 == 0 ):
+            scores.append(20)
+        #Cas complexes (avec blocage)
+        elif( compteurJ1 == 4 and compteurJ2 == 1 ):
+            scores.append(70)
+        elif( compteurJ1 == 3 and compteurJ2 != 0 ):
+            scores.append(50)
+        elif( compteurJ1 == 2 and compteurJ2 != 0 ):
+            scores.append(30)
+        else: scores.append(15)
+        
         
     def ScoreCoup(self, coup):
-        self.moteurJeu.grille.RemplirCase(coup[1],2)
-        dicoEtat = self.moteurJeu.EtatPlacement(coup,2)
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
+        dicoEtat = self.moteurJeu.EtatPlacement(coup[0], coup[1])
         scores = []
         #Calcul du score
         
         for paquet in range(5):
-            compteurJ1 = compteurJ2 = compteur0 = 0
+            compteurLJ1 = compteurLJ2 = compteurL0 = 0
+            compteurCJ1 = compteurCJ2 = compteurC0 = 0
+            compteurD1J1 = compteurD1J2 = compteurD10 = 0
+            compteurD2J1 = compteurD2J2 = compteurD20 = 0
             for case in range(paquet, paquet+5):
                 caseLigne = dicoEtat["ligne"][case]
-                """caseColonne = dicoEtat["colonne"][case]
+                caseColonne = dicoEtat["colonne"][case]
                 caseDiag1 = dicoEtat["diag1"][case]
-                caseDiag2 = dicoEtat["diag2"][case]"""
-                if( caseLigne == 2 ):
-                    compteur0 = compteurJ1 = 0
-                    compteurJ2 += 1
-                elif( caseLigne == 1):
-                    compteur0 = compteurJ2 = 0
-                    compteurJ1 += 1
-                elif( caseLigne == 0):
-                    compteur0 += 1
-                    if( compteur0 >= 4):
-                        compteurJ1 = compteurJ2 = 0
-                else:
-                    compteur0 = compteurJ1 = compteurJ2 = 0
-
-                #Cas simples (pas de blocage)
-                if( compteurJ2 == 5 ):
-                    scores.append(100)
-                elif( compteurJ2 == 4 and compteurJ1 == 0 ):
-                    scores.append(60)
-                elif( compteurJ2 == 3 and compteurJ1 == 0 ):
-                    scores.append(40)
-                elif( compteurJ2 == 2 and compteurJ1 == 0 ):
-                    scores.append(20)
-                #Cas complexes (avec blocage)
-                if( compteurJ1 == 4 and compteurJ2 == 1 ):
-                    scores.append(70)
-                if( compteurJ1 == 3 and compteurJ2 != 0 ):
-                    scores.append(50)
-                if( compteurJ1 == 2 and compteurJ2 != 0 ):
-                    scores.append(30)
-            
+                caseDiag2 = dicoEtat["diag2"][case]
+                
+                self.ScoreCompteurs(compteurLJ1,compteurLJ2,compteurL0,caseLigne,scores)
+                self.ScoreCompteurs(compteurCJ1,compteurCJ2,compteurC0,caseColonne,scores)
+                self.ScoreCompteurs(compteurD1J1,compteurD1J2,compteurD10,caseDiag1,scores)
+                self.ScoreCompteurs(compteurD2J1,compteurD2J2,compteurD20,caseDiag2,scores)
 
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return ( max(scores), coup[0] )
