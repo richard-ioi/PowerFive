@@ -144,7 +144,7 @@ class Interface:
             Méthode exécutant les procédure d'affichages sur l'écran
         """
         self.plusOuMoins *= -1
-        print(self.tremble," ",self.plusOuMoins)
+        #print(self.tremble," ",self.plusOuMoins)
         if(self.tremble > 0): 
             self.yTremble = self.plusOuMoins * 2
             self.tremble -= 1
@@ -177,7 +177,7 @@ class Interface:
                 if(gagnant != 0):
                     self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
-                self.tremble = 3
+                self.tremble = 4
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
 

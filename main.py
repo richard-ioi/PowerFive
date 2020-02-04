@@ -78,10 +78,9 @@ class Main:
             self.interface.Affichage()
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
-            #screen.blit(imageJeton,(screenLargeur//2-imageJeton.get_width()//2-4 , posJeton))
-            
             if(self.interface.dialogueFini==False):
                 self.interface.afficheTexte(2,"Bonjour je m'appelle Pingu")
+                #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
             pygame.display.update()
 
 if __name__ == "__main__":
