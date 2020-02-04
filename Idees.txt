@@ -11,3 +11,4 @@ Idéees de capacités :
 -
 
 Chaque capacité a un cout en "mana". Une fois la jauge de mana remplie le jouer peut utilisé sa capacité.
+

@@ -117,7 +117,7 @@ class Grille:
 
         # Récupération colonne
         colonne = []
-        for elmC in range(y, self.hauteur, 1):
+        for elmC in range(0, self.hauteur, 1):
             colonne.append(self.grillePrincipal[x][elmC])
 
         # Récupération ligne
@@ -156,7 +156,7 @@ class Grille:
             diag1_s["stop"] = (x+y, 0)
         
         for elmD0 in range(diag0_s["stop"][0] - diag0_s["start"][0] + 1):
-            print(str(diag0_s["start"][0] + elmD0)+' '+str(diag0_s["start"][1] + elmD0))
+            #print(str(diag0_s["start"][0] + elmD0)+' '+str(diag0_s["start"][1] + elmD0))
             diag0.append(self.grillePrincipal[ diag0_s["start"][0] + elmD0 ][ diag0_s["start"][1] + elmD0 ])
         
         for elmD1 in range(diag1_s["stop"][0] - diag1_s["start"][0] + 1):
