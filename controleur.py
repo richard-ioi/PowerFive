@@ -68,7 +68,8 @@ class MoteurJeu:
             try: caseDiag2 = diag2[i]
             except IndexError: caseDiag2=0
             caseLigne = ligne[i]
-            caseColonne = ligne[i]
+            try: caseColonne = colonne[i]
+            except IndexError: caseColonne=0
             #verif ligne
             if caseLigne==jeton.idJoueur:
                 compteurL+=1
@@ -80,6 +81,7 @@ class MoteurJeu:
             #verif colonne
             if caseColonne==jeton.idJoueur:
                 compteurC+=1
+                print(compteurC)
             else:
                 compteurC=0
             if compteurC==5:
@@ -193,7 +195,7 @@ class IA:
         self.moteurJeu.Placer(coupIA[1], self.idIA)
         
     def ScoreCoup(self, coup):
-        self.moteurJeu.grille.RemplirCase(coup[1],2)
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
         dicoEtat = self.moteurJeu.EtatPlacement(coup[0], coup[1])
         scores = []
         #Calcul du score
