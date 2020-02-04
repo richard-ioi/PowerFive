@@ -57,18 +57,11 @@ class MoteurJeu:
         compteurC=0
         compteurD1=0
         compteurD2=0
-<<<<<<< HEAD
-        EP=self.EtatPlacement(jeton.x, jeton.y)
+        EP = self.grille.EtatPlacement(jeton.x, jeton.y)
         colonne=EP["colonne"]
         ligne=EP["ligne"]
         diag1=EP["diag1"]
         diag2=EP["diag2"]
-=======
-        colonne=EtatPlacemet()["colonne"]
-        ligne=EtatPlacemet()["ligne"]
-        diag1=EtatPlacemet()["diag1"]
-        diag2=EtatPlacemet()["diag2"]
->>>>>>> cd376d999402b2d79adb945fff61f3a16b8057df
         for i in range(9):
             try: caseDiag1 = diag1[i]
             except IndexError: caseDiag1=0
@@ -112,58 +105,6 @@ class MoteurJeu:
                 return jeton.idJoueur
         #par défaut
         return 0
-    
-    def EtatPlacement(self, x, y):
-        largeur, hauteur = 9, 8
-
-        # Récupération colonne
-        colonne = []
-        for elmC in range(y, hauteur, 1):
-            colonne.append(self.grille.grillePrincipal[x][elmC])
-
-        # Récupération ligne
-        ligne = []
-        for elmL in range(largeur):
-            ligne.append(self.grille.grillePrincipal[elmL][y])
-
-        ### Récupération diagonales
-        diag0, diag1 = [], []
-        diag0_s, diag1_s = {}, {}
-        
-        ## Diagonale \
-        # Calcul case la plus à gauche
-        if y >= x: # début sur |
-            diag0_s["start"] = (0, y-x)
-        if y < x: # début sur --
-            diag0_s["start"] = (x-y, 0)
-
-        # Calcul case la plus à droite
-        if y <= x-1: # début sur |
-            diag0_s["stop"] = ((largeur-1), (largeur -1) - (x-y))
-        if y > x-1: # début sur --
-            diag0_s["stop"] = ((hauteur-1) - (y-x), hauteur-1)
-
-        ## Diagonale /
-        # Calcul case la plus à gauche
-        if x+y <= 6:
-            diag1_s["start"] = (0, y+x)
-        if x+y > 6: # début sur --
-            diag1_s["start"] = (x+y - (hauteur-1), hauteur -1)
-        
-        #Calcul case la plus à droite
-        if x+y >= 8:
-            diag1_s["stop"] = ((largeur-1), x+y - hauteur)
-        if x+y < 8: # début sur --
-            diag1_s["stop"] = (x+y, 0)
-        
-        for elmD0 in range(diag0_s["stop"][0] - diag0_s["start"][0] + 1):
-            diag0.append(self.grille.grillePrincipal[ diag0_s["start"][0] + elmD0 ][ diag0_s["start"][1] + elmD0 ])
-        
-        for elmD1 in range(diag1_s["stop"][0] - diag1_s["start"][0] + 1):
-            diag1.append(self.grille.grillePrincipal[ diag1_s["start"][0] + elmD1 ][ diag1_s["start"][1] - elmD1 ])
-        
-        return {"ligne" : ligne, "colonne": colonne, "diag1": diag0, "diag2": diag1}
-
 
 class Jukebox:
     """

@@ -112,7 +112,58 @@ class Grille:
             if jeton != 0:
                 nbJeton += 1
         return nbJeton
-    
+
+    def EtatPlacement(self, x, y):
+
+        # Récupération colonne
+        colonne = []
+        for elmC in range(y, self.hauteur, 1):
+            colonne.append(self.grillePrincipal[x][elmC])
+
+        # Récupération ligne
+        ligne = []
+        for elmL in range(self.largeur):
+            ligne.append(self.grillePrincipal[elmL][y])
+
+        ### Récupération diagonales
+        diag0, diag1 = [], []
+        diag0_s, diag1_s = {}, {}
+        
+        ## Diagonale \
+        # Calcul case la plus à gauche
+        if y >= x: # début sur |
+            diag0_s["start"] = (0, y-x)
+        if y < x: # début sur --
+            diag0_s["start"] = (x-y, 0)
+
+        # Calcul case la plus à droite
+        if y <= x-1: # début sur |
+            diag0_s["stop"] = ((self.largeur-1), (self.largeur -1) - (x-y))
+        if y > x-1: # début sur --
+            diag0_s["stop"] = ((self.hauteur-1) - (y-x), self.hauteur-1)
+
+        ## Diagonale /
+        # Calcul case la plus à gauche
+        if x+y <= 6: # début sur |
+            diag1_s["start"] = (0, y+x)
+        if x+y > 6: # début sur --
+            diag1_s["start"] = (x+y - (self.hauteur-1), self.hauteur -1)
+        
+        #Calcul case la plus à droite
+        if x+y >= 8: # début sur |
+            diag1_s["stop"] = ((self.largeur-1), x+y - self.hauteur)
+        if x+y < 8: # début sur --
+            diag1_s["stop"] = (x+y, 0)
+        
+        for elmD0 in range(diag0_s["stop"][0] - diag0_s["start"][0] + 1):
+            print(str(diag0_s["start"][0] + elmD0)+' '+str(diag0_s["start"][1] + elmD0))
+            diag0.append(self.grillePrincipal[ diag0_s["start"][0] + elmD0 ][ diag0_s["start"][1] + elmD0 ])
+        
+        for elmD1 in range(diag1_s["stop"][0] - diag1_s["start"][0] + 1):
+            diag1.append(self.grillePrincipal[ diag1_s["start"][0] + elmD1 ][ diag1_s["start"][1] - elmD1 ])
+        
+        return {"ligne" : ligne, "colonne": colonne, "diag1": diag0, "diag2": diag1}
+            
     def ColonnePleine(self, colonne):
         """
             Méthode booléenne indiquant si la colonne est pleine.
