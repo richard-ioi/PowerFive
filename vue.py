@@ -66,7 +66,7 @@ class Interface:
         """
         self.plusOuMoins *= -1
         if(self.tremble > 0): 
-            self.yTremble = self.plusOuMoins * 5
+            self.yTremble = self.plusOuMoins * 2
             self.tremble -= 1
         else: self.yTremble = 0
 
@@ -97,7 +97,7 @@ class Interface:
                 if(gagnant != 0):
                     self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
-                self.tremble = 10
+                self.tremble = 4
             jeton.speed += jeton.acceleration
             self.distance += jeton.speed
 

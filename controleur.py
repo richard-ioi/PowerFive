@@ -139,6 +139,7 @@ class IA:
         listeCoups=[]
         for coup in coupPossibles:
             listeCoups.append(self.ScoreCoup(coup))
+        print(listeCoups)
         coupIA=max(listeCoups, key=lambda score: score[0])
         self.moteurJeu.Placer(coupIA[1], self.idIA)
 
@@ -156,6 +157,7 @@ class IA:
         else:
             compteur0 = compteurJ1 = compteurJ2 = 0
         #Cas simples (pas de blocage)
+        print(compteurJ1," ",compteurJ2," ",compteur0)
         if( compteurJ2 == 5 ):
             scores.append(100)
         elif( compteurJ2 == 4 and compteurJ1 == 0 ):
@@ -176,7 +178,7 @@ class IA:
         
     def ScoreCoup(self, coup):
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
-        dicoEtat = self.moteurJeu.EtatPlacement(coup[0], coup[1])
+        dicoEtat = self.moteurJeu.grille.EtatPlacement(coup[0], coup[1])
         scores = []
         #Calcul du score
         
@@ -185,11 +187,19 @@ class IA:
             compteurCJ1 = compteurCJ2 = compteurC0 = 0
             compteurD1J1 = compteurD1J2 = compteurD10 = 0
             compteurD2J1 = compteurD2J2 = compteurD20 = 0
+
             for case in range(paquet, paquet+5):
+
                 caseLigne = dicoEtat["ligne"][case]
-                caseColonne = dicoEtat["colonne"][case]
-                caseDiag1 = dicoEtat["diag1"][case]
-                caseDiag2 = dicoEtat["diag2"][case]
+
+                try: caseColonne = dicoEtat["colonne"][case]
+                except IndexError: caseColonne = -1
+
+                try: caseDiag1 = dicoEtat["diag1"][case]
+                except IndexError: caseDiag1 = -1
+
+                try: caseDiag2 = dicoEtat["diag2"][case]
+                except IndexError: caseDiag2 = -1
                 
                 self.ScoreCompteurs(compteurLJ1,compteurLJ2,compteurL0,caseLigne,scores)
                 self.ScoreCompteurs(compteurCJ1,compteurCJ2,compteurC0,caseColonne,scores)
