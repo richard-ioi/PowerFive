@@ -79,6 +79,8 @@ class Main:
         self.compteurMana=0
         self.manaFull=False
         self.compteurManaVide=0
+        self.seVide=False
+        self.clicked=False
     
     def mainLoop(self):
         while True:
@@ -101,30 +103,48 @@ class Main:
                                 self.moteur.Placer(rect["colonne"],self.idJoueur)
                                 self.boutonUlti.Reinitialiser()
                                 self.manaFull=False
-                                print(self.grille)
+                                #print(self.grille)
 
-            if self.compteurManaVide!=0:
-                self.compteurMana-=1
-
-            if self.compteurManaVide==0 and self.compteurMana==22:
-                self.compteurMana=0
-                self.compteurManaVide=0
-                self.barreMana.Reinitialiser()
-                
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
             if(not self.interface.tourJoueur): self.ia.IAPlay()
             #Affichage
             self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked and self.manaFull)
-            self.barreMana.updateCurrentAnim(condition=(self.moteur.lacher) and (self.idJoueur==1) and(self.compteurMana<21))
-            if (self.compteurMana==21):
-                self.manaFull=True
-            if (self.moteur.lacher) and (self.idJoueur==1) and(self.compteurMana<22):
+
+
+            #Gestion MANA
+            self.barreMana.updateCurrentAnim(condition=(self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<21))
+
+            if (self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<21): #Compteur à chaque fois que le joueur joue
                 self.compteurMana+=1
-            if (self.boutonUlti.clicked and self.compteurMana==21):
-                self.barreMana.updateCurrentAnim(condition=True)
-                self.compteurManaVide=22
+
+            if self.compteurManaVide!=0: #Compteur pour laisser la mana se vider
+                self.compteurManaVide-=1
+
+            if (self.compteurMana==21): #Si le compteur == 21, la mana est pleine
+                self.manaFull=True
+            
+            if self.boutonUlti.clicked: #Si jamais le bouton Ultimate a été clické une fois
+                self.clicked=True
+
+            if self.compteurMana==21 and self.seVide==False and (self.moteur.lacher==True) and (self.idJoueur==1) and self.clicked==True:
+                    self.barreMana.updateCurrentAnim(condition=self.compteurMana==21)
+                    self.compteurManaVide=32
+                    self.seVide=True
+                    self.clicked=False
+                    print("DECOMPTE SE VIDE ENCLANCHE")
+
+            if (self.compteurManaVide==0 and self.seVide==True) or (self.interface.reinitialise==True):
+                self.compteurMana=0
+                self.compteurManaVide=0
+                self.barreMana.Reinitialiser()
+                self.interface.reinitialise=False
+                self.seVide=False
+                self.manaFull=False
+            #------------------Fin Gestion Mana
+
+
             self.interface.Affichage()
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
