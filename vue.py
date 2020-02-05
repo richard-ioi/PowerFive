@@ -56,6 +56,7 @@ class Interface:
         self.dialogueFini=False
 
         self.compteurJeton=0
+        self.reinitialise=False
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -71,6 +72,7 @@ class Interface:
                                     [0,0,0,0,0,0,0,0,-1],  #6
                                     [0,0,0,0,0,0,0,0,-1],  #7
                                     [0,0,0,0,0,0,0,0,-1]]  #8
+        self.reinitialise=True
 
     def afficheTexte(self,idJoueur,aTexte):
         if idJoueur==1:
