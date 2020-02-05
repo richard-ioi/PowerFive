@@ -64,7 +64,7 @@ class Main:
                         if(self.interface.tourJoueur):
                             if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
                                 self.moteur.Placer(rect["colonne"], idJoueur)
-            if(not self.interface.tourJoueur):
+            if(not self.interface.tourJoueur and not self.interface.lacher):
                 self.ia.IAPlay()
             self.interface.Affichage()
             self.interface.AttentePlacement(posSouris, idJoueur)
