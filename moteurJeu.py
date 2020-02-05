@@ -1,21 +1,58 @@
+#! /usr/bin/env python3
+
+"""
+    Module regroupant les contrôleurs du jeu.
+"""
+
 import pygame
-import numpy as np
+import os
+from pygame.transform import scale
 
 class MoteurJeu:
-    def __init__(self):
+    """
+        Classe regroupant les méthodes effectuant toute les actions disponibles du jeu.
+    """
+    def __init__(self, grille, clock):
+        """
+            Constructeur de la classe.
+
+            Args:
+                grille: Objet Grille utilisé et manipulé par le jeu
+                clock: Horloge pygame du jeu.
+        """
         #self.joueur = Joueur()
         #self.ia = IA()
-        self.grille = Grille()
-
+        self.grille = grille
+        self.clock = clock
+    
+    # A tester
     def Placer(self,jeton):
-        self.grille.grille[jeton.x][jeton.y] = jeton.idJoueur
-        print("Jeton placé en (",jeton.x,",",jeton.y,")")
+        """
+            Méthode permettant la placement d'un jeton dans la grille.
+
+            Args:
+                jeton: Jeton à placer dans la grille
+        """
+        # colonneJeton = self.grille.hauteur - self.grille.NbJetonColonne(jeton.x) -1
+        # if not self.grille.ColonnePleine():
+        #     self.grille.grilleAttente[jeton.x] = jeton.idJoueur
+        # self.grille.grille[jeton.x][colonneJeton] = jeton.idJoueur
+        # print("Jeton placé en (",jeton.x,",",colonneJeton,")")
+        
+        self.grille.RemplirCase(jeton)
     
     def Gagnant(self, jeton):
+        """
+            Méthode permttant de déterminer s'il y a un gagnant.
+            Elle vérifie la colonne, la diagonale et la ligne ou se trouve la jeton.
+
+            Args:
+                jeton: Jeton servant de référentiel pour la vérification.
+        """
         compteur = 0
         # Vérification colonne
         for elmC in range(jeton.y, self.grille.hauteur, 1):
-            if( self.grille.grille[jeton.x][elmC] == jeton.idJoueur ):
+            if( self.grille.grillePrincipal[jeton.x][elmC] == jeton.idJoueur ):
                 compteur += 1
             else:
                 compteur = 0
@@ -25,7 +62,7 @@ class MoteurJeu:
         compteur = 0
         # Vérificaion ligne
         for elmL in range(self.grille.largeur):
-            if( self.grille.grille[elmL][jeton.y] == jeton.idJoueur ):
+            if( self.grille.grillePrincipal[elmL][jeton.y] == jeton.idJoueur ):
                 compteur += 1
             else:
                 compteur = 0
@@ -37,9 +74,9 @@ class MoteurJeu:
         # Vérification diagonale 1
         for elmD1 in range(self.grille.hauteur):
             print(elmD1)
-            try: caseDiag1 = self.grille.grille[jeton.x + elmD1][jeton.y + elmD1]
+            try: caseDiag1 = self.grille.grillePrincipal[jeton.x + elmD1][jeton.y + elmD1]
             except IndexError: pass
-            try: caseDiag2 = self.grille.grille[jeton.x - elmD1][jeton.y + elmD1]
+            try: caseDiag2 = self.grille.grillePrincipal[jeton.x - elmD1][jeton.y + elmD1]
             except IndexError: pass
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
@@ -54,9 +91,9 @@ class MoteurJeu:
         compteur1 -= 1
         compteur2 -= 1
         for elmD2 in range(self.grille.hauteur):
-            try: caseDiag1 = self.grille.grille[jeton.x - elmD2][jeton.y - elmD2]
+            try: caseDiag1 = self.grille.grillePrincipal[jeton.x - elmD2][jeton.y - elmD2]
             except IndexError: pass
-            try: caseDiag2 = self.grille.grille[jeton.x + elmD2][jeton.y - elmD2]
+            try: caseDiag2 = self.grille.grillePrincipal[jeton.x + elmD2][jeton.y - elmD2]
             except IndexError: pass
             if(caseDiag1 == jeton.idJoueur):
                 compteur1 += 1           #Tant que notre case est à l'id du joueur on augmente le compteur
@@ -70,46 +107,3 @@ class MoteurJeu:
         compteur1 = 0
         compteur2 = 0
         return 0
-
-class Grille:
-    def __init__(self):
-                    #y  0 1 2 3 4 5 6 7  8     x
-        self.grille = [[0,0,0,0,0,0,0,0,-1],  #0
-                       [0,0,0,0,0,0,0,0,-1],  #1
-                       [0,0,0,0,0,0,0,0,-1],  #2
-                       [0,0,0,0,0,0,0,0,-1],  #3
-                       [0,0,0,0,0,0,0,0,-1],  #4
-                       [0,0,0,0,0,0,0,0,-1],  #5
-                       [0,0,0,0,0,0,0,0,-1],  #6
-                       [0,0,0,0,1,1,1,1,-1],  #7
-                       [0,0,0,0,0,0,0,0,-1]]  #8
-        self.largeur = 9
-        self.hauteur = 8
-
-    def CasesVides(self):
-        casesVides = []
-        for colonne in range(len(self.grille)):
-            for elm in range(self.hauteur, -1, -1):
-                if(self.grille[colonne][elm] == 0):
-                    casesVides.append( (colonne, elm) )
-                    break
-        return casesVides
-
-class Jeton: 
-    #Classe Jeton très temporaire juste pour tester le bon fonctionnement de MoteurJeu
-    def __init__(self,x,y):
-        self.x = x
-        self.y = y
-        self.idJoueur = 1
-
-
-#Test des classes et de leurs méthodes
-if __name__ == "__main__":
-    Grille1 = Grille()
-    Moteur1 = MoteurJeu()
-    Jeton1 = Jeton(7,3)
-
-    print("Coordonnées des cases vides: ",Grille1.CasesVides())
-    Moteur1.Placer(Jeton1)
-    print("Id du Joueur gagnant: ",Moteur1.Gagnant(Jeton1))
-    print(Moteur1.grille.grille)
