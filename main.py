@@ -29,6 +29,7 @@ class Main:
                               sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
                                          "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
         self.music.playMusic("Pingu")"""
+        self.sprite_cible = scale(pygame.image.load(os.path.join("data","graphismes","cible.png")),(30*3,34*3))
         self.animBase = { "Sheriff": Animation(self.fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
                           "Froggy": Animation(self.fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
                           "Weasel": Animation(self.fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
@@ -76,6 +77,7 @@ class Main:
             #Affichage
             self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked)
             self.interface.Affichage()
+            self.fenetre.blit(self.sprite_cible,(self.posSouris[0]-self.sprite_cible.get_width()//2,self.posSouris[1]-self.sprite_cible.get_height()//2))
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
             if(self.interface.dialogueFini==False):
