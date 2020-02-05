@@ -62,10 +62,6 @@ class MoteurJeu:
         ligne=EP["ligne"]
         diag1=EP["diag1"]
         diag2=EP["diag2"]
-        print('l: ',ligne)
-        print('c: ', colonne)
-        print('d1 ',diag1)
-        print('d2 ', diag2)
         #verif ligne
         for i in range(len(ligne)):
             caseLigne = ligne[i]
@@ -138,6 +134,8 @@ class IA:
         self.moteurJeu = moteurJeu
         self.difficulty = difficulty
         self.nbSimul = 0
+        self.mMscore = (0,0)
+        self.mMgain = 0
 
     def IAPlay(self):
         coupPossibles = self.moteurJeu.grille.CasesVides()
@@ -150,7 +148,7 @@ class IA:
                 if( self.difficulty == "normal" ):
                     listeCoups.append(self.ScoreCoup(coup,2))
                 elif( self.difficulty == "difficile" ):
-                    listeCoups.append(self.MinMax(coup,2)[:2]) #Append (gain,coup) de MinMax
+                    self.moteurJeu.Placer(self.MinMax(coup,2)[1], self.idIA) #Append (gain,coup) de MinMax
             print(listeCoups)
             coupIA=max(listeCoups, key=lambda score: score[0])
             #print(coupIA[0])
@@ -236,33 +234,32 @@ class IA:
         jeton = Jeton(idJoueur,coup[0],coup[1])
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
         gagnant = self.moteurJeu.Gagnant(jeton)
-        print(self.nbSimul)
-        if(gagnant == 1): return ((500,0), coup[0])
-        elif(gagnant == 2): return ((0,500), coup[0])
+        #print(self.nbSimul)
+        if(gagnant == 1): return (-500, coup[0], (500,0))
+        elif(gagnant == 2): return (500, coup[0], (0,500))
         elif(self.nbSimul >= 3):
             self.nbSimul = 0
-            return (None, coup[0])
+            return (self.mMgain, coup[0], self.mMscore)
         self.nbSimul += 1
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         coupPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
         for coupPossible in coupPossibles:
+            print(self.nbSimul)
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
             if(idJoueur==2):
                 #notes.append(self.ScoreCoup(coupPossible, 2))
-                print(self.MinMax(coupPossible,1))
-                score = self.MinMax(coupPossible,1)[2]
-                gain = score[1]-score[0]
+                self.mMscore = self.MinMax(coupPossible,1)[2]
+                self.mMgain = self.mMscore[1]-self.mMscore[0]
             else:
                 #notes.append(self.ScoreCoup(coupPossible, 1))
-                print(self.MinMax(coupPossible,2))
-                score = self.MinMax(coupPossible,2)[2]
-                gain = score[0]-score[1]
-            notes.append( (gain, coup, score) )
+                self.mMscore = self.MinMax(coupPossible,2)[2]
+                self.mMgain = self.mMscore[0]-self.mMscore[1]
+            notes.append( (self.mMgain, coupPossible, self.mMscore) )
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            print("#####")
+            print(notes)
         noteOpti = max(notes, key=lambda gain:gain[0])
-        return noteOpti
+        return (noteOpti[0],noteOpti[1][0],noteOpti[2])
 
         """def Simulation(idJoueur):
         if( DetectionGagnant() != 0 ):
