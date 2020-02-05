@@ -208,28 +208,7 @@ class Interface:
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
-                animation.update( animation.x_pos, animation.y_pos )
-                if animation == self.animBase["Sheriff"]:
-                    animation.affiche(50,720-64*3-50)
-                if animation == self.animBase["Froggy"]:
-                    animation.affiche(1000,520)
-                if animation == self.animBase["Weasel"]:
-                    animation.affiche(1000,20)
-                if animation == self.animBase["Jurassy"]:
-                    animation.affiche(1000,250)
-                if animation == self.animBase["Pingu"]:
-                    animation.affiche(1280-62*3-50,720-96*3-50)
-                if animation == self.animBase["PinguBad"]:
-                    animation.affiche(50,300)
-                if animation == self.animBase["Bouton"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
-                if animation == self.animBase["Mana"]:
-                    animation.affiche(90,215 , nouveauRect=False)
-                #AnimSpec
-                """if animation == self.animSpec["bouton"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
-                if animation == self.animSpec["bouton2"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)"""
+                animation.affiche(animation.coordx,animation.coordy)
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
@@ -346,7 +325,7 @@ class Animation:
     """
         Classe définissant les animations du jeu.
     """
-    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False):
+    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False,coordx=0,coordy=0):
         """
             Constructeur de la classe
 
@@ -360,6 +339,8 @@ class Animation:
                 width: Largeur des sprites
                 height: Hauteur des sprites
         """
+        self.coordx=coordx
+        self.coordy=coordy
         self.fenetre = screen
         self.palette_name = palette
         self.palette = pygame.image.load(os.path.join("data","graphismes",self.palette_name))
@@ -453,9 +434,13 @@ class Personnage:
     """
         Classe représentant un personnage.
     """
-    def __init__(self, idJoueur, nomPerso):
+    def __init__(self, screen, idJoueur, nomPerso, nbSprites, vitesseSprite, largeur, hauteur, x ,y):
+        self.fenetre=screen
         self.idJoueur = idJoueur
         self.nomPerso = nomPerso
+        self.dialogue = Dialogue("data/dialogues/saloon.xml").getDialogues(nomPerso)
+        self.palette = os.path.join(nomPerso, "char.png")
+        self.animation = Animation(self.fenetre, self.palette , 0, nbSprites, vitesseSprite, True, largeur, hauteur, None, 3, False,x,y)
 
 
 class Joueur(Personnage):
