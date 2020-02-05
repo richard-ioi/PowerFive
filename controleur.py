@@ -62,15 +62,13 @@ class MoteurJeu:
         ligne=EP["ligne"]
         diag1=EP["diag1"]
         diag2=EP["diag2"]
-        for i in range(9):
-            try: caseDiag1 = diag1[i]
-            except IndexError: caseDiag1=0
-            try: caseDiag2 = diag2[i]
-            except IndexError: caseDiag2=0
+        print('l: ',ligne)
+        print('c: ', colonne)
+        print('d1 ',diag1)
+        print('d2 ', diag2)
+        #verif ligne
+        for i in range(len(ligne)):
             caseLigne = ligne[i]
-            try: caseColonne = colonne[i]
-            except IndexError: caseColonne=0
-            #verif ligne
             if caseLigne==jeton.idJoueur:
                 compteurL+=1
             else:
@@ -78,7 +76,9 @@ class MoteurJeu:
             if compteurL==5:
                 print("Win Ligne")
                 return jeton.idJoueur
-            #verif colonne
+        #verif colonne
+        for i in range(len(colonne)):
+            caseColonne = colonne[i]
             if caseColonne==jeton.idJoueur:
                 compteurC+=1
             else:
@@ -86,7 +86,9 @@ class MoteurJeu:
             if compteurC==5:
                 print("Win Colonne")
                 return jeton.idJoueur
-            #verif diag1
+        #verif diag1
+        for i in range(len(diag1)):
+            caseDiag1 = diag1[i]
             if caseDiag1==jeton.idJoueur:
                 compteurD1+=1
             else:
@@ -94,9 +96,11 @@ class MoteurJeu:
             if compteurD1==5:
                 print("Win Diag1")
                 return jeton.idJoueur
-            #verif diag2
+        #verif diag2
+        for i in range(len(diag2)):
+            caseDiag2 = diag2[i]
             if caseDiag2==jeton.idJoueur:
-                compteurD2=1
+                compteurD2+=1
             else:
                 compteurD2=0
             if compteurD2==5:
@@ -146,7 +150,7 @@ class IA:
                     listeCoups.append(self.ScoreCoup(coup,2))
                 elif( self.difficulty == "difficile" ):
                     listeCoups.append(self.MinMax(coup))
-            print(listeCoups)
+            #print(listeCoups)
             coupIA=max(listeCoups, key=lambda score: score[0])
             #print(coupIA[0])
             self.moteurJeu.Placer(coupIA[1], self.idIA)

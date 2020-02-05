@@ -39,7 +39,7 @@ class Main:
         self.grille = Grille()
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-        self.ia = IA(self.moteur,"difficile")
+        self.ia = IA(self.moteur,"normal")
     
     def mainLoop(self):
         while True:
@@ -64,7 +64,7 @@ class Main:
                         if(self.interface.tourJoueur):
                             if rect["rect"].collidepoint( (posSouris[0]-5, posSouris[1]) ):
                                 self.moteur.Placer(rect["colonne"], idJoueur)
-            if(not self.interface.tourJoueur):
+            if(not self.interface.tourJoueur and not self.interface.lacher):
                 self.ia.IAPlay()
             self.interface.Affichage()
             self.interface.AttentePlacement(posSouris, idJoueur)
