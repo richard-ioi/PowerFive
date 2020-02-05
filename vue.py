@@ -84,6 +84,8 @@ class Interface:
             colonneXCenter = rectCol.center[0]
             derniereCaseY = rectCase.y + 8
             yJeton = rectCol.y+68-16-jeton.sprite.get_height() + self.distance
+            jeton.speed += jeton.acceleration
+            self.distance += jeton.speed
             if( yJeton < derniereCaseY ):
                 self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )
             else:
@@ -98,8 +100,6 @@ class Interface:
                     self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
                 self.tremble = 4
-            jeton.speed += jeton.acceleration
-            self.distance += jeton.speed
 
         for iJeton in self.jetonsPlaces:
             self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
