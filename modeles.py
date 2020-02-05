@@ -87,16 +87,21 @@ class Grille:
         #self.coupPossible = casesVides
         return casesVides
 
-    def CaseVideColonne(self,colonne):
+    def CaseVideColonne(self, colonne, inv = True):
         """
             Méthode donnant l'ensemble des cases vides disponible dans la grille.
 
             Return:
                 Une liste de tuples contenant l'index des colonnes et des cases disponibles.
         """
-        for case in range(self.hauteur, -1, -1):
-            if(self.grillePrincipal[colonne][case] == 0):
-                return (colonne, case)
+        if inv:
+            for case in range(self.hauteur, -1, -1):
+                if(self.grillePrincipal[colonne][case] == 0):
+                    return case
+        else:
+            for case in range(0, self.hauteur + 1):
+                if(self.grillePrincipal[colonne][case] != 0):
+                    return case - 1
     
     def NbJetonColonne(self, colonne):
         """
@@ -135,7 +140,52 @@ class Grille:
         """
         case = self.CasesVides()[colonne][1]
         self.grillePrincipal[colonne][case] = idJoueur
-
+    
+    def PurgerColonne(self, colonne):
+        debut = self.CaseVideColonne(colonne, inv = False) + 1
+        caseUtile = self.grillePrincipal[colonne][debut:]
+        if 0 in caseUtile:
+            while 0 in caseUtile:
+                caseUtile.remove(0)
+            nbZero = len(self.grillePrincipal[colonne]) - len(caseUtile)
+            colonnePurgee = [0]
+            colonnePurgee *= nbZero
+            colonnePurgee += caseUtile
+            self.grillePrincipal[colonne] = colonnePurgee[:]
+        
+    def InverserJeton(self):
+        for i, colonne in enumerate(self.grillePrincipal):
+            for j, case in enumerate(colonne):
+                if case == 1:
+                    self.grillePrincipal[i][j] = 2
+                if case == 2:
+                    self.grillePrincipal[i][j] = 1
+    
+    def EjecterDernierJeton(self, colonne):
+        self.grillePrincipal[colonne] = [0] + self.grillePrincipal[colonne][:-2] + [-1]
+    
+    def EjecterJetonAleat(self):
+        colonne = random.randrange(len(self.grillePrincipal))
+        if self.hauteur - self.CaseVideColonne(colonne) > 1:
+            case = random.randrange( self.CaseVideColonne(colonne) +1, self.hauteur  )
+            self.grillePrincipal[colonne][case] = 0
+        else:
+            self.EjecterJetonAleat()
+        self.PurgerColonne(colonne)
+    
+    def EjecterJetonsAleat(self, n = 2):
+        for i, colonne in enumerate(self.grillePrincipal):
+            k = random.randint(1, n)
+            cases = random.choices(range(len(colonne) - 1), k=k)
+            print(cases)
+            for j in cases:
+                self.grillePrincipal[i][j] = 0
+            self.PurgerColonne(i)
+    
+    def MelangerJetons(self):
+        random.shuffle(self.grillePrincipal)
+        for colonne in range(len(maGrille.grillePrincipal)):
+            maGrille.PurgerColonne(colonne)
 
 class Jeton:
     """

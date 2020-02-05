@@ -8,12 +8,13 @@ import pygame
 import os
 import time
 from pygame.transform import scale
+import xml.etree.ElementTree as ET
 
 class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec):
+    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None):
         """
             Constructeur de la classe.
 
@@ -54,6 +55,12 @@ class Interface:
         self.texteSuite=""
         self.dialogueFini=False
 
+        self.compteurJeton=0
+        self.reinitialise=False
+
+        self.mode=mode
+        self.ennemi = ennemi
+
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
         time.sleep(1)
@@ -68,6 +75,7 @@ class Interface:
                                     [0,0,0,0,0,0,0,0,-1],  #6
                                     [0,0,0,0,0,0,0,0,-1],  #7
                                     [0,0,0,0,0,0,0,0,-1]]  #8
+        self.reinitialise=True
 
     def afficheTexte(self,idJoueur,aTexte):
         if idJoueur==1:
@@ -195,34 +203,16 @@ class Interface:
         #for animation in self.animBase.values():
             #animation.play = True
 
-        self.animBase["Sheriff"].play = True
-        self.animBase["Pingu"].play = True
-        #self.animBase["Weasel"].play = True
-        #self.animBase["Ultimatebouton"].play = True
+        self.animBase["sheriff"].play = True
+        self.animBase[self.ennemi].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
-                animation.update( animation.x_pos, animation.y_pos )
-                if animation == self.animBase["Sheriff"]:
-                    animation.affiche(50,720-64*3-50)
-                if animation == self.animBase["Froggy"]:
-                    animation.affiche(1000,520)
-                if animation == self.animBase["Weasel"]:
-                    animation.affiche(1000,20)
-                if animation == self.animBase["Jurassy"]:
-                    animation.affiche(1000,250)
-                if animation == self.animBase["Pingu"]:
-                    animation.affiche(1280-62*3-50,720-96*3-50)
-                if animation == self.animBase["PinguBad"]:
-                    animation.affiche(50,300)
-                if animation == self.animBase["Bouton"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
-                #AnimSpec
-                """if animation == self.animSpec["bouton"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)
-                if animation == self.animSpec["bouton2"]:
-                    animation.affiche(80+5,250-10 , nouveauRect=True)"""
+                if self.animBase["Bouton"]:
+                    animation.affiche(animation.coordx,animation.coordy,True)
+                else:
+                    animation.affiche(animation.coordx,animation.coordy)
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
@@ -335,11 +325,12 @@ class Interface:
         ]
         return rectColonne, rectList
 
+
 class Animation:
     """
         Classe définissant les animations du jeu.
     """
-    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False):
+    def __init__(self, screen, palette, y_sprite1, nb_sprites, speed=1, loop=True, width=62, height=64, nextAnim=None, coeffAgrandir=3, playAtStart=False,coordx=0,coordy=0):
         """
             Constructeur de la classe
 
@@ -353,6 +344,8 @@ class Animation:
                 width: Largeur des sprites
                 height: Hauteur des sprites
         """
+        self.coordx=coordx
+        self.coordy=coordy
         self.fenetre = screen
         self.palette_name = palette
         self.palette = pygame.image.load(os.path.join("data","graphismes",self.palette_name))
@@ -438,7 +431,7 @@ class Dialogue:
     
     def getDialogues(self, nomPerso):
         dialogues = []
-        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
+        for dial in self.root.find(f"./personnage[@nom='{nomPerso}']").getchildren():
             dialogues.append(dial.text.strip())
         return dialogues
 
@@ -446,22 +439,13 @@ class Personnage:
     """
         Classe représentant un personnage.
     """
-    def __init__(self, idJoueur):
+    def __init__(self, screen, idJoueur, nomPerso, nbSprites, vitesseSprite, largeur, hauteur, x ,y):
+        self.fenetre=screen
         self.idJoueur = idJoueur
-
-class Dialogue:
-    """
-        Classe représentant un dialogue
-    """
-    def __init__(self, fichier):
-        self.fichier = fichier
-        self.root = ET.parse(self.fichier).getroot()
-    
-    def getDialogues(self, nomPerso):
-        dialogues = []
-        for dial in root.find(f"./personnage[@nom='{perso}']").getchildren():
-            dialogues.append(dial.text.strip())
-        return dialogues
+        self.nomPerso = nomPerso
+        self.dialogue = Dialogue("data/dialogues/saloon.xml").getDialogues(nomPerso)
+        self.palette = os.path.join(nomPerso, "char.png")
+        self.animation = Animation(self.fenetre, self.palette , 0, nbSprites, vitesseSprite, True, largeur, hauteur, None, 3, False,x,y)
 
 
 class Joueur(Personnage):
