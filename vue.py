@@ -14,7 +14,7 @@ class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec):
+    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None):
         """
             Constructeur de la classe.
 
@@ -57,6 +57,9 @@ class Interface:
 
         self.compteurJeton=0
         self.reinitialise=False
+
+        self.mode=mode
+        self.ennemi = ennemi
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -200,10 +203,8 @@ class Interface:
         #for animation in self.animBase.values():
             #animation.play = True
 
-        self.animBase["Sheriff"].play = True
-        self.animBase["Pingu"].play = True
-        #self.animBase["Weasel"].play = True
-        #self.animBase["Ultimatebouton"].play = True
+        self.animBase["sheriff"].play = True
+        self.animBase[self.ennemi].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
@@ -323,6 +324,7 @@ class Interface:
             {"coord":(8, 7),  "rect": pygame.Rect(xGrille + 490, yGrille + 494, 60, 68)}
         ]
         return rectColonne, rectList
+
 
 class Animation:
     """

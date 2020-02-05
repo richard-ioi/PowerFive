@@ -38,14 +38,14 @@ class Main:
         self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,20)
         self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,250)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
-        self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,50,300)
+        self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,1280-62*3-50,720-96*3-50)
 
-        self.animBase = { "Sheriff": self.sheriff.animation,
-                          "Froggy": self.froggy.animation,
-                          "Weasel": self.weasel.animation,
-                          "Jurassy": self.jurassy.animation,
-                          "Pingu": self.pingu.animation,
-                          "PinguBad": self.pingu_bad.animation }
+        self.animBase = { "sheriff": self.sheriff.animation,
+                          "froggy": self.froggy.animation,
+                          "weasel": self.weasel.animation,
+                          "jurassy": self.jurassy.animation,
+                          "pingu": self.pingu.animation,
+                          "pingu_bad": self.pingu_bad.animation }
 
         self.animBoutonUlti = [ Animation(self.fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,47,None,3,True,80+5,250-10),
                         Animation(self.fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,47,None,3,True,80+5,250-10),
@@ -79,7 +79,7 @@ class Main:
 
         self.animSpec = {}
         self.grille = Grille()
-        self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec)
+        self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "weasel")
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur)
         self.posSouris = (0,0)
@@ -160,9 +160,23 @@ class Main:
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
             if(self.interface.dialogueFini==False):
-                self.interface.afficheTexte(2,self.pingu.dialogue[0])
+                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
                 #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
             pygame.display.update()
+
+    def getEnnemi(self, ennemi):
+        if self.interface.ennemi==self.sheriff.nomPerso:
+            return self.sheriff
+        elif self.interface.ennemi==self.froggy.nomPerso:
+            return self.froggy
+        elif self.interface.ennemi==self.weasel.nomPerso:
+            return self.weasel
+        elif self.interface.ennemi==self.jurassy.nomPerso:
+            return self.jurassy
+        elif self.interface.ennemi==self.pingu.nomPerso:
+            return self.pingu
+        elif self.interface.ennemi==self.pingu_bad.nomPerso:
+            return self.pingu_bad
 
 if __name__ == "__main__":
     jeu = Main().mainLoop()
