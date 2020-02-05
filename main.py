@@ -24,11 +24,11 @@ class Main:
         self.hauteur = 720
         self.titre = "PowerFive"
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
-        """self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",
-                                         "Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
-                              sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
-                                         "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
-        self.music.playMusic("Pingu")"""
+        self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav") } )
+                                         #"Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
+        """sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
+        "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )"""
+        self.music.playMusic("Pingu")
         self.animBase = { "Sheriff": Animation(self.fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
                           "Froggy": Animation(self.fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
                           "Weasel": Animation(self.fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
@@ -39,7 +39,7 @@ class Main:
         self.grille = Grille()
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-        self.ia = IA(self.moteur)
+        self.ia = IA(self.moteur,"difficile")
     
     def mainLoop(self):
         while True:

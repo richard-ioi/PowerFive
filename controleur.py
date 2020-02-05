@@ -110,7 +110,7 @@ class Jukebox:
         Classe permettant la manipulation de la musique et des sons du jeu.
     """
 
-    def __init__(self, musics, sounds):
+    def __init__(self, musics, sounds=None):
         self.musics = musics
         self.sounds = sounds
         self.currentMusic = self.musics["Pingu"]
@@ -129,30 +129,37 @@ class Jukebox:
 
 
 class IA:
-    def __init__(self, moteurJeu):
+    def __init__(self, moteurJeu, difficulty):
         self.idIA = 2
         self.moteurJeu = moteurJeu
+        self.difficulty = difficulty
 
     def IAPlay(self):
         coupPossibles = self.moteurJeu.grille.CasesVides()
-        listeCoups=[]
-        for coup in coupPossibles:
-            listeCoups.append(self.ScoreCoup(coup))
-        #print(listeCoups)
-        coupIA=max(listeCoups, key=lambda score: score[0])
-        #print(coupIA[0])
-        self.moteurJeu.Placer(coupIA[1], self.idIA)
+        if( self.difficulty == "easy" ):
+            randomCoup = random.randrange(len(coupPossibles))
+            self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
+        else:
+            listeCoups=[]
+            for coup in coupPossibles:
+                if( self.difficulty == "normal" ):
+                    listeCoups.append(self.ScoreCoup(coup,2))
+                elif( self.difficulty == "difficile" ):
+                    listeCoups.append(self.MinMax(coup))
+            print(listeCoups)
+            coupIA=max(listeCoups, key=lambda score: score[0])
+            #print(coupIA[0])
+            self.moteurJeu.Placer(coupIA[1], self.idIA)
 
-    def ScoreCoup(self, coup):
+    def ScoreCoup(self, coup, idJoueur):
         scores=[]
-        scores.append(self.ScoreCompteur(coup,"ligne"))
-        scores.append(self.ScoreCompteur(coup,"colonne"))
-        scores.append(self.ScoreCompteur(coup,"diag1"))
-        scores.append(self.ScoreCompteur(coup,"diag2"))
-        print(max(scores),' ',coup)
+        scores.append(self.ScoreCompteur(coup,"ligne",idJoueur))
+        scores.append(self.ScoreCompteur(coup,"colonne",idJoueur))
+        scores.append(self.ScoreCompteur(coup,"diag1",idJoueur))
+        scores.append(self.ScoreCompteur(coup,"diag2",idJoueur))
         return ( max(scores),coup[0] )
-        
-    def ScoreCompteur(self, coup, stringEtat, ID=2):
+            
+    def ScoreCompteur(self, coup, stringEtat, ID):
         #print(stringEtat)
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
         score = 15
@@ -206,16 +213,6 @@ class IA:
             elif( compteurJ1 == 2 ): score = 30
             elif( compteurJ2 == 2 ): score = 20
 
-        if ID==2:
-            compteurJ2 -= 1
-            if( compteurJ2 == 5 ): score = 100
-            elif( compteurJ1 == 4 ): score = 70
-            elif( compteurJ2 == 4 ): score = 60
-            elif( compteurJ1 == 3 ): score = 50
-            elif( compteurJ2 == 3 ): score = 40
-            elif( compteurJ1 == 2 ): score = 30
-            elif( compteurJ2 == 2 ): score = 20
-
         else:
             compteurJ1 -= 1
             if( compteurJ2 == 5 ): score = 100
@@ -231,89 +228,17 @@ class IA:
         return score
 
 
-        
-        """for paquet in range(5):
-            compteurJ1 = compteurJ2 = compteur0 = 0
-            compteurLJ1 = compteurLJ2 = compteurL0 = 0
-            compteurCJ1 = compteurCJ2 = compteurC0 = 0
-            compteurD1J1 = compteurD1J2 = compteurD10 = 0
-            compteurD2J1 = compteurD2J2 = compteurD20 = 0
-
-            for case in range(paquet, paquet+5):
-
-                caseLigne = dicoEtat["ligne"][case]
-
-                try: caseColonne = dicoEtat["colonne"][case]
-                except IndexError: caseColonne = -1
-
-                try: caseDiag1 = dicoEtat["diag1"][case]
-                except IndexError: caseDiag1 = -1
-
-                try: caseDiag2 = dicoEtat["diag2"][case]
-                except IndexError: caseDiag2 = -1
-                
-                #self.ScoreCompteurs(compteurLJ1,compteurLJ2,compteurL0,caseLigne,scores)
-                #self.ScoreCompteurs(compteurCJ1,compteurCJ2,compteurC0,caseColonne,scores)
-                #self.ScoreCompteurs(compteurD1J1,compteurD1J2,compteurD10,caseDiag1,scores)
-                #self.ScoreCompteurs(compteurD2J1,compteurD2J2,compteurD20,caseDiag2,scores
-                
-                if( caseLigne == 2 ):
-                    compteur0 = compteurJ1 = 0
-                    compteurJ2 += 1
-                elif( caseLigne == 1):
-                    compteur0 = compteurJ2 = 0
-                    compteurJ1 += 1
-                elif( caseLigne == 0):
-                    compteur0 += 1
-                    if( compteur0 >= 4):
-                        compteurJ1 = compteurJ2 = 0
-                else:
-                    compteur0 = compteurJ1 = compteurJ2 = 0
-                #Cas simples (pas de blocage)
-                #print(compteurJ1," ",compteurJ2," ",compteur0)
-                if( compteurJ2 == 5 ):
-                    scores.append(100)
-                elif( compteurJ2 == 4 and compteurJ1 == 0 ):
-                    scores.append(60)
-                elif( compteurJ2 == 3 and compteurJ1 == 0 ):
-                    scores.append(40)
-                elif( compteurJ2 == 2 and compteurJ1 == 0 ):
-                    scores.append(20)
-                #Cas complexes (avec blocage)
-                elif( compteurJ1 == 4 and compteurJ2 == 1 ):
-                    scores.append(70)
-                elif( compteurJ1 == 3 and compteurJ2 != 0 ):
-                    scores.append(50)
-                elif( compteurJ1 == 2 and compteurJ2 != 0 ):
-                    scores.append(30)
-                else: scores.append(15)
-
+    def MinMax(self, coup): #DIFFICULTE: DIFFICILE
+        """jeton = Jeton()
+        gagnant = self.moteurJeu.Gagnant(jeton)
+        if(gagnant == 1): return -500
+        elif(gagnant == 2): return 500"""
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
+        notesIA = []
+        notesH = []
+        coupPossibles = self.moteurJeu.grille.CasesVides()
+        for coupPossible in coupPossibles:
+            notesIA.append(self.ScoreCoup(coupPossible, 2))
+            notesH.append(self.ScoreCoup(coupPossible, 1))
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
-        return ( max(scores), coup[0] )"""
-
-    """def CalculScore():
-        gagnant = MoteurJeu.Gagnant(Jeton)
-        if gagnant == 1:
-            return (1,0)
-        elif gagnant == 2:
-            return (0,1)
-        else:
-            return(0,0)
-
-    def Simulation(self,jeton):
-        if self.MoteurJeu.Gagnant(jeton):
-            return (CalculScore(), None)
-        L=self.grille.CasesVides()
-        resultat=[]
-        for K in L:
-            self.grille[K[0]][K[1]]=jeton.idJoueur
-            if jeton.idJoueur==2:
-                score = Simulation(1)[0]
-                gain = score[1] - score[0]
-            else:
-                score = Simulation(2)[0]
-                gain = score[0] - score[1]
-            resultat.append((score,gain,K))
-            self.grille[K[0]][K[1]]=0
-        gainmax=max(resultat, key=lambda res: res[1])
-        return (gainmax[0], gainmax[2])"""
+        return ( max(notesIA, key=lambda score: score[0])[0] - max(notesH, key=lambda score: score[0])[0], coup[0] )

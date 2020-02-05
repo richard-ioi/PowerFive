@@ -190,7 +190,7 @@ class Jeton:
     """
         Classe représentant les jetons du jeu.
     """
-    def __init__(self, idJoueur):
+    def __init__(self, idJoueur, x=0, y=0):
         """
             Constructeur de la classe.
 
@@ -201,8 +201,8 @@ class Jeton:
                 image: Sprite du jeton
         """
         self.idJoueur = idJoueur
-        self.x = 0
-        self.y = 0
+        self.x = x
+        self.y = y
         self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) ) if idJoueur == 1 \
                      else scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
         self.speed = 2
