@@ -24,46 +24,55 @@ class Main:
         self.hauteur = 720
         self.titre = "PowerFive"
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
+
         """self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",
                                          "Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
                               sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
                                          "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
         self.music.playMusic("Pingu")"""
-        self.animBase = { "Sheriff": Animation(self.fenetre, os.path.join("sheriff", "char.png"), 0, 42, 7, True, 62, 64),
-                          "Froggy": Animation(self.fenetre, os.path.join("froggy", "char.png"), 0, 24, 5),
-                          "Weasel": Animation(self.fenetre, os.path.join("weasel", "char.png"), 0, 13, 5, True, 62, 72),
-                          "Jurassy": Animation(self.fenetre, os.path.join("jurassy", "char.png"), 0, 13, 5, True, 62, 72),
-                          "Pingu": Animation(self.fenetre, os.path.join("pingu","char.png"), 0,27,5,True,62,96),
-                          "PinguBad": Animation(self.fenetre, os.path.join("pingu","char_bad.png"), 0,33,5,True,62,96) }
 
-        self.animBoutonUlti = [ Animation(self.fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,47,None,3,True),
-                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,47),
-                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,47) ]
+        self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
+        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
+        self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,20)
+        self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,250)
+        self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
+        self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,50,300)
+
+        self.animBase = { "Sheriff": self.sheriff.animation,
+                          "Froggy": self.froggy.animation,
+                          "Weasel": self.weasel.animation,
+                          "Jurassy": self.jurassy.animation,
+                          "Pingu": self.pingu.animation,
+                          "PinguBad": self.pingu_bad.animation }
+
+        self.animBoutonUlti = [ Animation(self.fenetre, os.path.join("ultimate","ultimate1.png"),0,1,1,True,56,47,None,3,True,80+5,250-10),
+                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle0.png"),0,12,2,False,56,47,None,3,True,80+5,250-10),
+                        Animation(self.fenetre, os.path.join("ultimate","ultimateboucle.png"),0,12,3,True,56,47,None,3,True,80+5,250-10) ]
 
         self.animMana = [ 
-                        Animation(self.fenetre, os.path.join("mana","mana0.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana1.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana2.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana3.png"),0,1,1,True,80,13,None,2,True), 
-                        Animation(self.fenetre, os.path.join("mana","mana4.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana5.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana6.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana7.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana8.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana9.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana10.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana11.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana12.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana13.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana14.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana15.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana16.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana17.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana18.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana19.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana20.png"),0,1,1,True,80,13,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana_full.png"),0,7,5,True,78,12,None,2,True),
-                        Animation(self.fenetre, os.path.join("mana","mana_deremplissage.png"),0,21,2,False,80,12,None,2,True),
+                        Animation(self.fenetre, os.path.join("mana","mana0.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana1.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana2.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana3.png"),0,1,1,True,80,13,None,2,True,90,215), 
+                        Animation(self.fenetre, os.path.join("mana","mana4.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana5.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana6.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana7.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana8.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana9.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana10.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana11.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana12.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana13.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana14.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana15.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana16.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana17.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana18.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana19.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana20.png"),0,1,1,True,80,13,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana_full.png"),0,7,5,True,78,12,None,2,True,90,215),
+                        Animation(self.fenetre, os.path.join("mana","mana_deremplissage.png"),0,21,2,False,80,12,None,2,True,90,215),
                         ]
 
         self.animSpec = {}
@@ -149,7 +158,7 @@ class Main:
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
             if(self.interface.dialogueFini==False):
-                self.interface.afficheTexte(2,self.dialogue.getDialogues("Pingu")[0])
+                self.interface.afficheTexte(2,self.pingu.dialogue[0])
                 #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
             pygame.display.update()
 
