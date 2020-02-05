@@ -160,7 +160,6 @@ class Main:
 
 
             self.interface.Affichage()
-            self.fenetre.blit(self.sprite_cible,(self.posSouris[0]-self.sprite_cible.get_width()//2,self.posSouris[1]-self.sprite_cible.get_height()//2))
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             
             if(self.interface.dialogueFini==False):
