@@ -23,6 +23,8 @@ class Main:
         self.largeur = 1280
         self.hauteur = 720
         self.titre = "PowerFive"
+        self.favicon = pygame.image.load('data/graphismes/favicon.png')
+        pygame.display.set_icon(self.favicon)
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
 
         """self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",

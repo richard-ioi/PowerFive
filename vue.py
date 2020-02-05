@@ -208,7 +208,10 @@ class Interface:
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
             #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
-                animation.affiche(animation.coordx,animation.coordy)
+                if self.animBase["Bouton"]:
+                    animation.affiche(animation.coordx,animation.coordy,True)
+                else:
+                    animation.affiche(animation.coordx,animation.coordy)
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
