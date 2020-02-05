@@ -149,9 +149,10 @@ class IA:
         scores.append(self.ScoreCompteur(coup,"colonne"))
         scores.append(self.ScoreCompteur(coup,"diag1"))
         scores.append(self.ScoreCompteur(coup,"diag2"))
+        print(max(scores),' ',coup)
         return ( max(scores),coup[0] )
         
-    def ScoreCompteur(self, coup, stringEtat):
+    def ScoreCompteur(self, coup, stringEtat, ID=2):
         #print(stringEtat)
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
         score = 15
@@ -160,45 +161,70 @@ class IA:
         ligne=EP[stringEtat]
         compteurJ2 = compteurJ1 = 0
         #Compteur pour J2
-        for i2 in range(coup[0], len(ligne), 1):
+        if stringEtat!='colonne':
+            k=0
+        else:
+            k=1
+        for i2 in range(coup[k], len(ligne), 1):
             #vers les i++
             try: case = ligne[i2]
             except IndexError: case = -1
             if( case == 2 ): compteurJ2 += 1
-            else: break
-        compteurJ2 -= 1
-        for j2 in range(coup[0], -1, -1):
+            elif(i2 != coup[k]): break
+        for j2 in range(coup[k], -1, -1):
             #vers les j--
             try: case = ligne[j2]
             except IndexError: case = -1
             if( case == 2 ): compteurJ2 += 1
-            else : break
+            elif(j2 != coup[k]) : break
 
         #Compteur pour J1
-        for i1 in range(coup[0], len(ligne), 1):
+        for i1 in range(coup[k], len(ligne), 1):
             #vers les i++
             #print(coup," ",i1," ",ligne[i1])
             try: case = ligne[i1]
             except IndexError: case = -1
             if( case == 1 ): compteurJ1 += 1
-            elif( i1 != coup[0] ): break
-        for j1 in range(coup[0], -1, -1):
+            elif( i1 != coup[k] ): break
+        for j1 in range(coup[k], -1, -1):
             #vers les j--
             try: case = ligne[j1]
             except IndexError: case = -1
             if( case == 1 ): compteurJ1 += 1
-            elif( j1 != coup[0] ): break
+            elif( j1 != coup[k] ): break
         #print(coup," ",ligne," J1: ",compteurJ1," J2: ",compteurJ2 )
 
         #Conditions de scores
         #print("J1: ",compteurJ1," J2: ",compteurJ2 )
-        if( compteurJ2 == 5 ): score = 100
-        elif( compteurJ1 == 4 ): score = 70
-        elif( compteurJ2 == 4 ): score = 60
-        elif( compteurJ1 == 3 ): score = 50
-        elif( compteurJ2 == 3 ): score = 40
-        elif( compteurJ1 == 2 ): score = 30
-        elif( compteurJ2 == 2 ): score = 20
+        if ID==2:
+            compteurJ2 -= 1
+            if( compteurJ2 == 5 ): score = 100
+            elif( compteurJ1 == 4 ): score = 70
+            elif( compteurJ2 == 4 ): score = 60
+            elif( compteurJ1 == 3 ): score = 50
+            elif( compteurJ2 == 3 ): score = 40
+            elif( compteurJ1 == 2 ): score = 30
+            elif( compteurJ2 == 2 ): score = 20
+
+        if ID==2:
+            compteurJ2 -= 1
+            if( compteurJ2 == 5 ): score = 100
+            elif( compteurJ1 == 4 ): score = 70
+            elif( compteurJ2 == 4 ): score = 60
+            elif( compteurJ1 == 3 ): score = 50
+            elif( compteurJ2 == 3 ): score = 40
+            elif( compteurJ1 == 2 ): score = 30
+            elif( compteurJ2 == 2 ): score = 20
+
+        else:
+            compteurJ1 -= 1
+            if( compteurJ2 == 5 ): score = 100
+            elif( compteurJ1 == 4 ): score = 70
+            elif( compteurJ2 == 4 ): score = 60
+            elif( compteurJ1 == 3 ): score = 50
+            elif( compteurJ2 == 3 ): score = 40
+            elif( compteurJ1 == 2 ): score = 30
+            elif( compteurJ2 == 2 ): score = 20
         #print(ligne)
 
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
