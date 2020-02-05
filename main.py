@@ -79,7 +79,9 @@ class Main:
 
         self.animSpec = {}
         self.grille = Grille()
-        self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "weasel")
+        self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "pingu"),
+                                Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "weasel")]
+        self.interface = self.listeInterfaces[0]
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur)
         self.posSouris = (0,0)
@@ -153,6 +155,7 @@ class Main:
                 self.interface.reinitialise=False
                 self.seVide=False
                 self.manaFull=False
+                self.interface=self.listeInterfaces[1]
             #------------------Fin Gestion Mana
 
 
