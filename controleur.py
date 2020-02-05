@@ -43,16 +43,16 @@ class MoteurJeu:
             caseDispo = self.grille.CaseVideColonne(colonne)
             rectCase = None
             for rect in self.interface.rectList:
-                if rect["coord"] == caseDispo:
+                if rect["coord"] == (colonne, caseDispo):
                     rectCase = rect["rect"]
             jeton = Jeton(idJoueur)
-            self.grille.grillePrincipal[ colonne ][ caseDispo[1] ] = jeton.idJoueur
+            self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton.idJoueur
             #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             if self.interface.lacher:
                 self.lacher=True
-            jeton.x = caseDispo[0]
-            jeton.y = caseDispo[1]
+            jeton.x = colonne
+            jeton.y = caseDispo
             #print(jeton)
     
     def Gagnant(self, jeton):

@@ -185,7 +185,7 @@ class Grille:
     def MelangerJetons(self):
         random.shuffle(self.grillePrincipal)
         for colonne in range(len(maGrille.grillePrincipal)):
-            maGrille.EjecterDernierJeton(colonne)
+            maGrille.PurgerColonne(colonne)
 
 class Jeton:
     """
