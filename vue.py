@@ -12,7 +12,7 @@ class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec):
+    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, combat):
         """
             Constructeur de la classe.
 
@@ -28,29 +28,28 @@ class Interface:
         self.largeur = largeur
         self.hauteur = hauteur
         self.grille = grille
-<<<<<<< HEAD
         self.rectList = self.InitRect()
-=======
-        self.rectList = InitRect()
->>>>>>> df54f475ea758e021b164c1356573717865ce0e8
         self.animBase = animBase
         self.animSpec = animSpec
+        self.combat = combat
+
     
-    def Affichage(self):
-        """
-            Méthode exécutant les procédure d'affichages sur l'écran
-        """
-        self.fenetre.fill([255,255,255])
+    def AffichageHorsCombat(self):
+
+        #if (SALOON OK ):
+        self.animBase["Saloon1"].play = True
+
+         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
+            #print(animation.play)
+            if animation.play:
+                animation.update( animation.x_pos, animation.y_pos )
+                if animation == self.animBase["Saloon"]:
+                    animation.affiche(0,0)
+
+    def AffichageCombat(self):
+        
         self.fenetre.blit( self.grille.sprites["back"], ( self.largeur//2 - self.grille.dimSprites[0]//2 - 8, self.hauteur//2 - self.grille.dimSprites[1]//2 - 8 ) )
         self.fenetre.blit( self.grille.sprites["top"], ( self.largeur//2 - self.grille.dimSprites[0]//2 , self.hauteur//2 - self.grille.dimSprites[1]//2 ) )
-        
-<<<<<<< HEAD
-        #!! rectList a ajouter
-
-=======
->>>>>>> df54f475ea758e021b164c1356573717865ce0e8
-        #for animation in self.animBase.values():
-            #animation.play = True
 
         self.animBase["Sheriff"].play = True
         self.animBase["Pingu"].play = True
@@ -72,18 +71,23 @@ class Interface:
                 if animation == self.animBase["PinguBad"]:
                     animation.affiche(50,300)
 
-        # if( self.AnimFroggy.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimFroggy.update(self.AnimFroggy.x_pos,self.AnimFroggy.y_pos)
-        #     self.AnimFroggy.affiche(1000,520)
-        # if( self.AnimWheatle.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimWheatle.update(self.AnimWheatle.x_pos,self.AnimWheatle.y_pos)
-        #     self.AnimWheatle.affiche(1000,0)
-        # if( self.AnimJurassy.play ):
-        #     #print("First ",AnimTest.speed)
-        #     self.AnimJurassy.update(self.AnimJurassy.x_pos,self.AnimJurassy.y_pos)
-        #     self.AnimJurassy.affiche(1000,250)
+    def Affichage(self):
+        """
+            Méthode exécutant les procédure d'affichages sur l'écran
+        """
+
+        self.fenetre.fill([255,255,255])
+
+        if (self.combat==1):
+            self.AffichageCombat()
+        
+        elif (self.combat==0):
+            self.AffichageHorsCombat()
+
+        
+        #!! rectList a ajouter
+
+        
 
     def InitRect(self):
         #Rect pour les cases de la grille
