@@ -7,6 +7,7 @@
 import pygame
 import os
 import random
+import copy
 from pygame.transform import scale
 from modeles import Jeton,Grille
 
@@ -31,21 +32,21 @@ class MoteurJeu:
 
     
     # A tester
-    def Placer(self, colonne, idJoueur):
+    def Placer(self, colonne, grille, idJoueur):
         """
             Méthode permettant la placement d'un jeton dans la grille.
 
             Args:
                 jeton: Jeton à placer dans la grille
         """
-        if (not self.grille.ColonnePleine(self.grille.grillePrincipal[colonne]) and not self.interface.lacher):
+        if (not self.grille.ColonnePleine(grille[colonne]) and not self.interface.lacher):
             caseDispo = self.grille.CaseVideColonne(colonne)
             rectCase = None
             for rect in self.interface.rectList:
                 if rect["coord"] == caseDispo:
                     rectCase = rect["rect"]
             jeton = Jeton(idJoueur)
-            self.grille.grillePrincipal[ colonne ][ caseDispo[1] ] = jeton.idJoueur
+            grille[ colonne ][ caseDispo[1] ] = jeton.idJoueur
             #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             jeton.x = caseDispo[0]
@@ -138,12 +139,12 @@ class IA:
         self.mMgain = 0
 
     def IAPlay(self):
-        coupPossibles = self.moteurJeu.grille.CasesVides()
+        coupPossibles = self.moteurJeu.grille.CasesVides(self.moteurJeu.grille.grillePrincipal)
         if( self.difficulty == "easy" ):
             randomCoup = random.randrange(len(coupPossibles))
-            self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
+            self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.moteurJeu.grille.grillePrincipal, self.idIA)
         elif( self.difficulty == "difficile" ):
-            self.moteurJeu.Placer(self.MinMax(2)[1], self.idIA) #Append (gain,coup) de MinMax
+            self.moteurJeu.Placer(self.MinMax(2)[1], self.moteurJeu.grille.grillePrincipal, self.idIA) #Append (gain,coup) de MinMax
             self.nbSimul = 0
         else:
             listeCoups=[]
@@ -153,7 +154,7 @@ class IA:
             print(listeCoups)
             coupIA=max(listeCoups, key=lambda score: score[0])
             #print(coupIA[0])
-            self.moteurJeu.Placer(coupIA[1], self.idIA)
+            self.moteurJeu.Placer(coupIA[1], self.moteurJeu.grille.grillePrincipal, self.idIA)
 
     def ScoreCoup(self, coup, idJoueur):
         scores=[]
@@ -231,47 +232,18 @@ class IA:
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return score
 
-    def MinMax(self, idJoueur): #DIFFICULTE: DIFFICILE
-        """jeton = Jeton(idJoueur,coup[0],coup[1])
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
-        gagnant = self.moteurJeu.Gagnant(jeton)
-        #print(self.nbSimul)
-        if(gagnant == 1): return (-500, coup[0], (500,0))
-        elif(gagnant == 2): return (500, coup[0], (0,500))
-        elif(self.nbSimul >= 3):
-            return (self.mMgain, coup[0], self.mMscore)
-        self.nbSimul += 1
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0"""
-        coupPossibles = self.moteurJeu.grille.CasesVides()
-        notes = []
-        jeton = None
-        gagnant = 0
-        if(self.nbSimul >= 3):
-            return (self.mMgain, 0, self.mMscore)
-        else:
-            for coupPossible in coupPossibles:
-                print(self.nbSimul)
-                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-                jeton = Jeton(idJoueur,coupPossible[0],coupPossible[1])
-                gagnant = self.moteurJeu.Gagnant(jeton)
-                #print(self.nbSimul)
-                if(gagnant == 1): return (-500, coupPossible[0], (500,0))
-                elif(gagnant == 2): return (500, coupPossible[0], (0,500))
-                else:
-                    if(idJoueur==2):
-                        #notes.append(self.ScoreCoup(coupPossible, 2))
-                        self.mMscore = self.MinMax(1)[2]
-                        self.mMgain = self.mMscore[1]-self.mMscore[0]
-                    else:
-                        #notes.append(self.ScoreCoup(coupPossible, 1))
-                        self.mMscore = self.MinMax(2)[2]
-                        self.mMgain = self.mMscore[0]-self.mMscore[1]
-                    notes.append( (self.mMgain, coupPossible, self.mMscore) )
-                    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-                    print(notes)
-        self.nbSimul += 1
-        noteOpti = max(notes, key=lambda gain:gain[0])
-        return (noteOpti[0],noteOpti[1][0],noteOpti[2])
+    def MinMax(self, coup, idJoueur): #DIFFICULTE: DIFFICILE
+        grille2=copy.deepcopy(self.moteurJeu.grille.grillePrincipal)
+        coupPossibles = self.moteurJeu.grille.CasesVides(grille2)
+        listeCoups=[]
+        for coupIA in coupPossibles:
+            self.moteurJeu.Placer(coupIA[1], grille2, self.idIA)
+            coupPossibles2 = self.moteurJeu.grille.CasesVides(grille2)
+            scoreIA
+            for coupJoueur in coupPossibles2:
+                score=
+        coupIA=max(listeCoups, key=lambda score: score[0])
+
 
         """def Simulation(idJoueur):
         if( DetectionGagnant() != 0 ):
