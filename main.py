@@ -27,11 +27,11 @@ class Main:
         pygame.display.set_icon(self.favicon)
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
 
-        """self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav",
-                                         "Devil Pingu": os.path.join("data", "musiques", "devil_pingu_theme.wav" },
-                              sounds = { "Explosion": pygame.mixer.Sound( os.path.join("data", "sons", "explosion.wav") ),
-                                         "Succes": pygame.mixer.Sound( os.path.join("data", "sons", "succes.wav") ) } )
-        self.music.playMusic("Pingu")"""
+        self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav") },
+                              sounds = { "Jetons": [ pygame.mixer.Sound(os.path.join("data", "sons", "jeton0.wav")),
+                                                    pygame.mixer.Sound(os.path.join("data", "sons", "jeton1.wav")),
+                                                    pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
+        self.music.playMusic("Pingu")
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
         self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
@@ -79,7 +79,7 @@ class Main:
 
         self.animSpec = {}
         self.grille = Grille()
-        self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "pingu"),
+        self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "pingu", self.music),
                                 Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "weasel")]
         self.interface = self.listeInterfaces[0]
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)

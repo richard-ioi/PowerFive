@@ -14,7 +14,7 @@ class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None):
+    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None, musics=None):
         """
             Constructeur de la classe.
 
@@ -36,6 +36,7 @@ class Interface:
         self.animBase = animBase
         self.animSpec = animSpec
         self.moteurJeu = None
+        self.musics = musics
 
         self.tourJoueur = True
         self.jetonsPlaces = []
@@ -229,12 +230,9 @@ class Interface:
                 self.fenetre.blit( jetonSprite, (posXColonne-jetonSprite.get_width()//2,17) )
 
     def lacherJeton(self, jeton, rectCase, coordCase):
+        self.musics.playSound("Jetons",isRandom=True)
         self.lacher = True
         self.lacherInfos = (jeton,rectCase,coordCase)
-
-    """def rebondJeton(self, yMax, jeton):
-        jeton.acceleration = -2
-        jeton.speed = -1"""
     
     def InitRect(self):
         xGrille, yGrille = self.coordGrilleBack[0], self.coordGrilleBack[1]

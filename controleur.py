@@ -150,9 +150,12 @@ class Jukebox:
             pygame.mixer.music.load(self.musics[music])
             pygame.mixer.music.play(loops = loop, start = start)
     
-    def playSound(self, sound):
+    def playSound(self, sound, isRandom=False):
         if self.exist(sound):
-            self.sounds.play()
+            if isRandom:
+                R = random.randrange(len(self.sounds[sound]))
+                self.sounds[sound][R].play()
+            else: self.sounds[sound].play()
 
 
 class IA:
