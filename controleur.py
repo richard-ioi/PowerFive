@@ -142,13 +142,14 @@ class IA:
         if( self.difficulty == "easy" ):
             randomCoup = random.randrange(len(coupPossibles))
             self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
+        elif( self.difficulty == "difficile" ):
+            self.moteurJeu.Placer(self.MinMax(2)[1], self.idIA) #Append (gain,coup) de MinMax
+            self.nbSimul = 0
         else:
             listeCoups=[]
             for coup in coupPossibles:
                 if( self.difficulty == "normal" ):
                     listeCoups.append(self.ScoreCoup(coup,2))
-                elif( self.difficulty == "difficile" ):
-                    self.moteurJeu.Placer(self.MinMax(coup,2)[1], self.idIA) #Append (gain,coup) de MinMax
             print(listeCoups)
             coupIA=max(listeCoups, key=lambda score: score[0])
             #print(coupIA[0])
@@ -230,34 +231,45 @@ class IA:
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return score
 
-    def MinMax(self, coup, idJoueur): #DIFFICULTE: DIFFICILE
-        jeton = Jeton(idJoueur,coup[0],coup[1])
+    def MinMax(self, idJoueur): #DIFFICULTE: DIFFICILE
+        """jeton = Jeton(idJoueur,coup[0],coup[1])
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
         gagnant = self.moteurJeu.Gagnant(jeton)
         #print(self.nbSimul)
         if(gagnant == 1): return (-500, coup[0], (500,0))
         elif(gagnant == 2): return (500, coup[0], (0,500))
         elif(self.nbSimul >= 3):
-            self.nbSimul = 0
             return (self.mMgain, coup[0], self.mMscore)
         self.nbSimul += 1
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0"""
         coupPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
-        for coupPossible in coupPossibles:
-            print(self.nbSimul)
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-            if(idJoueur==2):
-                #notes.append(self.ScoreCoup(coupPossible, 2))
-                self.mMscore = self.MinMax(coupPossible,1)[2]
-                self.mMgain = self.mMscore[1]-self.mMscore[0]
-            else:
-                #notes.append(self.ScoreCoup(coupPossible, 1))
-                self.mMscore = self.MinMax(coupPossible,2)[2]
-                self.mMgain = self.mMscore[0]-self.mMscore[1]
-            notes.append( (self.mMgain, coupPossible, self.mMscore) )
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            print(notes)
+        jeton = None
+        gagnant = 0
+        if(self.nbSimul >= 3):
+            return (self.mMgain, 0, self.mMscore)
+        else:
+            for coupPossible in coupPossibles:
+                print(self.nbSimul)
+                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
+                jeton = Jeton(idJoueur,coupPossible[0],coupPossible[1])
+                gagnant = self.moteurJeu.Gagnant(jeton)
+                #print(self.nbSimul)
+                if(gagnant == 1): return (-500, coupPossible[0], (500,0))
+                elif(gagnant == 2): return (500, coupPossible[0], (0,500))
+                else:
+                    if(idJoueur==2):
+                        #notes.append(self.ScoreCoup(coupPossible, 2))
+                        self.mMscore = self.MinMax(1)[2]
+                        self.mMgain = self.mMscore[1]-self.mMscore[0]
+                    else:
+                        #notes.append(self.ScoreCoup(coupPossible, 1))
+                        self.mMscore = self.MinMax(2)[2]
+                        self.mMgain = self.mMscore[0]-self.mMscore[1]
+                    notes.append( (self.mMgain, coupPossible, self.mMscore) )
+                    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+                    print(notes)
+        self.nbSimul += 1
         noteOpti = max(notes, key=lambda gain:gain[0])
         return (noteOpti[0],noteOpti[1][0],noteOpti[2])
 
