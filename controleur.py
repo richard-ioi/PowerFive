@@ -143,19 +143,18 @@ class IA:
             randomCoup = random.randrange(len(coupPossibles))
             self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
         elif( self.difficulty == "difficile" ):
-            self.moteurJeu.Placer(self.MinMax(2)[1], self.idIA) #Append (gain,coup) de MinMax
-            self.nbSimul = 0
+            self.moteurJeu.Placer(self.MinMax(2)[1], self.idIA) #Jouer le meilleur coup retourné par MinMax
+            #self.nbSimul = 0
         else:
             listeCoups=[]
             for coup in coupPossibles:
                 if( self.difficulty == "normal" ):
                     listeCoups.append(self.ScoreCoup(coup,2))
-            print(listeCoups)
+            #print(listeCoups)
             coupIA=max(listeCoups, key=lambda score: score[0])
-            #print(coupIA[0])
             self.moteurJeu.Placer(coupIA[1], self.idIA)
 
-    def ScoreCoup(self, coup, idJoueur):
+    def ScoreCoup(self, coup, idJoueur):  #Retourne le score du coup placé en parametre
         scores=[]
         scores.append(self.ScoreCompteur(coup,"ligne",idJoueur))
         scores.append(self.ScoreCompteur(coup,"colonne",idJoueur))
@@ -232,6 +231,43 @@ class IA:
         return score
 
     def MinMax(self, idJoueur): #DIFFICULTE: DIFFICILE
+        coupPossibles = self.moteurJeu.grille.CasesVides()
+        notesIA = []
+        notesH = []
+
+        for coupPossible in coupPossibles:
+            print(coupPossible," Simul n°: ",self.nbSimul)
+            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
+            if(idJoueur==2):
+                #score = self.ScoreCoup(coupPossible, 2)[0]
+                notesIA.append(self.ScoreCoup(coupPossible, 2))   #Ajoute (score du coup, le coup correspondant) a la liste de l'ia
+                if(self.nbSimul < 3):
+                    self.nbSimul += 1
+                    #Appel de MinMax pour l'autre joueur
+                    notesH.append(self.MinMax(1)[:2])
+                else:
+                    self.nbSimul = 0 
+                    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+                    continue
+            else:
+                notesH.append(self.ScoreCoup(coupPossible, 1))    #Ajoute (score du coup, le coup correspondant) a la liste de l'humain
+                if(self.nbSimul < 3):
+                    self.nbSimul += 1
+                    #Appel de MinMax pour l'autre joueur
+                    notesIA.append(self.MinMax(2)[:2])
+                else:
+                    self.nbSimul = 0 
+                    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+                    continue
+            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+
+        maxIA = max(notesIA, key=lambda scoreIA: scoreIA[0])
+        maxH = max(notesH, key=lambda scoreH: scoreH[0])
+        #retourner (le max des notes IA ,  le coup associé ,  le max des notesIA - le max des notesH) si idJoueur = 2
+        #retourner (le max des notes Humain ,  le coup associé,  le max des notesH - le max des notesIA) si idJoueur = 1
+        if(idJoueur == 2): return ( maxIA[0], maxIA[1], maxIA[0]-maxH[0] )
+        else: return ( maxH[0], maxH[1], maxH[0]-maxIA[0] )
+
         """jeton = Jeton(idJoueur,coup[0],coup[1])
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
         gagnant = self.moteurJeu.Gagnant(jeton)
@@ -241,7 +277,7 @@ class IA:
         elif(self.nbSimul >= 3):
             return (self.mMgain, coup[0], self.mMscore)
         self.nbSimul += 1
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0"""
+        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         coupPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
         jeton = None
@@ -271,7 +307,7 @@ class IA:
                     print(notes)
         self.nbSimul += 1
         noteOpti = max(notes, key=lambda gain:gain[0])
-        return (noteOpti[0],noteOpti[1][0],noteOpti[2])
+        return (noteOpti[0],noteOpti[1][0],noteOpti[2])"""
 
         """def Simulation(idJoueur):
         if( DetectionGagnant() != 0 ):
