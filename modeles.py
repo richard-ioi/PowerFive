@@ -48,6 +48,15 @@ class Grille:
                                 [0,0,0,0,0,0,0,0,-1],  #6
                                 [0,0,0,0,0,0,0,0,-1],  #7
                                 [0,0,0,0,0,0,0,0,-1]]  #8
+        self.grilleJetons = [[None,None,None,None,None,None,None,None,mur],  #0
+                             [None,None,None,None,None,None,None,None,mur],  #1
+                             [None,None,None,None,None,None,None,None,mur],  #2
+                             [None,None,None,None,None,None,None,None,mur],  #3
+                             [None,None,None,None,None,None,None,None,mur],  #4
+                             [None,None,None,None,None,None,None,None,mur],  #5
+                             [None,None,None,None,None,None,None,None,mur],  #6
+                             [None,None,None,None,None,None,None,None,mur],  #7
+                             [None,None,None,None,None,None,None,None,mur]]  #8
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
@@ -192,7 +201,7 @@ class Jeton:
     """
         Classe représentant les jetons du jeu.
     """
-    def __init__(self, idJoueur):
+    def __init__(self, idJoueur, x=0, y=0):
         """
             Constructeur de la classe.
 
@@ -203,8 +212,8 @@ class Jeton:
                 image: Sprite du jeton
         """
         self.idJoueur = idJoueur
-        self.x = 0
-        self.y = 0
+        self.x = x
+        self.y = y
         self.sprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) ) if idJoueur == 1 \
                      else scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
         self.speed = 2

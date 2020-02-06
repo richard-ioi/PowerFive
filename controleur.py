@@ -45,14 +45,13 @@ class MoteurJeu:
             for rect in self.interface.rectList:
                 if rect["coord"] == (colonne, caseDispo):
                     rectCase = rect["rect"]
-            jeton = Jeton(idJoueur)
+            jeton = Jeton(idJoueur, colonne, caseDispo)
             self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton.idJoueur
+            self.grille.grilleJetons[ colonne ][ caseDispo ] = jeton
             #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             if self.interface.lacher:
                 self.lacher=True
-            jeton.x = colonne
-            jeton.y = caseDispo
             #print(jeton)
     
     def Gagnant(self, jeton):
