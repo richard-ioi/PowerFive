@@ -6,6 +6,7 @@
 
 import pygame
 import os
+import random
 from pygame.transform import scale
 
 class Grille:
@@ -184,8 +185,8 @@ class Grille:
     
     def MelangerJetons(self):
         random.shuffle(self.grillePrincipal)
-        for colonne in range(len(maGrille.grillePrincipal)):
-            maGrille.PurgerColonne(colonne)
+        for colonne in range(len(self.grillePrincipal)):
+            self.PurgerColonne(colonne)
 
 class Jeton:
     """
