@@ -239,7 +239,7 @@ class IA:
 
         """if partieterminee ou nbSimul > 2:
             return score"""
-
+        #IDEE POUR AMELIORER: Somme du gain max au niv 0 + gain max du niv 1 + gain max du niv 2 + gain niv 3 (avec Note())
         jeton = Jeton(idJoueur,self.lastCoup[0],self.lastCoup[1])
         gagnant = self.moteurJeu.Gagnant(jeton)
         if( gagnant != 0 or nbSimul >= 3 ):
@@ -248,20 +248,22 @@ class IA:
 
         for coupPossible in coupPossibles:
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-            self.lastCoup = coupPossible
+            if(nbSimul == 0): self.lastCoup = coupPossible
             if(idJoueur==2):
                 #notes.append(self.ScoreCoup(coupPossible, 2))
+                #print(f"Joueur : {idJoueur}")
                 score = self.MinMax( 1, nbSimul+1 )[2]
-                gain = self.mMscore[1]-self.mMscore[0]
+                gain = score[1]-score[0]
             else:
+                #print(f"Joueur : {idJoueur}")
                 #notes.append(self.ScoreCoup(coupPossible, 1))
                 score = self.MinMax( 2, nbSimul+1 )[2]
-                gain = self.mMscore[0]-self.mMscore[1]
+                gain = score[0]-score[1]
 
             notes.append( (gain, coupPossible, score) )
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            print(notes)
-            print(" ")
+        print("Joueur {} : {}".format(idJoueur,notes))
+        print(" ")
 
         noteOpti = max(notes, key=lambda gain:gain[0])
         return (noteOpti[0],noteOpti[1][0],noteOpti[2])
@@ -290,7 +292,6 @@ class IA:
         maxIA = max(notesIA, key=lambda score: score[0])
         maxH = max(notesH, key=lambda score: score[0])
         return (maxIA[0] - maxH[0], (maxH[0],maxIA[0]))
-
 
 """def MinMax(self, idJoueur, nbSimul): #DIFFICULTE: DIFFICILE
 coupPossibles = self.moteurJeu.grille.CasesVides()
