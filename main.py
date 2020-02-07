@@ -19,7 +19,7 @@ class Main:
     def initJeu(self):
         pygame.init()
         self.Clock = pygame.time.Clock()
-        self.fps = 60
+        self.fps = 30
         self.largeur = 1280
         self.hauteur = 720
         self.titre = "PowerFive"
@@ -177,7 +177,6 @@ class Main:
                 #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
             #------------------Fin gestion dialogues
 
-
             self.interface.Affichage()
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
 
@@ -217,7 +216,23 @@ class Main:
                                 
             self.interface.AffichageSaloon(self.animSaloonVide)
             pygame.display.update()
-                    
+        
+    def menuLoop(self):
+        police = pygame.font.Font(None,20)
+        texteRendu = police.render("Jouer",True,pygame.Color("#FFFFFF"))
+        while True :
+            self.posSouris = pygame.mouse.get_pos()
+            self.Clock.tick(self.fps)
+            pygame.display.set_caption(self.titre)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                """if event.type == pygame.MOUSEBUTTONDOWN:
+                    """
+            self.fenetre.blit(texteRendu,(640,360))
+                
 
     def getEnnemi(self, ennemi):
         if self.interface.ennemi==self.sheriff.nomPerso:
@@ -237,6 +252,8 @@ class Main:
         return self.interface.mode
 
 if __name__ == "__main__":
+    """if Main().getMode()=="menu":
+        jeu=Main().menuLoop()"""
     if Main().getMode()=="combat":
         jeu = Main().mainLoop()
     elif Main().getMode()=="saloon":

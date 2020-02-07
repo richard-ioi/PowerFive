@@ -7,8 +7,8 @@
 import pygame
 import os
 import time
-from pygame.transform import scale
 import xml.etree.ElementTree as ET
+from pygame.transform import scale
 
 class Interface:
     """
@@ -62,6 +62,8 @@ class Interface:
         self.mode=mode
         self.ennemi = ennemi
 
+        self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1280,720))
+
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
         time.sleep(1)
@@ -89,11 +91,10 @@ class Interface:
             y=400
 
         police = pygame.font.Font(None,20)
-        policespeciale = pygame.font.Font("data/polices/arial.ttf",9)
         texteRendu = police.render(self.texteFinal,True,pygame.Color("#000000"))
         texteRendu2 = police.render(self.texteFinal2,True,pygame.Color("#000000"))
         texteRendu3 = police.render(self.texteFinal3,True,pygame.Color("#000000"))
-        texteSuiteRendu = policespeciale.render(self.texteSuite,True,pygame.Color("#000000"))
+        texteSuiteRendu = police.render(self.texteSuite,True,pygame.Color("#000000"))
         
         if self.compteur!=len(aTexte):
             if (self.texteFini!=True):
@@ -148,6 +149,7 @@ class Interface:
         self.fenetre.blit(texteRendu3,(x+10,y+40))
         self.fenetre.blit(texteSuiteRendu,(x+(62-7)*4,y+55))
     
+
     def Affichage(self):
         """
             Méthode exécutant les procédure d'affichages sur l'écran
@@ -159,7 +161,10 @@ class Interface:
             self.tremble -= 1
         else: self.yTremble = 0
 
-        self.fenetre.fill([255,255,255])
+
+        self.fenetre.blit(self.background,(0,0))
+
+        #self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
 
         if(self.lacher):
