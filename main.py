@@ -77,13 +77,15 @@ class Main:
                         Animation(self.fenetre, os.path.join("mana","mana_deremplissage.png"),0,21,2,False,80,12,None,2,True,90,215),
                         ]
         
-        self.animSaloon = [ Animation(self.fenetre, os.path.join("saloon","saloon1.png"), 0,10,3,True,428,240,None,3,True,0,0), 
-                        Animation(self.fenetre, os.path.join("saloon","saloon2.png"), 0,10,3,True,428,240,None,3,True,0,0),
-                        Animation(self.fenetre, os.path.join("saloon","saloon3.png"), 0,10,3,True,428,240,None,3,True,0,0),
-                        Animation(self.fenetre, os.path.join("saloon","saloon4.png"), 0,10,3,True,428,240,None,3,True,0,0),
-                        Animation(self.fenetre, os.path.join("saloon","saloon5.png"), 0,10,3,True,428,240,None,3,True,0,0)
+        self.animSaloon = [ Animation(self.fenetre, os.path.join("saloon","saloon1.png"), 0,10,3,False,428,240,None,3,True,0,0), 
+                        Animation(self.fenetre, os.path.join("saloon","saloon2.png"), 0,10,3,False,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon3.png"), 0,10,3,False,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon4.png"), 0,10,3,False,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon5.png"), 0,10,3,False,428,240,None,3,True,0,0)
                         ]
 
+        self.animSaloonVide = {"Saloon": None}
+    
         self.animSpec = {}
         self.grille = Grille()
         self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music),
@@ -95,7 +97,7 @@ class Main:
         self.idJoueur = 1
         self.barreMana = ObjetAnimMultiple(85,50,self.animMana,self.animBase,"Mana")
         self.boutonUlti = ObjetAnimMultiple(85,240,self.animBoutonUlti,self.animBase)
-        self.saloon = ObjetAnimMultiple(0,0,self.animSaloon,self.animBase)
+        self.saloon = ObjetAnimMultiple(0,0,self.animSaloon,self.animSaloonVide,"Saloon")
         self.dialogue = Dialogue("data/dialogues/saloon.xml")
         self.compteurMana=0
         self.manaFull=False
@@ -191,7 +193,6 @@ class Main:
         rectWeasel = pygame.Rect(160,125,75,90)
         rectJurassy= pygame.Rect(1020,380,195,185)
         while True:
-            
             self.posSouris = pygame.mouse.get_pos()
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
@@ -211,9 +212,10 @@ class Main:
                         self.interface=self.listeInterfaces[1]
                         print("clic jurassy")
                         Main().mainLoop()
-                
+            
+            self.saloon.updateCurrentAnim(condition=True)
                                 
-            self.interface.AffichageSaloon(self.animSaloon[0])
+            self.interface.AffichageSaloon(self.animSaloonVide)
             pygame.display.update()
                     
 

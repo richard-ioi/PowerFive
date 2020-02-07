@@ -252,7 +252,10 @@ class ObjetAnimMultiple:
 
     def updateCurrentAnim(self, condition=True, conditions=None, indice=-1):
         #Update l'animation courante pour la suivante dans la liste d'animation, selon une condition en parametre
-        if(self.idAnim >= len(self.animList)-1): self.idAnim = len(self.animList)-1
+        if (self.idAnim >= len(self.animList)-1 and condition and self.currentAnim.done and not self.currentAnim.isLoop):
+            self.Reinitialiser()
+        elif(self.idAnim >= len(self.animList)-1): 
+            self.idAnim = len(self.animList)-1
         else:
             if(conditions != None): condition = conditions[self.idAnim] # PROBLEME!!! Les conditions ne s'update pas !
             if( indice != -1 ):

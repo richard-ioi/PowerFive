@@ -216,7 +216,9 @@ class Interface:
                     animation.affiche(animation.coordx,animation.coordy)
         
     def AffichageSaloon(self, animSaloon):
-        animSaloon.affiche(0,0,True)
+        for animation in list (animSaloon.values()):
+            if animation.play:
+                animation.affiche(0,0)
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
