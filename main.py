@@ -35,7 +35,7 @@ class Main:
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
         self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
-        self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,20)
+        self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,720-72*3-50)
         self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,250)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
         self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,1280-62*3-50,720-96*3-50)
@@ -76,11 +76,18 @@ class Main:
                         Animation(self.fenetre, os.path.join("mana","mana_full.png"),0,7,5,True,78,12,None,2,True,90,215),
                         Animation(self.fenetre, os.path.join("mana","mana_deremplissage.png"),0,21,2,False,80,12,None,2,True,90,215),
                         ]
+        
+        self.animSaloon = [ Animation(self.fenetre, os.path.join("saloon","saloon1.png"), 0,10,3,True,428,240,None,3,True,0,0), 
+                        Animation(self.fenetre, os.path.join("saloon","saloon2.png"), 0,10,3,True,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon3.png"), 0,10,3,True,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon4.png"), 0,10,3,True,428,240,None,3,True,0,0),
+                        Animation(self.fenetre, os.path.join("saloon","saloon5.png"), 0,10,3,True,428,240,None,3,True,0,0)
+                        ]
 
         self.animSpec = {}
         self.grille = Grille()
-        self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "pingu", self.music),
-                                Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "weasel")]
+        self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music),
+                                Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "jurassy")]
         self.interface = self.listeInterfaces[0]
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur)
@@ -88,6 +95,7 @@ class Main:
         self.idJoueur = 1
         self.barreMana = ObjetAnimMultiple(85,50,self.animMana,self.animBase,"Mana")
         self.boutonUlti = ObjetAnimMultiple(85,240,self.animBoutonUlti,self.animBase)
+        self.saloon = ObjetAnimMultiple(0,0,self.animSaloon,self.animBase)
         self.dialogue = Dialogue("data/dialogues/saloon.xml")
         self.compteurMana=0
         self.manaFull=False
@@ -99,7 +107,7 @@ class Main:
         while True:
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
-
+            
             self.moteur.lacher=False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -148,6 +156,9 @@ class Main:
                     self.clicked=False
                     print("DECOMPTE SE VIDE ENCLANCHE")
 
+            if (self.interface.reinitialise):
+                Main().saloonLoop()
+
             if (self.compteurManaVide==0 and self.seVide==True) or (self.interface.reinitialise==True):
                 self.compteurMana=0
                 self.compteurManaVide=0
@@ -158,14 +169,53 @@ class Main:
                 self.interface=self.listeInterfaces[1]
             #------------------Fin Gestion Mana
 
-
-            self.interface.Affichage()
-            self.interface.AttentePlacement(self.posSouris,self.idJoueur)
-            
+            #Gestion dialogues
             if(self.interface.dialogueFini==False):
                 self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
                 #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
+            #------------------Fin gestion dialogues
+
+
+            self.interface.Affichage()
+            self.interface.AttentePlacement(self.posSouris,self.idJoueur)
+
+            #Gestion dialogues
+            if(self.interface.dialogueFini==False):
+                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
+                #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
+            #------------------Fin gestion dialogues
+            
             pygame.display.update()
+
+    def saloonLoop(self):
+        rectWeasel = pygame.Rect(160,125,75,90)
+        rectJurassy= pygame.Rect(1020,380,195,185)
+        while True:
+            
+            self.posSouris = pygame.mouse.get_pos()
+            self.Clock.tick(self.fps)
+            pygame.display.set_caption(self.titre)
+
+            for event in pygame.event.get():
+                if event.type == pygame.QUIT:
+                    pygame.quit()
+                    sys.exit()
+                if event.type == pygame.MOUSEBUTTONDOWN:
+                    
+                    if( rectWeasel.collidepoint(self.posSouris) ):
+                        self.interface=self.listeInterfaces[0]
+                        print("clic weasel")
+                        Main().mainLoop()
+
+                    elif( rectJurassy.collidepoint(self.posSouris) ):
+                        self.interface=self.listeInterfaces[1]
+                        print("clic jurassy")
+                        Main().mainLoop()
+                
+                                
+            self.interface.AffichageSaloon(self.animSaloon[0])
+            pygame.display.update()
+                    
 
     def getEnnemi(self, ennemi):
         if self.interface.ennemi==self.sheriff.nomPerso:
@@ -181,5 +231,11 @@ class Main:
         elif self.interface.ennemi==self.pingu_bad.nomPerso:
             return self.pingu_bad
 
+    def getMode(self):
+        return self.interface.mode
+
 if __name__ == "__main__":
-    jeu = Main().mainLoop()
+    if Main().getMode()=="combat":
+        jeu = Main().mainLoop()
+    elif Main().getMode()=="saloon":
+        jeu = Main().saloonLoop()

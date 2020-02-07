@@ -214,6 +214,9 @@ class Interface:
                     animation.affiche(animation.coordx,animation.coordy,True)
                 else:
                     animation.affiche(animation.coordx,animation.coordy)
+        
+    def AffichageSaloon(self, animSaloon):
+        animSaloon.affiche(0,0,True)
 
     def AttentePlacement(self,posSouris,idJoueur):
         if(not self.lacher and idJoueur == 1):
