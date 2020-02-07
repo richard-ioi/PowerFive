@@ -43,6 +43,10 @@ class Interface:
         self.lacherInfos = (0,0)
         self.lacher = False
         self.distance = 0
+        self.plusOuMoins = -1
+        self.tremble = 0
+        self.yTremble = 0
+        #self.imgSaloon = scale(pygame.image.load(os.path.join("data","graphismes","saloon.png")),(1280,720))
 
         self.plusOuMoins = 1
         self.tremble = 0
@@ -155,7 +159,6 @@ class Interface:
             Méthode exécutant les procédure d'affichages sur l'écran
         """
         self.plusOuMoins *= -1
-        #print(self.tremble," ",self.plusOuMoins)
         if(self.tremble > 0): 
             self.yTremble = self.plusOuMoins * 2
             self.tremble -= 1
@@ -163,7 +166,6 @@ class Interface:
 
 
         self.fenetre.blit(self.background,(0,0))
-
         #self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
 
