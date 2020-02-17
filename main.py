@@ -27,11 +27,11 @@ class Main:
         pygame.display.set_icon(self.favicon)
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
 
-        self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav") },
+        self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav"),
+                                         "Battle": os.path.join("data", "musiques", "battle_theme_full.wav") },
                               sounds = { "Jetons": [ pygame.mixer.Sound(os.path.join("data", "sons", "jeton0.wav")),
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton1.wav")),
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
-        self.music.playMusic("Pingu")
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
         self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
@@ -89,7 +89,7 @@ class Main:
         self.animSpec = {}
         self.grille = Grille()
         self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music),
-                                Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "combat", "jurassy")]
+                                Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "jurassy", self.music)]
         self.interface = self.listeInterfaces[0]
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur,"normal")
@@ -107,6 +107,7 @@ class Main:
         self.clicked=False
     
     def mainLoop(self):
+        self.music.playMusic("Battle")
         while True:
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
@@ -190,6 +191,7 @@ class Main:
             pygame.display.update()
 
     def saloonLoop(self):
+        self.music.playMusic("Pingu")
         rectWeasel = pygame.Rect(160,125,75,90)
         rectJurassy= pygame.Rect(1020,380,195,185)
         while True:
@@ -205,11 +207,13 @@ class Main:
                     
                     if( rectWeasel.collidepoint(self.posSouris) ):
                         self.interface=self.listeInterfaces[0]
+                        self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
                         print("clic weasel")
                         Main().mainLoop()
 
                     elif( rectJurassy.collidepoint(self.posSouris) ):
                         self.interface=self.listeInterfaces[1]
+                        self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
                         print("clic jurassy")
                         Main().mainLoop()
             
