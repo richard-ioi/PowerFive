@@ -34,7 +34,7 @@ class Main:
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
-        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
+        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,720-72*3-50)
         self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,720-72*3-50)
         self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,720-72*3-50)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
@@ -128,7 +128,6 @@ class Main:
                                 self.moteur.Placer(rect["colonne"],self.idJoueur)
                                 self.boutonUlti.Reinitialiser()
                                 self.manaFull=False
-                                #print(self.grille)
 
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
@@ -173,8 +172,10 @@ class Main:
                 self.interface=self.listeInterfaces[1]
             #------------------Fin Gestion Mana
 
+            #Bidouillage pour changer l'ennemi
             if(ennemi!=None):
                 self.interface.ennemi=ennemi
+            #------------------Fin du bidouillage
 
             #Gestion affichage
             self.interface.Affichage()
@@ -193,6 +194,7 @@ class Main:
         self.music.playMusic("Pingu")
         rectWeasel = pygame.Rect(160,125,75,90)
         rectJurassy= pygame.Rect(1020,380,195,185)
+        rectFroggy = pygame.Rect(180*3,15*3,60*3,57*3)
         while True:
             self.posSouris = pygame.mouse.get_pos()
             self.Clock.tick(self.fps)
@@ -213,6 +215,11 @@ class Main:
                         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
                         print("clic weasel")
                         Main().mainLoop("weasel")
+
+                    elif ( rectFroggy.collidepoint(self.posSouris) ):
+                        self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
+                        print("clic froggy")
+                        Main().mainLoop("froggy")
             
             self.saloon.updateCurrentAnim(condition=True)
                                 
