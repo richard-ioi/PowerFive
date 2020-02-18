@@ -109,7 +109,6 @@ class Main:
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
         while True:
-            print(self.fps)
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
             
