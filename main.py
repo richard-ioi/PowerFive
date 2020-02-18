@@ -36,7 +36,7 @@ class Main:
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,720-64*3-50)
         self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,520)
         self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,720-72*3-50)
-        self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,250)
+        self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,720-72*3-50)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
         self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,1280-62*3-50,720-96*3-50)
 
@@ -90,7 +90,7 @@ class Main:
         self.grille = Grille()
         self.listeInterfaces = [Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music),
                                 Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "jurassy", self.music)]
-        self.interface = self.listeInterfaces[0]
+        self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
         self.ia = IA(self.moteur,"normal")
 
@@ -106,9 +106,10 @@ class Main:
         self.seVide=False
         self.clicked=False
     
-    def mainLoop(self):
+    def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
         while True:
+            print(self.fps)
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
             
@@ -173,14 +174,13 @@ class Main:
                 self.interface=self.listeInterfaces[1]
             #------------------Fin Gestion Mana
 
-            #Gestion dialogues
-            if(self.interface.dialogueFini==False):
-                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
-                #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
-            #------------------Fin gestion dialogues
+            if(ennemi!=None):
+                self.interface.ennemi=ennemi
 
+            #Gestion affichage
             self.interface.Affichage()
             self.interface.AttentePlacement(self.posSouris,self.idJoueur)
+            #------------------Fin gestion affichage
 
             #Gestion dialogues
             if(self.interface.dialogueFini==False):
@@ -204,18 +204,16 @@ class Main:
                     pygame.quit()
                     sys.exit()
                 if event.type == pygame.MOUSEBUTTONDOWN:
-                    
-                    if( rectWeasel.collidepoint(self.posSouris) ):
-                        self.interface=self.listeInterfaces[0]
-                        self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-                        print("clic weasel")
-                        Main().mainLoop()
 
-                    elif( rectJurassy.collidepoint(self.posSouris) ):
-                        self.interface=self.listeInterfaces[1]
+                    if( rectJurassy.collidepoint(self.posSouris) ):
                         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
                         print("clic jurassy")
-                        Main().mainLoop()
+                        Main().mainLoop("jurassy")
+
+                    elif( rectWeasel.collidepoint(self.posSouris) ):
+                        self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
+                        print("clic weasel")
+                        Main().mainLoop("weasel")
             
             self.saloon.updateCurrentAnim(condition=True)
                                 
@@ -273,7 +271,7 @@ class Main:
 if __name__ == "__main__":
     """if Main().getMode()=="menu":
         jeu=Main().menuLoop()"""
-    if Main().getMode()=="combat":
-        jeu = Main().mainLoop()
-    elif Main().getMode()=="saloon":
+    """if Main().getMode()=="combat":
+        jeu = Main().mainLoop()"""
+    if Main().getMode()=="saloon":
         jeu = Main().saloonLoop()
