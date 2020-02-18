@@ -237,12 +237,14 @@ class IA:
         score = (0,0)
         gain = 0
 
-        """if partieterminee ou nbSimul > 2:
-            return score"""
-        #IDEE POUR AMELIORER: Somme du gain max au niv 0 + gain max du niv 1 + gain max du niv 2 + gain niv 3 (avec Note())
+        #IDEE POUR AMELIORER: Connaitre le chemin qui va rapporter le plus de gain et choisir uniquement le premier coup de ce chemin
+        #Somme du gain max au niv 0 + gain max du niv 1 + gain max du niv 2 + gain niv 3 (avec Note())
+
         jeton = Jeton(idJoueur,self.lastCoup[0],self.lastCoup[1])
+        self.moteurJeu.grille.grillePrincipal[self.lastCoup[0]][self.lastCoup[1]] = idJoueur
         gagnant = self.moteurJeu.Gagnant(jeton)
-        if( gagnant != 0 or nbSimul >= 3 ):
+        self.moteurJeu.grille.grillePrincipal[self.lastCoup[0]][self.lastCoup[1]] = 0
+        if( gagnant != 0 or nbSimul >= 2 ):
             note = self.Note(gagnant, self.lastCoup, idJoueur)
             return (note[0], self.lastCoup, note[1])
 
@@ -261,6 +263,7 @@ class IA:
                 gain = score[0]-score[1]
 
             notes.append( (gain, coupPossible, score) )
+            self.mMgain += gain
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
         print("Joueur {} : {}".format(idJoueur,notes))
         print(" ")
