@@ -209,7 +209,7 @@ class IA:
         #print("J1: ",compteurJ1," J2: ",compteurJ2 )
         if ID==2:
             compteurJ2 -= 1
-            if( compteurJ2 == 5 ): score = 100
+            if( compteurJ2 == 5 ): score = 500
             elif( compteurJ1 == 4 ): score = 70
             elif( compteurJ2 == 4 ): score = 60
             elif( compteurJ1 == 3 ): score = 50
@@ -219,7 +219,7 @@ class IA:
 
         else:
             compteurJ1 -= 1
-            if( compteurJ1 == 5 ): score = 100
+            if( compteurJ1 == 5 ): score = 500
             elif( compteurJ2 == 4 ): score = 70
             elif( compteurJ1 == 4 ): score = 60
             elif( compteurJ2 == 3 ): score = 50
@@ -231,194 +231,119 @@ class IA:
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return score
 
-    def MinMax(self, idJoueur, nbSimul=0): #DIFFICULTE: DIFFICILE
-        coupPossibles = self.moteurJeu.grille.CasesVides()
+    def MinMax(self, idJoueur, nbSimul=0, dernierCoup=None): #Doit retourner le meilleur coup à jouer pour l'ia
+    #CHANGER LA FONCTION POUR NE PLUS UTILLISER LES (SCORE) MAIS SEULEMENT LES GAINS = LES NOTES
+    
+        #Si il y a un gagnant ou qu'on est à la profondeur 3: return la "note" de l'état du jeu, soit un tuple (score,None)
+        if( dernierCoup != None ):
+            jeton = Jeton(idJoueur, dernierCoup[0], dernierCoup[1]) #On creer un jeton temporaire pour determiner si il y a un gagnant pour le dernier coup joué
+            self.moteurJeu.grille.grillePrincipal[dernierCoup[0]][dernierCoup[1]] = idJoueur #On rejoue le dernier coup
+            gagnant = self.moteurJeu.Gagnant(jeton)
+            self.moteurJeu.grille.grillePrincipal[dernierCoup[0]][dernierCoup[1]] = 0 #On annule ce coup
+            if( gagnant != 0 or nbSimul >= 2 ):
+                #print("coup:",dernierCoup," ",gagnant," ",nbSimul)
+                return self.Note()
+
+        #On détermine les coups disponibles sur la grille de jeu et on instencie de la liste des notes
+        coupsPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
-        score = (0,0)
-        gain = 0
 
-        #IDEE POUR AMELIORER: Connaitre le chemin qui va rapporter le plus de gain et choisir uniquement le premier coup de ce chemin
-        #Somme du gain max au niv 0 + gain max du niv 1 + gain max du niv 2 + gain niv 3 (avec Note())
-
-        jeton = Jeton(idJoueur,self.lastCoup[0],self.lastCoup[1])
-        self.moteurJeu.grille.grillePrincipal[self.lastCoup[0]][self.lastCoup[1]] = idJoueur
-        gagnant = self.moteurJeu.Gagnant(jeton)
-        self.moteurJeu.grille.grillePrincipal[self.lastCoup[0]][self.lastCoup[1]] = 0
-        if( gagnant != 0 or nbSimul >= 2 ):
-            note = self.Note(gagnant, self.lastCoup, idJoueur)
-            return (note[0], self.lastCoup, note[1])
-
-        for coupPossible in coupPossibles:
+        #Pour chaque coup possible on va:
+        #Jouer le coup, calculer le score par une récurrence de minmax sur l'autre joueur en incrémentant la profondeur (nbSimul), stocker dans les notes (le gain, le score, le coup associé), annuler le coup
+        for coupPossible in coupsPossibles:
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-            if(nbSimul == 0): self.lastCoup = coupPossible
-            if(idJoueur==2):
-                #notes.append(self.ScoreCoup(coupPossible, 2))
-                #print(f"Joueur : {idJoueur}")
-                score = self.MinMax( 1, nbSimul+1 )[2]
-                gain = score[1]-score[0]
+            if( idJoueur == 2 ):
+                newMinMax = self.MinMax(1, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
+                #print("#J1##",newMinMax)
+                score = newMinMax[0]
+                gain = score[1] - score[0] #gain = score ia - score humain
             else:
-                #print(f"Joueur : {idJoueur}")
-                #notes.append(self.ScoreCoup(coupPossible, 1))
-                score = self.MinMax( 2, nbSimul+1 )[2]
-                gain = score[0]-score[1]
+                newMinMax = self.MinMax(2, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
+                #print("#J2##",newMinMax)
+                score = newMinMax[0]
+                gain = score[0] - score[1] #gain = score humain - score ia
 
-            notes.append( (gain, coupPossible, score) )
-            self.mMgain += gain
+            notes.append( (gain, score, coupPossible[0]) ) #Soit [0]:gain, [1]:(score), [2]:coup associé
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-        print("Joueur {} : {}".format(idJoueur,notes))
+
+        #On retourne enfin le score et le coup du tuple de notes qui possède le gain maximal, soit ( (score),coup) du gain max, pour pouvoir récupérer le score dans la récurrence et jouer le meilleur coup dans IAPlay()
         print(" ")
+        print(notes)
+        noteMax = max( notes, key=lambda gain:gain[0] ) #Tuple de notes qui possède le gain maximal
+        print(noteMax)
+        return ( noteMax[1], noteMax[2] )
 
-        noteOpti = max(notes, key=lambda gain:gain[0])
-        return (noteOpti[0],noteOpti[1][0],noteOpti[2])
+
+    def Note(self): #Doit retourner un tuple ((scoreH max,scoreIA max), None) pour etre "utilisé" dans MinMax()
+        #On instencie les coups disponibles et les listes des scores pour l'ia et pour l'humain qui contiendra des tuples (score, coup associé)
+        coupsDispo  = self.moteurJeu.grille.CasesVides()
+        scoresIA = []
+        scoresH = []
+
+        #Pour chaque coup possible on va:
+        #Avec la fonction ScoreCoup(), calculer le score pour ce coup pour l'ia et l'ajouter à scoresIA, calculer le score pour ce coup pour l'humain et l'ajouter à scoresH
+        for coup in coupsDispo:
+            scoresIA.append( self.ScoreCoup(coup, 2)[0] )
+            scoresH.append( self.ScoreCoup(coup, 1)[0] )
+
+        #On retourne un tuple ( (max de scoresH, max de scoresIA), None )
+        return (  ( max(scoresH), max(scoresIA) ), None  )
 
 
-    def Note(self, gagnant, coup, idJoueur, nbSimul=0):
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = idJoueur
+    """def MinMax(self, idJoueur, nbSimul=0, dernierCoup=None): #Doit retourner le meilleur coup à jouer pour l'ia
 
-        if(gagnant == 1): return (-500, (500,0))
-        elif(gagnant == 2): return (500, (0,500))
-        """if idJoueur == 2:
-            if(gagnant == 1): return (-500, (500,0))
-            elif(gagnant == 2): return (500, (0,500))
-        else: 
-            if(gagnant == 1): return (500, (500,0))
-            elif(gagnant == 2): return (-500, (0,500))"""
+        #Si il y a un gagnant ou qu'on est à la profondeur 3: return la "note" de l'état du jeu, soit un tuple (score,None)
+        if( dernierCoup != None ):
+            jeton = Jeton(idJoueur, dernierCoup[0], dernierCoup[1]) #On creer un jeton temporaire pour determiner si il y a un gagnant pour le dernier coup joué
+            self.moteurJeu.grille.grillePrincipal[dernierCoup[0]][dernierCoup[1]] = idJoueur #On rejoue le dernier coup
+            gagnant = self.moteurJeu.Gagnant(jeton)
+            self.moteurJeu.grille.grillePrincipal[dernierCoup[0]][dernierCoup[1]] = 0 #On annule ce coup
+            if( gagnant != 0 or nbSimul >= 3 ):
+                #print("coup:",dernierCoup," ",gagnant," ",nbSimul)
+                return self.Note()
 
-        coupPossibles = self.moteurJeu.grille.CasesVides()
-        notesIA = []
-        notesH = []
-        for coupPossible in coupPossibles:
-            notesIA.append(self.ScoreCoup(coupPossible, 2))
-            notesH.append(self.ScoreCoup(coupPossible, 1))
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
+        #On détermine les coups disponibles sur la grille de jeu et on instencie de la liste des notes
+        coupsPossibles = self.moteurJeu.grille.CasesVides()
+        notes = []
 
-        maxIA = max(notesIA, key=lambda score: score[0])
-        maxH = max(notesH, key=lambda score: score[0])
-        return (maxIA[0] - maxH[0], (maxH[0],maxIA[0]))
-
-"""def MinMax(self, idJoueur, nbSimul): #DIFFICULTE: DIFFICILE
-coupPossibles = self.moteurJeu.grille.CasesVides()
-notesIA = []
-notesH = []
-
-if partieterminee ou nbSimul > 2:
-    return score
-
-if( nbSimul >= 3 ):
-
-for coupPossible in coupPossibles:
-    print(coupPossible," Simul n°: ",self.nbSimul)
-    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-    if(idJoueur==2):
-        #score = self.ScoreCoup(coupPossible, 2)[0]
-        notesIA.append(self.ScoreCoup(coupPossible, 2))   #Ajoute (score du coup, le coup correspondant) a la liste de l'ia
-        if(self.nbSimul < 3):
-            self.nbSimul += 1
-            #Appel de MinMax pour l'autre joueur
-            notesH.append(self.MinMax(1, nbSimul + 1)[:2])
-        else:
-            self.nbSimul = 0 
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            continue
-    else:
-        notesH.append(self.ScoreCoup(coupPossible, 1))    #Ajoute (score du coup, le coup correspondant) a la liste de l'humain
-        if(self.nbSimul < 3):
-            self.nbSimul += 1
-            #Appel de MinMax pour l'autre joueur
-            notesIA.append(self.MinMax(2)[:2])
-        else:
-            self.nbSimul = 0 
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            continue
-    self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-
-maxIA = max(notesIA, key=lambda scoreIA: scoreIA[0])
-maxH = max(notesH, key=lambda scoreH: scoreH[0])
-#retourner (le max des notes IA ,  le coup associé ,  le max des notesIA - le max des notesH) si idJoueur = 2
-#retourner (le max des notes Humain ,  le coup associé,  le max des notesH - le max des notesIA) si idJoueur = 1
-if(idJoueur == 2): return ( maxIA[0], maxIA[1], maxIA[0]-maxH[0] )
-else: return ( maxH[0], maxH[1], maxH[0]-maxIA[0] )"""
-
-"""jeton = Jeton(idJoueur,coup[0],coup[1])
-self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
-gagnant = self.moteurJeu.Gagnant(jeton)
-#print(self.nbSimul)
-if(gagnant == 1): return (-500, coup[0], (500,0))
-elif(gagnant == 2): return (500, coup[0], (0,500))
-elif(self.nbSimul >= 3):
-    return (self.mMgain, coup[0], self.mMscore)
-self.nbSimul += 1
-self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
-coupPossibles = self.moteurJeu.grille.CasesVides()
-notes = []
-jeton = None
-gagnant = 0
-if(self.nbSimul >= 3):
-    return (self.mMgain, 0, self.mMscore)
-else:
-    for coupPossible in coupPossibles:
-        print(self.nbSimul)
-        self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-        jeton = Jeton(idJoueur,coupPossible[0],coupPossible[1])
-        gagnant = self.moteurJeu.Gagnant(jeton)
-        #print(self.nbSimul)
-        if(gagnant == 1): return (-500, coupPossible[0], (500,0))
-        elif(gagnant == 2): return (500, coupPossible[0], (0,500))
-        else:
-            if(idJoueur==2):
-                #notes.append(self.ScoreCoup(coupPossible, 2))
-                self.mMscore = self.MinMax(1)[2]
-                self.mMgain = self.mMscore[1]-self.mMscore[0]
+        #Pour chaque coup possible on va:
+        #Jouer le coup, calculer le score par une récurrence de minmax sur l'autre joueur en incrémentant la profondeur (nbSimul), stocker dans les notes (le gain, le score, le coup associé), annuler le coup
+        for coupPossible in coupsPossibles:
+            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
+            if( idJoueur == 2 ):
+                newMinMax = self.MinMax(1, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
+                #print("#J1##",newMinMax)
+                score = newMinMax[0]
+                gain = score[1] - score[0] #gain = score ia - score humain
             else:
-                #notes.append(self.ScoreCoup(coupPossible, 1))
-                self.mMscore = self.MinMax(2)[2]
-                self.mMgain = self.mMscore[0]-self.mMscore[1]
-            notes.append( (self.mMgain, coupPossible, self.mMscore) )
+                newMinMax = self.MinMax(2, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
+                #print("#J2##",newMinMax)
+                score = newMinMax[0]
+                gain = score[0] - score[1] #gain = score humain - score ia
+
+            notes.append( (gain, score, coupPossible[0]) ) #Soit [0]:gain, [1]:(score), [2]:coup associé
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-            print(notes)
-self.nbSimul += 1
-noteOpti = max(notes, key=lambda gain:gain[0])
-return (noteOpti[0],noteOpti[1][0],noteOpti[2])"""
 
-"""def Simulation(idJoueur):
-if( DetectionGagnant() != 0 ):
-    return (CalculScore(), None)
-coupsPossibles = CasesLibres()
-if( len(coupsPossibles) == 9 ):
-    return ( None, (0,0) )
-resultats = []
-for k in coupsPossibles:
-    Grille[k[0]][k[1]] = idJoueur
-    if(idJoueur == 1):
-        score = Simulation(2)[0]     #Tuple de score ex: (0,1)
-        gain = score[0] - score[1]   #Gain ex: 0-1=-1
-    else:
-        score = Simulation(1)[0]     #Tuple de score ex: (0,1)
-        gain = score[1] - score[0]   #Gain ex: 1-0=1
-    resultats.append((score,gain,k))   #On ajoute le score (0) le gain (1) et son coup associé (2) aux résultats
-    Grille[k[0]][k[1]] = 0           #On efface le coup que l'on a testé
-gainMax = max( resultats, key=lambda gain: gain[1] )
-return (gainMax[0],gainMax[2])"""
+        #On retourne enfin le score et le coup du tuple de notes qui possède le gain maximal, soit ( (score),coup) du gain max, pour pouvoir récupérer le score dans la récurrence et jouer le meilleur coup dans IAPlay()
+        print(" ")
+        print(notes)
+        noteMax = max( notes, key=lambda gain:gain[0] ) #Tuple de notes qui possède le gain maximal
+        print(noteMax)
+        return ( noteMax[1], noteMax[2] )
 
-"""def MinMax(self, coup, idJoueur): #DIFFICULTE: DIFFICILE
-jeton = Jeton(idJoueur)
-self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = jeton.idJoueur
-gagnant = self.moteurJeu.Gagnant(jeton)
-if(gagnant == 1): return (-500, coup[0])
-elif(gagnant == 2): return (500, coup[0])
-elif(self.nbSimul == 3): 
-    self.nbSimul = 0
-    return
-coupPossibles = self.moteurJeu.grille.CasesVides()
-notesIA = []
-notesH = []
-for coupPossible in coupPossibles:
-    notesIA.append(self.ScoreCoup(coupPossible, 2))
-    notesH.append(self.ScoreCoup(coupPossible, 1))
-    print(notesIA)
-    print(notesH)
-    print("#####")
-print(" ")
-self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
-self.nbSimul += 1
-return ( max(notesIA, key=lambda score: score[0])[0] - max(notesH, key=lambda score: score[0])[0], coup[0] )"""
+
+    def Note(self): #Doit retourner un tuple ((scoreH max,scoreIA max), None) pour etre "utilisé" dans MinMax()
+        #On instencie les coups disponibles et les listes des scores pour l'ia et pour l'humain qui contiendra des tuples (score, coup associé)
+        coupsDispo  = self.moteurJeu.grille.CasesVides()
+        scoresIA = []
+        scoresH = []
+
+        #Pour chaque coup possible on va:
+        #Avec la fonction ScoreCoup(), calculer le score pour ce coup pour l'ia et l'ajouter à scoresIA, calculer le score pour ce coup pour l'humain et l'ajouter à scoresH
+        for coup in coupsDispo:
+            scoresIA.append( self.ScoreCoup(coup, 2)[0] )
+            scoresH.append( self.ScoreCoup(coup, 1)[0] )
+
+        #On retourne un tuple ( (max de scoresH, max de scoresIA), None )
+        return (  ( max(scoresH), max(scoresIA) ), None  )"""
+        
