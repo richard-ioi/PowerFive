@@ -242,7 +242,7 @@ class IA:
             self.moteurJeu.grille.grillePrincipal[dernierCoup[0]][dernierCoup[1]] = 0 #On annule ce coup
             if( gagnant != 0 or nbSimul >= 2 ):
                 #print("coup:",dernierCoup," ",gagnant," ",nbSimul)
-                return self.Note()
+                return self.Note(idJoueur)
 
         #On détermine les coups disponibles sur la grille de jeu et on instencie de la liste des notes
         coupsPossibles = self.moteurJeu.grille.CasesVides()
@@ -254,27 +254,23 @@ class IA:
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
             if( idJoueur == 2 ):
                 newMinMax = self.MinMax(1, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
-                #print("#J1##",newMinMax)
-                score = newMinMax[0]
-                gain = score[1] - score[0] #gain = score ia - score humain
+                print("#J1##",newMinMax)
+                gain = newMinMax[0]
             else:
                 newMinMax = self.MinMax(2, nbSimul+1, coupPossible) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( (score), coup )
-                #print("#J2##",newMinMax)
-                score = newMinMax[0]
-                gain = score[0] - score[1] #gain = score humain - score ia
+                print("#J2##",newMinMax)
+                gain = newMinMax[0]
 
-            notes.append( (gain, score, coupPossible[0]) ) #Soit [0]:gain, [1]:(score), [2]:coup associé
+            notes.append( (gain, coupPossible[0]) ) #Soit [0]:gain, [1]:(score), [2]:coup associé
             self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
 
         #On retourne enfin le score et le coup du tuple de notes qui possède le gain maximal, soit ( (score),coup) du gain max, pour pouvoir récupérer le score dans la récurrence et jouer le meilleur coup dans IAPlay()
         print(" ")
-        print(notes)
         noteMax = max( notes, key=lambda gain:gain[0] ) #Tuple de notes qui possède le gain maximal
-        print(noteMax)
-        return ( noteMax[1], noteMax[2] )
+        return noteMax
 
 
-    def Note(self): #Doit retourner un tuple ((scoreH max,scoreIA max), None) pour etre "utilisé" dans MinMax()
+    def Note(self, idJoueur): #Doit retourner un tuple (gain pour l'ia, None) pour etre "utilisé" dans MinMax()
         #On instencie les coups disponibles et les listes des scores pour l'ia et pour l'humain qui contiendra des tuples (score, coup associé)
         coupsDispo  = self.moteurJeu.grille.CasesVides()
         scoresIA = []
@@ -286,8 +282,9 @@ class IA:
             scoresIA.append( self.ScoreCoup(coup, 2)[0] )
             scoresH.append( self.ScoreCoup(coup, 1)[0] )
 
-        #On retourne un tuple ( (max de scoresH, max de scoresIA), None )
-        return (  ( max(scoresH), max(scoresIA) ), None  )
+        #On retourne un tuple ( gain pour l'ia ou pour l'humain, None )
+        if(idJoueur == 2): return ( max(scoresIA) - max(scoresH), None )
+        else: return ( max(scoresH) - max(scoresIA), None )
 
 
     """def MinMax(self, idJoueur, nbSimul=0, dernierCoup=None): #Doit retourner le meilleur coup à jouer pour l'ia
