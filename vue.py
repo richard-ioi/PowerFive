@@ -68,6 +68,8 @@ class Interface:
 
         self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1280,720))
 
+        self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,12,2,True,428,17,None,3,True,0,640)
+
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
         time.sleep(1)
@@ -199,6 +201,9 @@ class Interface:
 
         for iJeton in self.jetonsPlaces:
             self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
+
+    
+        self.tableAnimation.affiche(self.tableAnimation.coordx,self.tableAnimation.coordy)
 
         self.fenetre.blit( self.grille.sprites["top"], (self.coordGrilleTop[0], self.coordGrilleTop[1]+self.yTremble) )
 
