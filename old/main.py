@@ -3,9 +3,9 @@
 import pygame
 import os
 import sys
-from controleurs import *
+from controleur import *
 from modeles import *
-from vues import *
+from vue import *
 
 """
     Fichier principal initialisant l'ensemble des classes du jeu.
@@ -105,7 +105,7 @@ class Main:
         self.compteurManaVide=0
         self.seVide=False
         self.clicked=False
-
+    
     def mainLoop(self):
         while True:
             self.Clock.tick(self.fps)
