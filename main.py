@@ -34,7 +34,7 @@ class Main:
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,505)
-        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,720-72*3-50)
+        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,(720-72*3-50)+50)
         self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,(720-72*3-50)+20)
         self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,(720-72*3-50)+20)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
@@ -105,13 +105,26 @@ class Main:
         self.compteurManaVide=0
         self.seVide=False
         self.clicked=False
+
+        self.texteBienvenue=False
+
+        self.compteurChangement=0
     
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
         while True:
+            
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
             
+            if (self.interface.changementIAFini==False) or (self.interface.changementJoueurFini==False):
+                self.compteurChangement+=1
+            
+            if (self.compteurChangement==36):
+                self.interface.changementIAFini=True
+                self.interface.changementJoueurFini=True
+                self.compteurChangement=0
+
             self.moteur.lacher=False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -159,7 +172,7 @@ class Main:
                     self.clicked=False
                     print("DECOMPTE SE VIDE ENCLANCHE")
 
-            if (self.interface.reinitialise):
+            if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
                 Main().saloonLoop()
 
             if (self.compteurManaVide==0 and self.seVide==True) or (self.interface.reinitialise==True):
@@ -184,8 +197,7 @@ class Main:
 
             #Gestion dialogues
             if(self.interface.dialogueFini==False):
-                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
-                #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
+                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[self.interface.dialogueIA])
             #------------------Fin gestion dialogues
             
             pygame.display.update()

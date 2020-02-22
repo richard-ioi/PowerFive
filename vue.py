@@ -66,9 +66,28 @@ class Interface:
         self.mode=mode
         self.ennemi = ennemi
 
-        self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1280,720))
-
+        self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1278,720))
         self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,2,True,428,17,None,3,True,6,640)
+
+        self.scoreIA=0
+        self.scoreJoueur=0
+
+        self.dialogueIA=0
+
+        self.panneauScore= scale(pygame.image.load(os.path.join("data","graphismes","scores","panneau_score.png")),(177,69))
+        self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA0.png")),(90,90))
+        self.panneauJoueur= scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur0.png")),(90,90))
+
+        self.changementIA1 = Animation(self.fenetre, os.path.join("scores","changement_IA1.png"),0,18,2,True,43,45,None,2,True,710,0)
+        self.changementIA2 = Animation(self.fenetre, os.path.join("scores","changement_IA2.png"),0,18,2,True,43,45,None,2,True,710,0)
+        self.changementIA3 = Animation(self.fenetre, os.path.join("scores","changement_IA3.png"),0,18,2,True,43,45,None,2,True,710,0)
+        self.changementJoueur1 = Animation(self.fenetre, os.path.join("scores","changement_Joueur1.png"),0,18,2,True,43,45,None,2,True,470,0)
+        self.changementJoueur2 = Animation(self.fenetre, os.path.join("scores","changement_Joueur2.png"),0,18,2,True,43,45,None,2,True,470,0)
+        self.changementJoueur3 = Animation(self.fenetre, os.path.join("scores","changement_Joueur3.png"),0,18,2,True,43,45,None,2,True,470,0)
+
+        self.changementIAFini=True
+        self.changementJoueurFini=True
+
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -141,6 +160,7 @@ class Interface:
                         self.texteFinal3=""
                         self.texteFini=False
                         self.dialogueFini=True
+                        self.dialogueIA+=1
                         self.compteur=0
         """else:
             self.compteur=0
@@ -168,8 +188,31 @@ class Interface:
 
 
         self.fenetre.blit(self.background,(0,0))
-        #self.fenetre.fill([255,255,255])
         self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
+        pygame.draw.rect(self.fenetre,(75,36,27),(0,680,1280,720))
+
+        self.fenetre.blit(self.panneauScore,(550,0))
+        
+        if(self.changementJoueurFini):
+            self.fenetre.blit(self.panneauJoueur,(470,0))
+        if(self.changementIAFini):
+            self.fenetre.blit(self.panneauIA,(710,0))
+
+        if (self.changementIAFini==False):
+            if (self.scoreIA==1):
+                self.changementIA1.affiche(self.changementIA1.coordx,self.changementIA1.coordy)
+            elif (self.scoreIA==2):
+                self.changementIA2.affiche(self.changementIA2.coordx,self.changementIA2.coordy)
+            elif (self.scoreIA==3):
+                self.changementIA3.affiche(self.changementIA3.coordx,self.changementIA3.coordy)
+        
+        elif (self.changementJoueurFini==False):
+            if (self.scoreJoueur==1):
+                self.changementJoueur1.affiche(self.changementJoueur1.coordx,self.changementJoueur1.coordy)
+            elif (self.scoreJoueur==2):
+                self.changementJoueur2.affiche(self.changementJoueur2.coordx,self.changementJoueur2.coordy)
+            elif (self.scoreJoueur==3):
+                self.changementJoueur3.affiche(self.changementJoueur3.coordx,self.changementJoueur3.coordy)
 
         if(self.lacher):
             rectCol = None
@@ -194,9 +237,28 @@ class Interface:
                 self.tourJoueur = not self.tourJoueur
                 self.lacher = False
                 gagnant = self.moteurJeu.Gagnant(jeton)
+                
                 if(gagnant != 0):
+                    if (gagnant==1):
+                        self.scoreJoueur+=1
+                        self.dialogueIA=2
+                        print("Vous gagnez un point !")
+                        print("Score : "+str(self.scoreJoueur)+" - "+str(self.scoreIA))
+                        self.changementJoueurFini=False
+                       
+                        self.panneauJoueur = scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur"+str(self.scoreJoueur)+".png")),(90,90))
+
+                    elif (gagnant==2):
+                        self.scoreIA+=1
+                        self.dialogueIA=1
+                        print("L'IA gagne un point !")
+                        print("Score : "+str(self.scoreJoueur)+" - "+str(self.scoreIA))
+                        self.changementIAFini=False
+
+                        self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA"+str(self.scoreIA)+".png")),(90,90))
+
                     self.Reinitialiser()
-                    print("Gagnant : Joueur ",gagnant)
+                    self.reinitialise=False
                 self.tremble = 4
 
         for iJeton in self.jetonsPlaces:
