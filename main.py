@@ -159,7 +159,7 @@ class Main:
                     self.clicked=False
                     print("DECOMPTE SE VIDE ENCLANCHE")
 
-            if (self.interface.reinitialise):
+            if ((self.interface.scoreIA==2) or (self.interface.scoreJoueur==2)):
                 Main().saloonLoop()
 
             if (self.compteurManaVide==0 and self.seVide==True) or (self.interface.reinitialise==True):
@@ -184,8 +184,7 @@ class Main:
 
             #Gestion dialogues
             if(self.interface.dialogueFini==False):
-                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[0])
-                #self.interface.afficheTexte(1,"Moi j'suis l'Sheriff !")
+                self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[self.interface.dialogueIA])
             #------------------Fin gestion dialogues
             
             pygame.display.update()
