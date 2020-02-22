@@ -113,13 +113,14 @@ class Main:
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
         while True:
+            
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
             
             if (self.interface.changementIAFini==False) or (self.interface.changementJoueurFini==False):
                 self.compteurChangement+=1
             
-            if (self.compteurChangement==18):
+            if (self.compteurChangement==36):
                 self.interface.changementIAFini=True
                 self.interface.changementJoueurFini=True
                 self.compteurChangement=0

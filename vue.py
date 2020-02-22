@@ -78,9 +78,9 @@ class Interface:
         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA0.png")),(90,90))
         self.panneauJoueur= scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur0.png")),(90,90))
 
-        self.changementIA1 = Animation(self.fenetre, os.path.join("scores","changement_IA1.png"),0,18,1,True,43,45,None,2,True,710,0) #Loop - Playatstart
-        self.changementIA2 = Animation(self.fenetre, os.path.join("scores","changement_IA2.png"),0,18,1,True,43,45,None,2,True,710,0)
-        self.changementIA3 = Animation(self.fenetre, os.path.join("scores","changement_IA3.png"),0,18,1,True,43,45,None,2,True,710,0)
+        self.changementIA1 = Animation(self.fenetre, os.path.join("scores","changement_IA1.png"),0,18,2,True,43,45,None,2,True,710,0)
+        self.changementIA2 = Animation(self.fenetre, os.path.join("scores","changement_IA2.png"),0,18,2,True,43,45,None,2,True,710,0)
+        self.changementIA3 = Animation(self.fenetre, os.path.join("scores","changement_IA3.png"),0,18,2,True,43,45,None,2,True,710,0)
         self.changementJoueur1 = Animation(self.fenetre, os.path.join("scores","changement_Joueur1.png"),0,18,2,True,43,45,None,2,True,470,0)
         self.changementJoueur2 = Animation(self.fenetre, os.path.join("scores","changement_Joueur2.png"),0,18,2,True,43,45,None,2,True,470,0)
         self.changementJoueur3 = Animation(self.fenetre, os.path.join("scores","changement_Joueur3.png"),0,18,2,True,43,45,None,2,True,470,0)
@@ -160,6 +160,7 @@ class Interface:
                         self.texteFinal3=""
                         self.texteFini=False
                         self.dialogueFini=True
+                        self.dialogueIA+=1
                         self.compteur=0
         """else:
             self.compteur=0
