@@ -34,7 +34,7 @@ class Main:
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,505)
-        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,720-72*3-50)
+        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,(720-72*3-50)+50)
         self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,(720-72*3-50)+20)
         self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,(720-72*3-50)+20)
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
