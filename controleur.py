@@ -46,9 +46,9 @@ class MoteurJeu:
                 if rect["coord"] == (colonne, caseDispo):
                     rectCase = rect["rect"]
             jeton = Jeton(idJoueur)
-            self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton.idJoueur
-            #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
+            self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
+            #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             if self.interface.lacher:
                 self.lacher=True
             jeton.x = colonne

@@ -74,16 +74,7 @@ class Interface:
         #On réinitialise la grille de jeu après 1sec
         time.sleep(1)
         self.tourJoueur = True
-        self.jetonsPlaces = []
-        self.grille.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
-                                    [0,0,0,0,0,0,0,0,-1],  #1
-                                    [0,0,0,0,0,0,0,0,-1],  #2
-                                    [0,0,0,0,0,0,0,0,-1],  #3
-                                    [0,0,0,0,0,0,0,0,-1],  #4
-                                    [0,0,0,0,0,0,0,0,-1],  #5
-                                    [0,0,0,0,0,0,0,0,-1],  #6
-                                    [0,0,0,0,0,0,0,0,-1],  #7
-                                    [0,0,0,0,0,0,0,0,-1]]  #8
+        self.grille.Reinitialiser()
         self.reinitialise=True
 
     def afficheTexte(self,idJoueur,aTexte):
@@ -156,6 +147,19 @@ class Interface:
         self.fenetre.blit(texteSuiteRendu,(x+(62-7)*4,y+55))
     
 
+    def updateJetonsPlaces(self):
+        """
+            Méthode mettant à jour la liste des jetons à placé
+        """
+        temp = self.grille.CasesPleines()
+        for elm in temp:
+            xGrille, yGrille = elm[1], elm[2]
+            case = self.rectList[xGrille + yGrille * 9]["rect"] # Pour (1,2) --> 1 + 2*9 = elm n°19
+            xFenetre, yFenetre = case.center[0] - elm[0].sprite.get_width() // 2, case.y + 8
+            if (elm[0], xFenetre, yFenetre) not in self.jetonsPlaces:
+                self.jetonsPlaces.append( (elm[0], xFenetre, yFenetre) )
+
+    
     def Affichage(self):
         """
             Méthode exécutant les procédure d'affichages sur l'écran
@@ -187,10 +191,9 @@ class Interface:
             if( yJeton < derniereCaseY ):
                 self.fenetre.blit(jeton.sprite, (colonneXCenter-jeton.sprite.get_width()//2, yJeton) )
             else:
-                #self.rebondJeton(derniereCaseY+2,jeton)
                 yJeton = derniereCaseY+2
                 self.distance = 0
-                self.jetonsPlaces.append((jeton,(colonneXCenter-jeton.sprite.get_width()//2, yJeton)))
+                self.updateJetonsPlaces()
                 self.tourJoueur = not self.tourJoueur
                 self.lacher = False
                 gagnant = self.moteurJeu.Gagnant(jeton)
@@ -198,10 +201,9 @@ class Interface:
                     self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
                 self.tremble = 4
-
-        for iJeton in self.jetonsPlaces:
-            self.fenetre.blit(iJeton[0].sprite, iJeton[1] )
-
+        
+        for jeton in self.jetonsPlaces:
+            self.fenetre.blit(jeton[0].sprite, (jeton[1], jeton[2]))
     
         self.tableAnimation.affiche(self.tableAnimation.coordx,self.tableAnimation.coordy)
 

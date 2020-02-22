@@ -8,6 +8,7 @@ import pygame
 import os
 import random
 from pygame.transform import scale
+import copy
 
 class Grille:
     """
@@ -48,6 +49,7 @@ class Grille:
                                 [0,0,0,0,0,0,0,0,-1],  #6
                                 [0,0,0,0,0,0,0,0,-1],  #7
                                 [0,0,0,0,0,0,0,0,-1]]  #8
+        self.grilleSauvegarde = None
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
@@ -119,6 +121,16 @@ class Grille:
             if jeton != 0:
                 nbJeton += 1
         return nbJeton
+    
+    def CasesPleines(self):
+        jetonsPLaces = []
+        for x, colonne in enumerate(self.grillePrincipal):
+            for y, jeton in enumerate(colonne):
+                if jeton == 1 or jeton == 2:
+                    jetonsPLaces.append( (jeton, x, y) )
+        return jetonsPLaces
+
+        #return [(jeton, x, y) for y, colonne in enumerate(self.grillePrincipal) for x, jeton in enumerate(colonne) if jeton == 1 or jeton == 2]
 
     def EtatPlacement(self, x, y):
 
@@ -182,18 +194,28 @@ class Grille:
                 Un booléen
         """
         return self.NbJetonColonne(colonne) == self.hauteur+1
+    
+    def SauvegarderGrille(self):
+        copy.deepcopy(self.grillePrincipal, self.grilleSauvegarde)
 
-    def RemplirCase(self, colonne, idJoueur):
+    def RemplirCase(self, jeton, colonne):
         """
             Méthode remplissant une case de la grille
 
             Arg:
                 jeton: Jeton devant être placé dans la grille.
         """
+        self.SauvegarderGrille()
         case = self.CasesVides()[colonne][1]
-        self.grillePrincipal[colonne][case] = idJoueur
+        self.grillePrincipal[colonne][case] = jeton
     
     def PurgerColonne(self, colonne):
+        """
+            Méthode retirant les cases vides entre les jetons.
+
+            Args:
+                colonne: Indice de la colonne à purger
+        """
         debut = self.CaseVideColonne(colonne, inv = False) + 1
         caseUtile = self.grillePrincipal[colonne][debut:]
         if 0 in caseUtile:
@@ -206,6 +228,7 @@ class Grille:
             self.grillePrincipal[colonne] = colonnePurgee[:]
         
     def InverserJeton(self):
+        self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             for j, case in enumerate(colonne):
                 if case == 1:
@@ -214,9 +237,11 @@ class Grille:
                     self.grillePrincipal[i][j] = 1
     
     def EjecterDernierJeton(self, colonne):
+        self.SauvegarderGrille()
         self.grillePrincipal[colonne] = [0] + self.grillePrincipal[colonne][:-2] + [-1]
     
     def EjecterJetonAleat(self):
+        self.SauvegarderGrille()
         colonne = random.randrange(len(self.grillePrincipal))
         if self.hauteur - self.CaseVideColonne(colonne) > 1:
             case = random.randrange( self.CaseVideColonne(colonne) +1, self.hauteur  )
@@ -226,6 +251,7 @@ class Grille:
         self.PurgerColonne(colonne)
     
     def EjecterJetonsAleat(self, n = 2):
+        self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             k = random.randint(1, n)
             cases = random.choices(range(len(colonne) - 1), k=k)
@@ -235,9 +261,22 @@ class Grille:
             self.PurgerColonne(i)
     
     def MelangerJetons(self):
+        self.SauvegarderGrille()
         random.shuffle(self.grillePrincipal)
         for colonne in range(len(self.grillePrincipal)):
             self.PurgerColonne(colonne)
+    
+    def Reinitialiser(self):
+        self.grillePrincipal = [[0,0,0,0,0,0,0,0,-1],  #0
+                                [0,0,0,0,0,0,0,0,-1],  #1
+                                [0,0,0,0,0,0,0,0,-1],  #2
+                                [0,0,0,0,0,0,0,0,-1],  #3
+                                [0,0,0,0,0,0,0,0,-1],  #4
+                                [0,0,0,0,0,0,0,0,-1],  #5
+                                [0,0,0,0,0,0,0,0,-1],  #6
+                                [0,0,0,0,0,0,0,0,-1],  #7
+                                [0,0,0,0,0,0,0,0,-1]]  #8
+        self.SauvegarderGrille()
 
 class Jeton:
     """
@@ -267,6 +306,9 @@ class Jeton:
     
     def __repr__(self):
         return "Jeton({}, {})".format(self.idJoueur, self.visible)
+    
+    def __eq__(self, other):
+        return self.idJoueur == other
     
     def deplacer(self, coord):
         pass
@@ -324,12 +366,13 @@ class ObjetAnimMultiple:
 
 
 
-"""if __name__ == "__main__":
+if __name__ == "__main__":
     maGrille = Grille()
     monJeton = Jeton(1, 1)
     print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    maGrille.RemplirCase(monJeton)
+    print("(" + str(monJeton.x) + "," +  str(monJeton.y) + ")")
+    maGrille.RemplirCase(monJeton, 2)
     print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    print(str(maGrille))"""
+    print("(" + str(monJeton.x) + "," +  str(monJeton.y) + ")")
+    print(str(maGrille))
+    print(maGrille.CasesPleines())
