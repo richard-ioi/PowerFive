@@ -92,7 +92,7 @@ class Main:
                                 Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "jurassy", self.music)]
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-        self.ia = IA(self.moteur,"normal")
+        self.ia = IA(self.moteur,"easy")
 
         self.posSouris = (0,0)
         self.idJoueur = 1
@@ -157,6 +157,9 @@ class Main:
                     self.compteurManaVide=32
                     self.seVide=True
                     self.clicked=False
+                    #TEST COMPETENCE POUR MELANGER LES JETONS
+                    self.grille.MelangerJetons()
+                    #self.interface.startFlash = True
                     print("DECOMPTE SE VIDE ENCLANCHE")
 
             if (self.interface.reinitialise):

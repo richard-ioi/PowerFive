@@ -49,7 +49,7 @@ class Grille:
                                 [0,0,0,0,0,0,0,0,-1],  #6
                                 [0,0,0,0,0,0,0,0,-1],  #7
                                 [0,0,0,0,0,0,0,0,-1]]  #8
-        self.grilleSauvegarde = None
+        self.grilleSauvegarde = []
         self.largeur = 9
         self.hauteur = 8
         self.sprites = { "top": scale(pygame.image.load(os.path.join("data","graphismes","grille.png")), (140*4,141*4)),
@@ -251,7 +251,7 @@ class Grille:
         self.PurgerColonne(colonne)
     
     def EjecterJetonsAleat(self, n = 2):
-        self.SauvegarderGrille()
+        #self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             k = random.randint(1, n)
             cases = random.choices(range(len(colonne) - 1), k=k)
@@ -261,7 +261,7 @@ class Grille:
             self.PurgerColonne(i)
     
     def MelangerJetons(self):
-        self.SauvegarderGrille()
+        #self.SauvegarderGrille()
         random.shuffle(self.grillePrincipal)
         for colonne in range(len(self.grillePrincipal)):
             self.PurgerColonne(colonne)

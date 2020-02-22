@@ -70,6 +70,9 @@ class Interface:
 
         self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,2,True,428,17,None,3,True,6,640)
 
+        self.flashOppacite = 0
+        self.startFlash = False
+
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
         time.sleep(1)
@@ -198,7 +201,7 @@ class Interface:
                 self.lacher = False
                 gagnant = self.moteurJeu.Gagnant(jeton)
                 if(gagnant != 0):
-                    self.Reinitialiser()
+                    #self.Reinitialiser()
                     print("Gagnant : Joueur ",gagnant)
                 self.tremble = 4
         
@@ -228,7 +231,17 @@ class Interface:
                     animation.affiche(animation.coordx,animation.coordy,True)
                 else:
                     animation.affiche(animation.coordx,animation.coordy)
+
+        #self.FlashScreen()
+        #self.fenetre.fill(pygame.Color(255,0,0,10))
         
+    def FlashScreen(self, speed=50):
+        if( self.startFlash ): 
+            self.flashOppacite += speed
+        else: self.flashOppacite -= speed
+        if( self.flashOppacite <= 0 ): self.flashOppacite = 0
+        elif( self.flashOppacite > 200 ): self.startFlash = False
+
     def AffichageSaloon(self, animSaloon):
         for animation in list (animSaloon.values()):
             if animation.play:
