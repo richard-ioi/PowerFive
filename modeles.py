@@ -196,7 +196,7 @@ class Grille:
         return self.NbJetonColonne(colonne) == self.hauteur+1
     
     def SauvegarderGrille(self):
-        copy.deepcopy(self.grillePrincipal, self.grilleSauvegarde)
+        self.grilleSauvegarde = copy.deepcopy(self.grillePrincipal)
 
     def RemplirCase(self, jeton, colonne):
         """
