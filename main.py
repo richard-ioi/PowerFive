@@ -105,6 +105,10 @@ class Main:
         self.compteurManaVide=0
         self.seVide=False
         self.clicked=False
+
+        self.texteBienvenue=False
+
+        self.compteurChangement=0
     
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
@@ -112,6 +116,14 @@ class Main:
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
             
+            if (self.interface.changementIAFini==False) or (self.interface.changementJoueurFini==False):
+                self.compteurChangement+=1
+            
+            if (self.compteurChangement==18):
+                self.interface.changementIAFini=True
+                self.interface.changementJoueurFini=True
+                self.compteurChangement=0
+
             self.moteur.lacher=False
             for event in pygame.event.get():
                 if event.type == pygame.QUIT:
@@ -159,7 +171,7 @@ class Main:
                     self.clicked=False
                     print("DECOMPTE SE VIDE ENCLANCHE")
 
-            if ((self.interface.scoreIA==2) or (self.interface.scoreJoueur==2)):
+            if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
                 Main().saloonLoop()
 
             if (self.compteurManaVide==0 and self.seVide==True) or (self.interface.reinitialise==True):
