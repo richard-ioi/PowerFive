@@ -82,28 +82,20 @@ class Interface:
         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA0.png")),(180,180))
         self.panneauJoueur= scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur0.png")),(180,180))
 
-        self.changementIA1 = Animation(self.fenetre, os.path.join("scores","changement_IA1.png"),0,18,2,True,43,45,None,4,True,1000,0)
-        self.changementIA2 = Animation(self.fenetre, os.path.join("scores","changement_IA2.png"),0,18,2,True,43,45,None,4,True,1000,0)
-        self.changementIA3 = Animation(self.fenetre, os.path.join("scores","changement_IA3.png"),0,18,2,True,43,45,None,4,True,1000,0)
-        self.changementJoueur1 = Animation(self.fenetre, os.path.join("scores","changement_Joueur1.png"),0,18,2,True,43,45,None,4,True,100,0)
-        self.changementJoueur2 = Animation(self.fenetre, os.path.join("scores","changement_Joueur2.png"),0,18,2,True,43,45,None,4,True,100,0)
-        self.changementJoueur3 = Animation(self.fenetre, os.path.join("scores","changement_Joueur3.png"),0,18,2,True,43,45,None,4,True,100,0)
+        self.changementIA1 = Animation(self.fenetre, os.path.join("scores","changement_IA1.png"),0,18,2,True,43,45,None,4,True,1006,0)
+        self.changementIA2 = Animation(self.fenetre, os.path.join("scores","changement_IA2.png"),0,18,2,True,43,45,None,4,True,1006,0)
+        self.changementIA3 = Animation(self.fenetre, os.path.join("scores","changement_IA3.png"),0,18,2,True,43,45,None,4,True,1006,0)
+        self.changementJoueur1 = Animation(self.fenetre, os.path.join("scores","changement_Joueur1.png"),0,18,2,True,43,45,None,4,True,106,0)
+        self.changementJoueur2 = Animation(self.fenetre, os.path.join("scores","changement_Joueur2.png"),0,18,2,True,43,45,None,4,True,106,0)
+        self.changementJoueur3 = Animation(self.fenetre, os.path.join("scores","changement_Joueur3.png"),0,18,2,True,43,45,None,4,True,106,0)
 
         self.changementIAFini=True
         self.changementJoueurFini=True
 
-
-        self.flashOppacite = 0
-        self.startFlash = False
-
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
-        #time.sleep(2)
-        self.reinitialisation = True
-        if( self.compteur2 < 80  ):
-            if(not self.reinitialise):
-                self.compteur2 += 1
-        else:
+        if( self.reinitialisation and not self.lacher ):
+            time.sleep(2)
             self.tourJoueur = True
             self.grille.Reinitialiser()
             self.jetonsPlaces = []
@@ -188,7 +180,7 @@ class Interface:
         for elm in temp:
             xGrille, yGrille = elm[1], elm[2]
             case = self.rectList[xGrille + yGrille * 9]["rect"] # Pour (1,2) --> 1 + 2*9 = elm n°19
-            xFenetre, yFenetre = case.center[0] - elm[0].sprite.get_width() // 2, case.y + 8
+            xFenetre, yFenetre = case.center[0] - elm[0].sprite.get_width() // 2, case.y + 10
             if (elm[0], xFenetre, yFenetre) not in self.jetonsPlaces:
                 self.jetonsPlaces.append( (elm[0], xFenetre, yFenetre) )
 
@@ -257,7 +249,6 @@ class Interface:
                 self.distance = 0
                 self.updateJetonsPlaces()
                 self.tourJoueur = not self.tourJoueur
-                self.lacher = False
                 self.tremble = 4
                 gagnant = self.moteurJeu.Gagnant(jeton)
                 if(gagnant != 0):
@@ -282,8 +273,9 @@ class Interface:
                         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA"+str(self.scoreIA)+".png")),(180,180))
 
                     #if(self.changementJoueur1.done and self.changementJoueur2.done and self.changementJoueur3.done and self.changementIA1.done and self.changementIA2.done and self.changementIA3.done):
-                    self.Reinitialiser()
+                    self.reinitialisation = True
                     self.reinitialise=False
+                self.lacher = False
         
         for jeton in self.jetonsPlaces:
             self.fenetre.blit(jeton[0].sprite, (jeton[1], jeton[2]))
@@ -302,16 +294,7 @@ class Interface:
                     animation.affiche(animation.coordx,animation.coordy,True)
                 else:
                     animation.affiche(animation.coordx,animation.coordy)
-
-        #self.FlashScreen()
-        #self.fenetre.fill(pygame.Color(255,0,0,10))
-        
-    def FlashScreen(self, speed=50):
-        if( self.startFlash ): 
-            self.flashOppacite += speed
-        else: self.flashOppacite -= speed
-        if( self.flashOppacite <= 0 ): self.flashOppacite = 0
-        elif( self.flashOppacite > 200 ): self.startFlash = False
+                    
 
     def AffichageSaloon(self, animSaloon):
         for animation in list (animSaloon.values()):

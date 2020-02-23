@@ -21,6 +21,7 @@ class Main:
         self.Clock = pygame.time.Clock()
         self.fps = 30
         self.compteur = 0
+        self.compteur2 = 0
         self.switch = False
         self.largeur = 1280
         self.hauteur = 720
@@ -142,10 +143,10 @@ class Main:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if self.interface.compteur==0 and not self.interface.reinitialisation:
-                    if( event.type == pygame.MOUSEBUTTONDOWN and not self.interface.lacher ):
+                if self.interface.compteur==0:
+                    if( event.type == pygame.MOUSEBUTTONDOWN and not self.interface.lacher and not self.interface.reinitialisation ):
                         
-                        if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) ):
+                        if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) and self.manaFull ):
                             self.boutonUlti.clicked = True
 
                         for rect in self.interface.rectColonne:
@@ -188,11 +189,11 @@ class Main:
                     self.seVide=True
                     self.clicked=False
                     self.competenceJoueur.useCompetence() #On lance la competence du joueur (soit inverser la couleur des jetons)
+                    self.compteur2 = self.compteur
                     gagnant = self.moteur.Gagnant(Jeton(1,self.moteur.dernierJeton.x,self.moteur.dernierJeton.y))
-                    print(gagnant)
-                    if( gagnant != 0 and not self.interface.lacher):
-                        self.interface.Reinitialiser()
-                        self.interface.reinitialise=False
+                    if( gagnant != 0 ):
+                        self.interface.reinitialisation = True
+                        self.interface.reinitialise = False
                     #self.interface.startFlash = True
 
             if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
@@ -225,7 +226,10 @@ class Main:
             if(self.interface.dialogueFini==False):
                 self.interface.afficheTexte(2,self.getEnnemi(self.interface.ennemi).dialogue[self.interface.dialogueIA])
             #------------------Fin gestion dialogues
-            
+            if( self.compteur >= self.compteur2+40 ):
+                self.interface.Reinitialiser()
+                self.compteur2 = 0
+
             pygame.display.update()
 
     def saloonLoop(self):
