@@ -108,10 +108,10 @@ class Main:
         self.compteurManaVide=0
         self.seVide=False
         self.clicked=False
-
         self.texteBienvenue=False
-
         self.compteurChangement=0
+
+        self.competenceJoueur = Competence(self.grille, "InverseJetons")
     
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
@@ -137,19 +137,21 @@ class Main:
                     pygame.quit()
                     sys.exit()
                 if self.interface.compteur==0:
-                    if event.type == pygame.MOUSEBUTTONDOWN:
+                    if( event.type == pygame.MOUSEBUTTONDOWN and not self.interface.lacher ):
                         
                         if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) ):
                             self.boutonUlti.clicked = True
 
                         for rect in self.interface.rectColonne:
                             if rect["rect"].collidepoint( (self.posSouris[0]-5, self.posSouris[1]) ):
-                                self.moteur.Placer(rect["colonne"],self.idJoueur)
+                                if (self.boutonUlti.clicked):
+                                    self.moteur.Placer(rect["colonne"],2)
+                                else:
+                                    self.moteur.Placer(rect["colonne"],self.idJoueur)
                                 self.boutonUlti.Reinitialiser()
                                 self.manaFull=False
 
-            if(self.interface.tourJoueur): 
-                self.idJoueur = 1
+            if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
             if(not self.interface.tourJoueur and not self.interface.lacher): 
@@ -179,8 +181,7 @@ class Main:
                     self.compteurManaVide=31
                     self.seVide=True
                     self.clicked=False
-                    #TEST COMPETENCE POUR MELANGER LES JETONS
-                    self.grille.MelangerJetons()
+                    self.competenceJoueur.useCompetence() #On lance la competence du joueur (soit inverser la couleur des jetons)
                     #self.interface.startFlash = True
 
             if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
@@ -193,7 +194,7 @@ class Main:
                 self.interface.reinitialise=False
                 self.seVide=False
                 self.manaFull=False
-                self.interface=self.listeInterfaces[1]
+                #self.interface=self.listeInterfaces[1]
             #------------------Fin Gestion Mana
 
             #Bidouillage pour changer l'ennemi
@@ -203,7 +204,10 @@ class Main:
 
             #Gestion affichage
             self.interface.Affichage()
-            self.interface.AttentePlacement(self.posSouris,self.idJoueur)
+            if( self.boutonUlti.clicked ):
+                self.interface.AttentePlacement(self.posSouris,2,True)
+            else:
+                self.interface.AttentePlacement(self.posSouris,self.idJoueur)
             #------------------Fin gestion affichage
 
             #Gestion dialogues

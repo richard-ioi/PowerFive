@@ -227,20 +227,20 @@ class Grille:
             self.grillePrincipal[colonne] = colonnePurgee[:]
         
     def InverserJeton(self):
-        self.SauvegarderGrille()
+        #self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             for j, case in enumerate(colonne):
                 if case == 1:
-                    self.grillePrincipal[i][j] = 2
+                    self.grillePrincipal[i][j] = Jeton(2)
                 if case == 2:
-                    self.grillePrincipal[i][j] = 1
+                    self.grillePrincipal[i][j] = Jeton(1)
     
     def EjecterDernierJeton(self, colonne):
-        self.SauvegarderGrille()
+        #self.SauvegarderGrille()
         self.grillePrincipal[colonne] = [0] + self.grillePrincipal[colonne][:-2] + [-1]
     
     def EjecterJetonAleat(self):
-        self.SauvegarderGrille()
+        #self.SauvegarderGrille()
         colonne = random.randrange(len(self.grillePrincipal))
         if self.hauteur - self.CaseVideColonne(colonne) > 1:
             case = random.randrange( self.CaseVideColonne(colonne) +1, self.hauteur  )
@@ -258,6 +258,14 @@ class Grille:
             for j in cases:
                 self.grillePrincipal[i][j] = 0
             self.PurgerColonne(i)
+
+    def EjecterJetonCible(self, emplacement):
+        emplacement = emplacement
+        x = emplacement[0]
+        y = emplacement[1]
+        self.grillePrincipal[x][y] = 0
+        #[ICI] :  ENLEVER LE JETON GRAPHIQUEMENT
+        self.PurgerColonne(y)
     
     def MelangerJetons(self):
         #self.SauvegarderGrille()
@@ -276,6 +284,26 @@ class Grille:
                                 [0,0,0,0,0,0,0,0,-1],  #7
                                 [0,0,0,0,0,0,0,0,-1]]  #8
         self.SauvegarderGrille()
+
+class Competence:
+
+    def __init__(self, grille, nomCompetance):
+        self.grille = grille
+        self.nomCompetance = nomCompetance
+
+    def useCompetence(self, colonne=None, idJoueur=None, nom=None):
+        print("Vous utilisez votre compétence !  Les couleurs des jetons ont été inversées")
+        if(nom != None): self.nomCompetance = nom
+
+        if( self.nomCompetance == "MelangeJetons" ):
+            self.grille.MelangeJetons()
+        elif( self.nomCompetance == "InverseJetons" ):
+            self.grille.InverserJeton()
+        elif( self.nomCompetance == "Cible" ):
+            self.grille.EjecterJetonAleat()
+        elif( self.nomCompetance == "DernierJeton" ):
+            self.grille.EjecterDernierJeton(colonne)
+    
 
 class Jeton:
     """
@@ -361,7 +389,7 @@ class ObjetAnimMultiple:
         self.currentAnim = self.animList[self.idAnim]
         self.listGlobale.update( {self.name:self.currentAnim} )
         self.listGlobale[self.name].play = True
-        
+
 if __name__ == "__main__":
     maGrille = Grille()
     monJeton = Jeton(1, 1)

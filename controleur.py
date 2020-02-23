@@ -32,7 +32,7 @@ class MoteurJeu:
 
     
     # A tester
-    def Placer(self, colonne, idJoueur):
+    def Placer(self, colonne, idJoueur, inverse=False):
         """
             Méthode permettant la placement d'un jeton dans la grille.
 
@@ -139,21 +139,21 @@ class IA:
         self.idIA = 2
         self.moteurJeu = moteurJeu
         self.difficulty = difficulty
-        self.lastCoup = (0,0)
-        self.nbSimul = 0
-        self.mMscore = (0,0)
-        self.mMgain = 0
+        self.lastColonne = 0
 
     def IAPlay(self):
         coupPossibles = self.moteurJeu.grille.CasesVides()
         if( self.difficulty == "easy" ):
             randomCoup = random.randrange(len(coupPossibles))
+            self.lastColonne = coupPossibles[randomCoup][0]
             self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
         elif( self.difficulty == "normale" ):
             meilleurCoupIA = self.MeilleurCoup(coupPossibles)
+            self.lastColonne = meilleurCoupIA[1]
             self.moteurJeu.Placer(meilleurCoupIA[1], self.idIA)
         elif( self.difficulty == "difficile" ):
             coupmM = self.MinMax(2)
+            self.lastColonne = coupmM[1]
             self.moteurJeu.Placer(coupmM[1], self.idIA) #Jouer le meilleur coup retourné par MinMax
 
     def ScoreCoup(self, coup, idJoueur):  #Retourne le score du coup placé en parametre
