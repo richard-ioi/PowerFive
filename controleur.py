@@ -240,7 +240,7 @@ class IA:
         coupsPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
 
-        if( nbSimul == 4 ): #A la profondeur 2 on ne fait pas de nouvelle récurrence, on regarde simplement le meilleur coup possible pour l'ia (comme en difficulté normale)
+        if( nbSimul == 2 ): #A la profondeur 2 on ne fait pas de nouvelle récurrence, on regarde simplement le meilleur coup possible pour l'ia (comme en difficulté normale)
             return self.MeilleurCoup(coupsPossibles)
 
         #Pour chaque coup possible on va:
