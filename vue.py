@@ -14,7 +14,7 @@ class Interface:
     """
         Classe constituant l'interface du jeu.
     """
-    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None, musics=None):
+    def __init__(self, fenetre, largeur, hauteur, grille, animBase, animSpec, mode, ennemi=None, musics=None, personnage=None):
         """
             Constructeur de la classe.
 
@@ -65,6 +65,7 @@ class Interface:
 
         self.mode=mode
         self.ennemi = ennemi
+        self.personnage = personnage
 
         self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1278,720))
         self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,2,True,428,17,None,3,True,6,640)
@@ -144,7 +145,6 @@ class Interface:
             elif (self.texteFini):
                 for event in pygame.event.get():
                     if event.type==pygame.MOUSEBUTTONDOWN:
-                        print("ENTREE")
                         self.texteSuite=""
                         self.texteFinal=""
                         self.texteFinal2=""
@@ -154,7 +154,6 @@ class Interface:
         elif self.compteur==len(aTexte):
             for event in pygame.event.get():
                     if event.type==pygame.MOUSEBUTTONDOWN:
-                        print("ENTREE")
                         self.texteSuite=""
                         self.texteFinal=""
                         self.texteFinal2=""
@@ -243,8 +242,10 @@ class Interface:
                     if (gagnant==1):
                         self.scoreJoueur+=1
                         self.dialogueIA=2
+                        print("")
                         print("Vous gagnez un point !")
                         print("Score : "+str(self.scoreJoueur)+" - "+str(self.scoreIA))
+                        print("")
                         self.changementJoueurFini=False
                        
                         self.panneauJoueur = scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur"+str(self.scoreJoueur)+".png")),(90,90))
@@ -252,8 +253,10 @@ class Interface:
                     elif (gagnant==2):
                         self.scoreIA+=1
                         self.dialogueIA=1
-                        print("L'IA gagne un point !")
+                        print("")
+                        print("Votre adversaire gagne un point !")
                         print("Score : "+str(self.scoreJoueur)+" - "+str(self.scoreIA))
+                        print("")
                         self.changementIAFini=False
 
                         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA"+str(self.scoreIA)+".png")),(90,90))
@@ -493,7 +496,6 @@ class Animation:
                 if(self.nextAnim != None): 
                     self.nextAnim.play = True
                     #self.nextAnim.affiche(x,y-200)
-                    print("Affiche nextAnim")
         if self.play:
             sprite = self.sprite_list[self.play_count//self.speed]
             self.fenetre.blit(sprite, (x,y))
@@ -517,13 +519,14 @@ class Personnage:
     """
         Classe représentant un personnage.
     """
-    def __init__(self, screen, idJoueur, nomPerso, nbSprites, vitesseSprite, largeur, hauteur, x ,y):
+    def __init__(self, screen, idJoueur, nomPerso, nbSprites, vitesseSprite, largeur, hauteur, x , y, ia=None):
         self.fenetre=screen
         self.idJoueur = idJoueur
         self.nomPerso = nomPerso
         self.dialogue = Dialogue("data/dialogues/saloon.xml").getDialogues(nomPerso)
         self.palette = os.path.join(nomPerso, "char.png")
         self.animation = Animation(self.fenetre, self.palette , 0, nbSprites, vitesseSprite, True, largeur, hauteur, None, 3, False,x,y)
+        self.ia = ia
 
 
 class Joueur(Personnage):

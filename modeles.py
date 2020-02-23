@@ -229,7 +229,7 @@ class Grille:
         for i, colonne in enumerate(self.grillePrincipal):
             k = random.randint(1, n)
             cases = random.choices(range(len(colonne) - 1), k=k)
-            print(cases)
+            #print(cases)
             for j in cases:
                 self.grillePrincipal[i][j] = 0
             self.PurgerColonne(i)
@@ -320,16 +320,3 @@ class ObjetAnimMultiple:
         self.currentAnim = self.animList[self.idAnim]
         self.listGlobale.update( {self.name:self.currentAnim} )
         self.listGlobale[self.name].play = True
-
-
-
-
-"""if __name__ == "__main__":
-    maGrille = Grille()
-    monJeton = Jeton(1, 1)
-    print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    maGrille.RemplirCase(monJeton)
-    print(maGrille.CasesVides())
-    print("(" + str(monJeton.colonne) + "," +  str(monJeton.case) + ")")
-    print(str(maGrille))"""

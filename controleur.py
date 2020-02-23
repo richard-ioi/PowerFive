@@ -73,7 +73,7 @@ class MoteurJeu:
             else:
                 compteurL=0
             if compteurL==5:
-                print("Win Ligne")
+                #print("Win Ligne")
                 return jeton.idJoueur
         #verif colonne
         for i in range(len(colonne)):
@@ -83,7 +83,7 @@ class MoteurJeu:
             else:
                 compteurC=0
             if compteurC==5:
-                print("Win Colonne")
+                #print("Win Colonne")
                 return jeton.idJoueur
         #verif diag1
         for i in range(len(diag1)):
@@ -93,7 +93,7 @@ class MoteurJeu:
             else:
                 compteurD1=0
             if compteurD1==5:
-                print("Win Diag1")
+                #print("Win Diag1")
                 return jeton.idJoueur
         #verif diag2
         for i in range(len(diag2)):
@@ -103,7 +103,7 @@ class MoteurJeu:
             else:
                 compteurD2=0
             if compteurD2==5:
-                print("Win Diag2")
+                #print("Win Diag2")
                 return jeton.idJoueur
         #par défaut
         return 0
@@ -240,7 +240,7 @@ class IA:
         coupsPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
 
-        if( nbSimul == 2 ): #A la profondeur 2 on ne fait pas de nouvelle récurrence, on regarde simplement le meilleur coup possible pour l'ia (comme en difficulté normale)
+        if( nbSimul == 4 ): #A la profondeur 2 on ne fait pas de nouvelle récurrence, on regarde simplement le meilleur coup possible pour l'ia (comme en difficulté normale)
             return self.MeilleurCoup(coupsPossibles)
 
         #Pour chaque coup possible on va:

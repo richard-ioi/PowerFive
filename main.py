@@ -34,9 +34,9 @@ class Main:
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
 
         self.sheriff=Personnage(self.fenetre,2,"sheriff",42,7,62,64,50,505)
-        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,(720-72*3-50)+50)
-        self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,(720-72*3-50)+20)
-        self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,(720-72*3-50)+20)
+        self.froggy=Personnage(self.fenetre,2,"froggy",24,5,62,64,1000,(720-72*3-50)+50,ia="difficile")
+        self.weasel=Personnage(self.fenetre,2,"weasel",13,5,62,72,1000,(720-72*3-50)+20,ia="easy")
+        self.jurassy=Personnage(self.fenetre,2,"jurassy",13,5,62,72,1000,(720-72*3-50)+20,ia="normale")
         self.pingu=Personnage(self.fenetre,2,"pingu",27,5,62,96,1280-62*3-50,720-96*3-50)
         self.pingu_bad=Personnage(self.fenetre,2,"pingu_bad",33,5,62,96,1280-62*3-50,720-96*3-50)
 
@@ -92,8 +92,10 @@ class Main:
                                 Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "jurassy", self.music)]
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-        self.ia = IA(self.moteur,"difficile")
-
+        self.listIA = {"weasel": IA(self.moteur,"easy"),
+                       "jurassy":IA(self.moteur,"normale"),
+                       "froggy": IA(self.moteur,"difficile")}
+        self.ia = None
         self.posSouris = (0,0)
         self.idJoueur = 1
         self.barreMana = ObjetAnimMultiple(85,50,self.animMana,self.animBase,"Mana")
@@ -112,6 +114,9 @@ class Main:
     
     def mainLoop(self,ennemi=None):
         self.music.playMusic("Battle")
+        self.ia = self.listIA[ennemi]
+        print(ennemi.upper(),"vous défie !  | difficulté: ",self.ia.difficulty)
+        print("")
         while True:
             
             self.Clock.tick(self.fps)
@@ -142,12 +147,14 @@ class Main:
                                 self.boutonUlti.Reinitialiser()
                                 self.manaFull=False
 
-            if(self.interface.tourJoueur): self.idJoueur = 1
+            if(self.interface.tourJoueur): 
+                self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
             if(not self.interface.tourJoueur and not self.interface.lacher): 
-                print("iaplay")
+                print("C'est au tour de",ennemi.upper(),"...")
                 self.ia.IAPlay()
+                print("C'est a vous de jouer !")
             #Affichage
             self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked and self.manaFull)
 
@@ -172,7 +179,7 @@ class Main:
                     self.compteurManaVide=32
                     self.seVide=True
                     self.clicked=False
-                    print("DECOMPTE SE VIDE ENCLANCHE")
+                    #print("DECOMPTE SE VIDE ENCLANCHE")
 
             if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
                 Main().saloonLoop()
@@ -222,17 +229,14 @@ class Main:
 
                     if( rectJurassy.collidepoint(self.posSouris) ):
                         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-                        print("clic jurassy")
                         Main().mainLoop("jurassy")
 
                     elif( rectWeasel.collidepoint(self.posSouris) ):
                         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-                        print("clic weasel")
                         Main().mainLoop("weasel")
 
                     elif ( rectFroggy.collidepoint(self.posSouris) ):
                         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-                        print("clic froggy")
                         Main().mainLoop("froggy")
             
             self.saloon.updateCurrentAnim(condition=True)
