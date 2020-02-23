@@ -333,14 +333,14 @@ class Interface:
                 animation.affiche(0,0)
 
     def AttentePlacement(self,posSouris,idJoueur,inverse=False):
-        if(not self.lacher and (idJoueur == 1 or inverse)):
+        if(not self.lacher and idJoueur == 1):
             if( self.coordGrilleBack[0] <= posSouris[0] and posSouris[0] <= self.coordGrilleBack[0]+self.grille.sprites["back"].get_width()  ):
                 rectColonne = pygame.Rect(0,0,0,0)
                 for rect in self.rectColonne:
                     if rect["rect"].collidepoint((posSouris[0]-5,posSouris[1])):
                         rectColonne = rect["rect"]
                         break
-                if(idJoueur == 1): jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
+                if(not inverse): jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_jaune.png") ), (10*4,12*4) )
                 else: jetonSprite = scale( pygame.image.load( os.path.join("data","graphismes","jeton_rouge.png") ), (10*4,12*4) )
                 posXColonne = rectColonne.x + rectColonne.w - jetonSprite.get_width()//2-10
                 self.fenetre.blit( jetonSprite, (posXColonne-jetonSprite.get_width()//2,17+29) )

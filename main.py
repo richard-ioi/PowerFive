@@ -139,14 +139,15 @@ class Main:
                         if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) and self.manaFull ):
                             self.boutonUlti.clicked = True
 
-                        for rect in self.interface.rectColonne:
-                            if rect["rect"].collidepoint( (self.posSouris[0]-5, self.posSouris[1]) ):
-                                if (self.boutonUlti.clicked):
-                                    self.moteur.Placer(rect["colonne"],2)
-                                else:
-                                    self.moteur.Placer(rect["colonne"],self.idJoueur)
-                                self.boutonUlti.Reinitialiser()
-                                self.manaFull=False
+                        if( self.interface.tourJoueur ):
+                            for rect in self.interface.rectColonne:
+                                if rect["rect"].collidepoint( (self.posSouris[0]-5, self.posSouris[1]) ):
+                                    if (self.boutonUlti.clicked):
+                                        self.moteur.Placer(rect["colonne"],2)
+                                    else:
+                                        self.moteur.Placer(rect["colonne"],self.idJoueur)
+                                    self.boutonUlti.Reinitialiser()
+                                    self.manaFull=False
 
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
@@ -203,10 +204,11 @@ class Main:
 
             #Gestion affichage
             self.interface.Affichage()
-            if( self.boutonUlti.clicked ):
-                self.interface.AttentePlacement(self.posSouris,2,True)
-            else:
-                self.interface.AttentePlacement(self.posSouris,self.idJoueur)
+            if(self.interface.tourJoueur):
+                if( self.boutonUlti.clicked ):
+                    self.interface.AttentePlacement(self.posSouris,1,True)
+                else:
+                    self.interface.AttentePlacement(self.posSouris,1)
             #------------------Fin gestion affichage
 
             #Gestion dialogues
