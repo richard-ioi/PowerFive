@@ -29,7 +29,7 @@ class MoteurJeu:
         self.grille = grille
         self.clock = clock
         self.lacher=False
-
+        self.dernierJeton = None
     
     # A tester
     def Placer(self, colonne, idJoueur, inverse=False):
@@ -48,6 +48,7 @@ class MoteurJeu:
             jeton = Jeton(idJoueur)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
+            self.dernierJeton = jeton
             #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             if self.interface.lacher:
                 self.lacher=True

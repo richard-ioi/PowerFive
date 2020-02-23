@@ -53,6 +53,7 @@ class Interface:
         self.yTremble = 0
         
         self.compteur=0
+        self.compteur2 = 0
         self.texteFini=False
         self.texteFinal=""
         self.texteFinal2=""
@@ -62,6 +63,7 @@ class Interface:
 
         self.compteurJeton=0
         self.reinitialise=False
+        self.reinitialisation = False
 
         self.mode=mode
         self.ennemi = ennemi
@@ -96,11 +98,18 @@ class Interface:
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
-        time.sleep(2)
-        self.tourJoueur = True
-        self.grille.Reinitialiser()
-        self.jetonsPlaces = []
-        self.reinitialise=True
+        #time.sleep(2)
+        self.reinitialisation = True
+        if( self.compteur2 < 80  ):
+            if(not self.reinitialise):
+                self.compteur2 += 1
+        else:
+            self.tourJoueur = True
+            self.grille.Reinitialiser()
+            self.jetonsPlaces = []
+            self.reinitialise = True
+            self.compteur2 = 0
+            self.reinitialisation = False
 
     def afficheTexte(self,idJoueur,aTexte):
         if idJoueur==1:

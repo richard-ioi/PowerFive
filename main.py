@@ -20,6 +20,8 @@ class Main:
         pygame.init()
         self.Clock = pygame.time.Clock()
         self.fps = 30
+        self.compteur = 0
+        self.switch = False
         self.largeur = 1280
         self.hauteur = 720
         self.titre = "PowerFive"
@@ -119,10 +121,13 @@ class Main:
         self.ia = self.listIA[ennemi]
         print(ennemi.upper(),"vous défie !  | difficulté: ",self.ia.difficulty)
         print("")
+        self.compteur = 0
         while True:
             
             self.Clock.tick(self.fps)
             pygame.display.set_caption(self.titre)
+            self.compteur += 1
+            self.switch = False
             
             if (self.interface.changementIAFini==False) or (self.interface.changementJoueurFini==False):
                 self.compteurChangement+=1
@@ -137,7 +142,7 @@ class Main:
                 if event.type == pygame.QUIT:
                     pygame.quit()
                     sys.exit()
-                if self.interface.compteur==0:
+                if self.interface.compteur==0 and not self.interface.reinitialisation:
                     if( event.type == pygame.MOUSEBUTTONDOWN and not self.interface.lacher ):
                         
                         if( self.boutonUlti.currentAnim.rect.collidepoint(self.posSouris) ):
@@ -155,7 +160,7 @@ class Main:
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
-            if(not self.interface.tourJoueur and not self.interface.lacher): 
+            if(not self.interface.tourJoueur and not self.interface.lacher and not self.interface.reinitialisation): 
                 print("C'est au tour de",ennemi.upper(),"...")
                 self.ia.IAPlay()
                 print("C'est a vous de jouer !")
@@ -183,6 +188,11 @@ class Main:
                     self.seVide=True
                     self.clicked=False
                     self.competenceJoueur.useCompetence() #On lance la competence du joueur (soit inverser la couleur des jetons)
+                    gagnant = self.moteur.Gagnant(Jeton(1,self.moteur.dernierJeton.x,self.moteur.dernierJeton.y))
+                    print(gagnant)
+                    if( gagnant != 0 and not self.interface.lacher):
+                        self.interface.Reinitialiser()
+                        self.interface.reinitialise=False
                     #self.interface.startFlash = True
 
             if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
