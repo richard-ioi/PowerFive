@@ -74,7 +74,7 @@ class Interface:
 
         self.dialogueIA=0
 
-        self.panneauScore= scale(pygame.image.load(os.path.join("data","graphismes","scores","panneau_score.png")),(177,69))
+        self.panneauScore= scale(pygame.image.load(os.path.join("data","graphismes","scores","panneau_score.png")),(int(177*1.3),int(69*1.3)))
         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA0.png")),(180,180))
         self.panneauJoueur= scale(pygame.image.load(os.path.join("data","graphismes","scores","Joueur0.png")),(180,180))
 
@@ -232,7 +232,7 @@ class Interface:
         self.fenetre.blit(self.regle12,(982,355+20))
         self.fenetre.blit(self.regle13,(982,370+20))
 
-        self.fenetre.blit(self.panneauScore,(550,0))
+        self.fenetre.blit(self.panneauScore,(530,0))
         
         if(self.changementJoueurFini):
             self.fenetre.blit(self.panneauJoueur,(100,0))
