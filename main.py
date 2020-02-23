@@ -54,25 +54,25 @@ class Main:
         manay=245
         self.animMana = [ 
                         Animation(self.fenetre, os.path.join("mana","mana0.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana1.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana1.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana2.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana3.png"),0,1,1,True,80,13,None,3,True,manax,manay), 
+                        #Animation(self.fenetre, os.path.join("mana","mana3.png"),0,1,1,True,80,13,None,3,True,manax,manay), 
                         Animation(self.fenetre, os.path.join("mana","mana4.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana5.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana5.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana6.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana7.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana7.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana8.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana9.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana9.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana10.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana11.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana11.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana12.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana13.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana13.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana14.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana15.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana15.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana16.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana17.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana17.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana18.png"),0,1,1,True,80,13,None,3,True,manax,manay),
-                        Animation(self.fenetre, os.path.join("mana","mana19.png"),0,1,1,True,80,13,None,3,True,manax,manay),
+                        #Animation(self.fenetre, os.path.join("mana","mana19.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana20.png"),0,1,1,True,80,13,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana_full.png"),0,7,5,True,78,12,None,3,True,manax,manay),
                         Animation(self.fenetre, os.path.join("mana","mana_deremplissage.png"),0,21,2,False,80,12,None,3,True,manax,manay),
@@ -160,23 +160,23 @@ class Main:
             self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked and self.manaFull)
 
             #Gestion MANA
-            self.barreMana.updateCurrentAnim(condition=(self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<21))
+            self.barreMana.updateCurrentAnim(condition=(self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<11))
 
-            if (self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<21): #Compteur à chaque fois que le joueur joue
+            if (self.moteur.lacher) and (self.idJoueur==1) and (self.compteurMana<11): #Compteur à chaque fois que le joueur joue
                 self.compteurMana+=1
 
             if self.compteurManaVide!=0: #Compteur pour laisser la mana se vider
                 self.compteurManaVide-=1
 
-            if (self.compteurMana==21): #Si le compteur == 21, la mana est pleine
+            if (self.compteurMana==11): #Si le compteur == 11, la mana est pleine
                 self.manaFull=True
             
             if self.boutonUlti.clicked: #Si jamais le bouton Ultimate a été clické une fois
                 self.clicked=True
 
-            if self.compteurMana==21 and self.seVide==False and (self.moteur.lacher==True) and (self.idJoueur==1) and self.clicked==True:
-                    self.barreMana.updateCurrentAnim(condition=self.compteurMana==21)
-                    self.compteurManaVide=32
+            if self.compteurMana==11 and self.seVide==False and (self.moteur.lacher==True) and (self.idJoueur==1) and self.clicked==True:
+                    self.barreMana.updateCurrentAnim(condition=self.compteurMana==11)
+                    self.compteurManaVide=31
                     self.seVide=True
                     self.clicked=False
                     #TEST COMPETENCE POUR MELANGER LES JETONS
