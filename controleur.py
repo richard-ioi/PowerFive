@@ -149,17 +149,12 @@ class IA:
         if( self.difficulty == "easy" ):
             randomCoup = random.randrange(len(coupPossibles))
             self.moteurJeu.Placer(coupPossibles[randomCoup][0], self.idIA)
+        elif( self.difficulty == "normale" ):
+            meilleurCoupIA = self.MeilleurCoup(coupPossibles)
+            self.moteurJeu.Placer(meilleurCoupIA[1], self.idIA)
         elif( self.difficulty == "difficile" ):
-            self.moteurJeu.Placer(self.MinMax(2)[1], self.idIA) #Jouer le meilleur coup retourné par MinMax
-            #self.nbSimul = 0
-        else:
-            listeCoups=[]
-            for coup in coupPossibles:
-                if( self.difficulty == "normal" ):
-                    listeCoups.append(self.ScoreCoup(coup,2))
-            #print(listeCoups)
-            coupIA=max(listeCoups, key=lambda score: score[0])
-            self.moteurJeu.Placer(coupIA[1], self.idIA)
+            coupmM = self.MinMax(2)
+            self.moteurJeu.Placer(coupmM[1], self.idIA) #Jouer le meilleur coup retourné par MinMax
 
     def ScoreCoup(self, coup, idJoueur):  #Retourne le score du coup placé en parametre
         scores=[]
@@ -168,9 +163,8 @@ class IA:
         scores.append(self.ScoreCompteur(coup,"diag1",idJoueur))
         scores.append(self.ScoreCompteur(coup,"diag2",idJoueur))
         return ( max(scores),coup[0] )
-            
+        
     def ScoreCompteur(self, coup, stringEtat, ID):
-        #print(stringEtat)
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 2
         score = 15
         #Calcul du score
@@ -198,7 +192,6 @@ class IA:
         #Compteur pour J1
         for i1 in range(coup[k], len(ligne), 1):
             #vers les i++
-            #print(coup," ",i1," ",ligne[i1])
             try: case = ligne[i1]
             except IndexError: case = -1
             if( case == 1 ): compteurJ1 += 1
@@ -209,13 +202,11 @@ class IA:
             except IndexError: case = -1
             if( case == 1 ): compteurJ1 += 1
             elif( j1 != coup[k] ): break
-        #print(coup," ",ligne," J1: ",compteurJ1," J2: ",compteurJ2 )
 
         #Conditions de scores
-        #print("J1: ",compteurJ1," J2: ",compteurJ2 )
         if ID==2:
             compteurJ2 -= 1
-            if( compteurJ2 == 5 ): score = 100
+            if( compteurJ2 == 5 ): score = 500
             elif( compteurJ1 == 4 ): score = 70
             elif( compteurJ2 == 4 ): score = 60
             elif( compteurJ1 == 3 ): score = 50
@@ -225,70 +216,53 @@ class IA:
 
         else:
             compteurJ1 -= 1
-            if( compteurJ1 == 5 ): score = 100
+            if( compteurJ1 == 5 ): score = 500
             elif( compteurJ2 == 4 ): score = 70
             elif( compteurJ1 == 4 ): score = 60
             elif( compteurJ2 == 3 ): score = 50
             elif( compteurJ1 == 3 ): score = 40
             elif( compteurJ2 == 2 ): score = 30
             elif( compteurJ1 == 2 ): score = 20
-        #print(ligne)
 
         self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
         return score
 
-    def MinMax(self, idJoueur, nbSimul=0): #DIFFICULTE: DIFFICILE
-        coupPossibles = self.moteurJeu.grille.CasesVides()
+    def MeilleurCoup(self, coupsPossibles=[], idJoueur=2, maxi=True):
+        listeCoups=[]
+        if( not coupsPossibles ): return None
+        for coup in coupsPossibles:
+            listeCoups.append(self.ScoreCoup(coup,idJoueur))
+        if( maxi ): return max(listeCoups, key=lambda score: score[0])
+        else: return min(listeCoups, key=lambda score: score[0])
+
+    def MinMax(self, idJoueur, nbSimul=0, dernierCoup=None): #Doit retourner le meilleur coup à jouer pour l'ia
+        #On détermine les coups disponibles sur la grille de jeu et on instencie de la liste des notes
+        coupsPossibles = self.moteurJeu.grille.CasesVides()
         notes = []
-        score = (0,0)
-        gain = 0
 
-        """if partieterminee ou nbSimul > 2:
-            return score"""
-        #IDEE POUR AMELIORER: Somme du gain max au niv 0 + gain max du niv 1 + gain max du niv 2 + gain niv 3 (avec Note())
-        jeton = Jeton(idJoueur,self.lastCoup[0],self.lastCoup[1])
-        gagnant = self.moteurJeu.Gagnant(jeton)
-        if( gagnant != 0 or nbSimul >= 3 ):
-            note = self.Note(gagnant, self.lastCoup, idJoueur)
-            return (note[0], self.lastCoup, note[1])
+        if( nbSimul == 2 ): #A la profondeur 2 on ne fait pas de nouvelle récurrence, on regarde simplement le meilleur coup possible pour l'ia (comme en difficulté normale)
+            return self.MeilleurCoup(coupsPossibles)
 
-        for coupPossible in coupPossibles:
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
-            if(nbSimul == 0): self.lastCoup = coupPossible
-            if(idJoueur==2):
-                #notes.append(self.ScoreCoup(coupPossible, 2))
-                #print(f"Joueur : {idJoueur}")
-                score = self.MinMax( 1, nbSimul+1 )[2]
-                gain = score[1]-score[0]
-            else:
-                #print(f"Joueur : {idJoueur}")
-                #notes.append(self.ScoreCoup(coupPossible, 1))
-                score = self.MinMax( 2, nbSimul+1 )[2]
-                gain = score[0]-score[1]
-
-            notes.append( (gain, coupPossible, score) )
-            self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
-        print("Joueur {} : {}".format(idJoueur,notes))
-        print(" ")
-
-        noteOpti = max(notes, key=lambda gain:gain[0])
-        return (noteOpti[0],noteOpti[1][0],noteOpti[2])
-
-
-    def Note(self, gagnant, coup, idJoueur, nbSimul=0):
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = idJoueur
-
-        if(gagnant == 1): return (-500, (500,0))
-        elif(gagnant == 2): return (500, (0,500))
-
-        coupPossibles = self.moteurJeu.grille.CasesVides()
-        notesIA = []
-        notesH = []
-        for coupPossible in coupPossibles:
-            notesIA.append(self.ScoreCoup(coupPossible, 2))
-            notesH.append(self.ScoreCoup(coupPossible, 1))
-        self.moteurJeu.grille.grillePrincipal[coup[0]][coup[1]] = 0
-
-        maxIA = max(notesIA, key=lambda score: score[0])
-        maxH = max(notesH, key=lambda score: score[0])
-        return (maxIA[0] - maxH[0], (maxH[0],maxIA[0]))
+        #Pour chaque coup possible on va:
+        #Jouer le coup, calculer le score par une récurrence de minmax sur l'autre joueur en incrémentant la profondeur (nbSimul), stocker dans les notes (le score, le coup associé), annuler le coup
+        if( idJoueur == 2 ):
+            for coupPossible in coupsPossibles:
+                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
+                newMinMax = self.MinMax(1, nbSimul+1) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( score, coup )
+                score = newMinMax[0]
+                scoreDirect = self.ScoreCoup(coupPossible, idJoueur)[0]
+                notes.append( (min(score,scoreDirect), coupPossible[0]) ) #On ajoute dans notes le minimum entre le score possible du joueur suivant et le score pour ce coup pour le joueur actuel
+                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+            maxDesMin = max( notes, key=lambda score: score[0] ) #On return le maximum des scores de l'humain au tour +1, qui correspondent au minimum des scores max de l'ia au tour +2
+            return maxDesMin
+            
+        else:
+            for coupPossible in coupsPossibles:
+                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = idJoueur
+                newMinMax = self.MinMax(2, nbSimul+1) #Ce qu'on obtient par la récurence de MinMax, soit un tuple ( score, coup )
+                score = newMinMax[0]
+                scoreDirect = self.ScoreCoup(coupPossible, idJoueur)[0]
+                notes.append( (max(score,scoreDirect), coupPossible[0]) ) #On ajoute dans notes le minimum entre le score possible du joueur suivant et le score pour ce coup pour le joueur actuel
+                self.moteurJeu.grille.grillePrincipal[coupPossible[0]][coupPossible[1]] = 0
+            minDesMax = min( notes, key=lambda score: score[0] ) #On return le  minimum des scores max de l'ia au tour +1
+            return minDesMax

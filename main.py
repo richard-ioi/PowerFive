@@ -92,7 +92,7 @@ class Main:
                                 Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "jurassy", self.music)]
         self.interface = Interface(self.fenetre, self.largeur, self.hauteur, self.grille, self.animBase, self.animSpec, "saloon", "weasel", self.music)
         self.moteur = MoteurJeu(self.interface, self.grille, self.Clock)
-        self.ia = IA(self.moteur,"normal")
+        self.ia = IA(self.moteur,"difficile")
 
         self.posSouris = (0,0)
         self.idJoueur = 1
@@ -145,7 +145,9 @@ class Main:
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
-            if(not self.interface.tourJoueur): self.ia.IAPlay()
+            if(not self.interface.tourJoueur): 
+                print("iaplay")
+                self.ia.IAPlay()
             #Affichage
             self.boutonUlti.updateCurrentAnim(condition=self.boutonUlti.clicked and self.manaFull)
 
@@ -271,20 +273,6 @@ class Main:
 
     def getMode(self):
         return self.interface.mode
-
-    def TestIA(self):
-                              #y 0 1 2 3 4 5 6 7  8     x
-        self.grillePrincipal = [[0,0,0,0,0,0,0,2,-1],  #0
-                                [0,0,0,0,0,0,0,1,-1],  #1
-                                [0,0,0,0,0,0,0,2,-1],  #2
-                                [0,0,0,0,0,0,0,1,-1],  #3
-                                [0,0,0,0,0,0,2,2,-1],  #4
-                                [0,0,0,0,0,0,1,1,-1],  #5
-                                [0,0,0,0,0,0,0,2,-1],  #6
-                                [0,0,0,0,0,0,0,1,-1],  #7
-                                [0,0,0,0,0,0,0,2,-1]]  #8
-        note = self.ia.Note(0,(4,5),2)
-        print(note)
 
 if __name__ == "__main__":
     """if Main().getMode()=="menu":
