@@ -145,7 +145,7 @@ class Main:
             if(self.interface.tourJoueur): self.idJoueur = 1
             else: self.idJoueur = 2
             self.posSouris = pygame.mouse.get_pos()
-            if(not self.interface.tourJoueur): 
+            if(not self.interface.tourJoueur and not self.interface.lacher): 
                 print("iaplay")
                 self.ia.IAPlay()
             #Affichage
