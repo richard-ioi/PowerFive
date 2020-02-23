@@ -68,7 +68,7 @@ class Interface:
         self.personnage = personnage
 
         self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1278,720))
-        self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,2,True,428,17,None,3,True,0,669)
+        self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,4,True,428,17,None,3,True,0,669)
         #self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,10,True,428,17,None,4,True,-213,631)
 
         self.scoreIA=0
