@@ -174,7 +174,6 @@ class Grille:
             diag1_s["stop"] = (x+y, 0)
         
         for elmD0 in range(diag0_s["stop"][0] - diag0_s["start"][0] + 1):
-            #print(str(diag0_s["start"][0] + elmD0)+' '+str(diag0_s["start"][1] + elmD0))
             diag0.append(self.grillePrincipal[ diag0_s["start"][0] + elmD0 ][ diag0_s["start"][1] + elmD0 ])
         
         for elmD1 in range(diag1_s["stop"][0] - diag1_s["start"][0] + 1):
@@ -227,7 +226,6 @@ class Grille:
             self.grillePrincipal[colonne] = colonnePurgee[:]
         
     def InverserJeton(self):
-        #self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             for j, case in enumerate(colonne):
                 if case == 1:
@@ -236,11 +234,9 @@ class Grille:
                     self.grillePrincipal[i][j] = Jeton(1)
     
     def EjecterDernierJeton(self, colonne):
-        #self.SauvegarderGrille()
         self.grillePrincipal[colonne] = [0] + self.grillePrincipal[colonne][:-2] + [-1]
     
     def EjecterJetonAleat(self):
-        #self.SauvegarderGrille()
         colonne = random.randrange(len(self.grillePrincipal))
         if self.hauteur - self.CaseVideColonne(colonne) > 1:
             case = random.randrange( self.CaseVideColonne(colonne) +1, self.hauteur  )
@@ -250,11 +246,9 @@ class Grille:
         self.PurgerColonne(colonne)
     
     def EjecterJetonsAleat(self, n = 2):
-        #self.SauvegarderGrille()
         for i, colonne in enumerate(self.grillePrincipal):
             k = random.randint(1, n)
             cases = random.choices(range(len(colonne) - 1), k=k)
-            #print(cases)
             for j in cases:
                 self.grillePrincipal[i][j] = 0
             self.PurgerColonne(i)
@@ -268,7 +262,6 @@ class Grille:
         self.PurgerColonne(y)
     
     def MelangerJetons(self):
-        #self.SauvegarderGrille()
         random.shuffle(self.grillePrincipal)
         for colonne in range(len(self.grillePrincipal)):
             self.PurgerColonne(colonne)
@@ -366,7 +359,6 @@ class ObjetAnimMultiple:
 
     def selectAnim(self, indice):
         self.currentAnim = self.animList[indice]
-        #self.currentAnim.creerRect(self.posX, self.posY)
         self.listGlobale.update( {self.name:self.currentAnim} )
         self.listGlobale[self.name].play = True
 
@@ -377,7 +369,7 @@ class ObjetAnimMultiple:
         elif(self.idAnim >= len(self.animList)-1): 
             self.idAnim = len(self.animList)-1
         else:
-            if(conditions != None): condition = conditions[self.idAnim] # PROBLEME!!! Les conditions ne s'update pas !
+            if(conditions != None): condition = conditions[self.idAnim] 
             if( indice != -1 ):
                 self.selectAnim(indice)
             if not self.currentAnim.isLoop :
