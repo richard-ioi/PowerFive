@@ -28,7 +28,8 @@ class Main:
         self.fenetre = pygame.display.set_mode( (self.largeur, self.hauteur) )
 
         self.music = Jukebox( musics = { "Pingu": os.path.join("data", "musiques", "pingu_theme.wav"),
-                                         "Battle": os.path.join("data", "musiques", "battle_theme_full.wav") },
+                                         "Main": os.path.join("data", "musiques", "saloon_theme.wav"),
+                                         "Battle": os.path.join("data", "musiques", "battle_theme.wav") },
                               sounds = { "Jetons": [ pygame.mixer.Sound(os.path.join("data", "sons", "jeton0.wav")),
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton1.wav")),
                                                     pygame.mixer.Sound(os.path.join("data", "sons", "jeton2.wav")) ] } )
@@ -218,7 +219,7 @@ class Main:
             pygame.display.update()
 
     def saloonLoop(self):
-        self.music.playMusic("Pingu")
+        self.music.playMusic("Main")
         rectWeasel = pygame.Rect(160,125,75,90)
         rectJurassy= pygame.Rect(1020,380,195,185)
         rectFroggy = pygame.Rect(180*3,15*3,60*3,57*3)
