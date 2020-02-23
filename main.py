@@ -179,7 +179,9 @@ class Main:
                     self.compteurManaVide=32
                     self.seVide=True
                     self.clicked=False
-                    #print("DECOMPTE SE VIDE ENCLANCHE")
+                    #TEST COMPETENCE POUR MELANGER LES JETONS
+                    self.grille.MelangerJetons()
+                    #self.interface.startFlash = True
 
             if ((self.interface.scoreIA==3) or (self.interface.scoreJoueur==3)):
                 Main().saloonLoop()
