@@ -24,8 +24,6 @@ class Interface:
                 animBase: Dictionnaire des Animations de base
                 animSpec: Dictionnaire des Animations circonstancielles
         """
-        #self.fenetre = pygame.display.set_mode( (largeur, hauteur) )
-        #self.titre = pygame.display.set_caption(titre)
         self.fenetre = fenetre
         self.largeur = largeur
         self.hauteur = hauteur
@@ -46,7 +44,6 @@ class Interface:
         self.plusOuMoins = -1
         self.tremble = 0
         self.yTremble = 0
-        #self.imgSaloon = scale(pygame.image.load(os.path.join("data","graphismes","saloon.png")),(1280,720))
 
         self.plusOuMoins = 1
         self.tremble = 0
@@ -70,8 +67,7 @@ class Interface:
         self.personnage = personnage
 
         self.background = scale(pygame.image.load(os.path.join("data","graphismes","saloon","saloon_clone.png")),(1278,720))
-        self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,2,True,428,17,None,3,True,0,669)
-        #self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,10,True,428,17,None,4,True,-213,631)
+        self.tableAnimation = Animation(self.fenetre, os.path.join("table_animation.png"),0,32,4,True,428,17,None,3,True,0,669)
 
         self.scoreIA=0
         self.scoreJoueur=0
@@ -91,6 +87,27 @@ class Interface:
 
         self.changementIAFini=True
         self.changementJoueurFini=True
+        
+        self.cadreTexte = scale(pygame.image.load(os.path.join("data","graphismes","cadre_texte.png")),(242,61*4))
+        self.police = pygame.font.Font(None,20)
+
+        self.regle1 = self.police.render("Vous devez battre votre adversaire",True,pygame.Color("#000000"))
+        self.regle2 = self.police.render("en réalisant un alignement de 5",True,pygame.Color("#000000"))
+        self.regle3 = self.police.render("pions jaune en ligne, colonne ou ",True,pygame.Color("#000000"))
+        self.regle4 = self.police.render("diagonale.",True,pygame.Color("#000000"))
+
+        self.regle5 = self.police.render("Attention le joueur adverse ne doit",True,pygame.Color("#000000"))
+        self.regle6 = self.police.render("pas y parvenir avant vous !",True,pygame.Color("#000000"))
+
+        self.regle7 = self.police.render("Votre barre de compétence se ",True,pygame.Color("#000000"))
+        self.regle8 = self.police.render("remplit lorsque vous jouez un coup.",True,pygame.Color("#000000"))
+        
+        self.regle9 = self.police.render("Lorque la barre est remplie, appuyez",True,pygame.Color("#000000"))
+        self.regle10 = self.police.render("sur le bouton ULTIMATE afin de",True,pygame.Color("#000000"))
+        self.regle11 = self.police.render("déclancher votre compétence qui est",True,pygame.Color("#000000"))
+        self.regle12 = self.police.render("d'inverser les couleurs au prochain",True,pygame.Color("#000000"))
+        self.regle13 = self.police.render("coup ! ",True,pygame.Color("#000000"))
+        
 
     def Reinitialiser(self):
         #On réinitialise la grille de jeu après 1sec
@@ -113,11 +130,10 @@ class Interface:
             x=815
             y=400+29
 
-        police = pygame.font.Font(None,20)
-        texteRendu = police.render(self.texteFinal,True,pygame.Color("#000000"))
-        texteRendu2 = police.render(self.texteFinal2,True,pygame.Color("#000000"))
-        texteRendu3 = police.render(self.texteFinal3,True,pygame.Color("#000000"))
-        texteSuiteRendu = police.render(self.texteSuite,True,pygame.Color("#000000"))
+        texteRendu = self.police.render(self.texteFinal,True,pygame.Color("#000000"))
+        texteRendu2 = self.police.render(self.texteFinal2,True,pygame.Color("#000000"))
+        texteRendu3 = self.police.render(self.texteFinal3,True,pygame.Color("#000000"))
+        texteSuiteRendu = self.police.render(self.texteSuite,True,pygame.Color("#000000"))
         
         if self.compteur!=len(aTexte):
             if (self.texteFini!=True):
@@ -198,7 +214,23 @@ class Interface:
 
         self.fenetre.blit(self.background,(0,0))
         self.fenetre.blit( self.grille.sprites["back"], (self.coordGrilleBack[0], self.coordGrilleBack[1]+self.yTremble) )
-        #pygame.draw.rect(self.fenetre,(75,36,27),(0,680,1280,720))
+
+        self.fenetre.blit(self.cadreTexte,(975,170))
+        self.fenetre.blit(self.regle1,(982,180))
+        self.fenetre.blit(self.regle2,(982,195))
+        self.fenetre.blit(self.regle3,(982,210))
+        self.fenetre.blit(self.regle4,(982,225))
+        self.fenetre.blit(self.regle5,(982,250))
+        self.fenetre.blit(self.regle6,(982,265))
+
+        self.fenetre.blit(self.regle7,(982,280+10))
+        self.fenetre.blit(self.regle8,(982,295+10))
+
+        self.fenetre.blit(self.regle9,(982,310+20))
+        self.fenetre.blit(self.regle10,(982,325+20))
+        self.fenetre.blit(self.regle11,(982,340+20))
+        self.fenetre.blit(self.regle12,(982,355+20))
+        self.fenetre.blit(self.regle13,(982,370+20))
 
         self.fenetre.blit(self.panneauScore,(550,0))
         
@@ -272,7 +304,6 @@ class Interface:
                         self.changementIAFini=False
                         self.panneauIA = scale(pygame.image.load(os.path.join("data","graphismes","scores","IA"+str(self.scoreIA)+".png")),(180,180))
 
-                    #if(self.changementJoueur1.done and self.changementJoueur2.done and self.changementJoueur3.done and self.changementIA1.done and self.changementIA2.done and self.changementIA3.done):
                     self.reinitialisation = True
                     self.reinitialise=False
                 self.lacher = False
@@ -288,14 +319,12 @@ class Interface:
         self.animBase[self.ennemi].play = True
 
         for animation in list(self.animBase.values()) + list(self.animSpec.values()):
-            #if animation == self.animBase["Bouton"]: print(animation," ",animation.done)
             if animation.play:
                 if self.animBase["Bouton"]:
                     animation.affiche(animation.coordx,animation.coordy,True)
                 else:
                     animation.affiche(animation.coordx,animation.coordy)
                     
-
     def AffichageSaloon(self, animSaloon):
         for animation in list (animSaloon.values()):
             if animation.play:
@@ -470,9 +499,7 @@ class Animation:
         self.y_pos = y_sprites
         self.sprite_list = []
         for i_sprite in range(self.nb_sprites):
-            #print(x_sprites+(self.larg_sprite+1)*i_sprite)
             sprite = self.palette.subsurface(x_sprites+(self.larg_sprite+2)*i_sprite, y_sprites, self.larg_sprite-1, self.haut_sprite-1)
-            #if self.palette_name == "microman_sprites.png":
             sprite = scale(sprite, (self.larg_sprite*self.coeffAgrandir,self.haut_sprite*self.coeffAgrandir))
             self.sprite_list.append(sprite)
 
@@ -497,7 +524,6 @@ class Animation:
                 self.play = False
                 if(self.nextAnim != None): 
                     self.nextAnim.play = True
-                    #self.nextAnim.affiche(x,y-200)
         if self.play:
             sprite = self.sprite_list[self.play_count//self.speed]
             self.fenetre.blit(sprite, (x,y))

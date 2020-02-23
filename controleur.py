@@ -22,8 +22,6 @@ class MoteurJeu:
                 grille: Objet Grille utilisé et manipulé par le jeu
                 clock: Horloge pygame du jeu.
         """
-        #self.joueur = Joueur()
-        #self.ia = IA()
         self.interface = interface
         self.interface.moteurJeu = self
         self.grille = grille
@@ -31,7 +29,6 @@ class MoteurJeu:
         self.lacher=False
         self.dernierJeton = None
     
-    # A tester
     def Placer(self, colonne, idJoueur, inverse=False):
         """
             Méthode permettant la placement d'un jeton dans la grille.
@@ -49,12 +46,9 @@ class MoteurJeu:
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
             self.dernierJeton = jeton
-            #jetonRect = jeton.sprite.get_rect(center = rectCase.center)
             if self.interface.lacher:
                 self.lacher=True
             jeton.x = colonne
-            jeton.y = caseDispo
-            #print(jeton)
     
     def Gagnant(self, jeton):
         compteurL=0
@@ -74,7 +68,6 @@ class MoteurJeu:
             else:
                 compteurL=0
             if compteurL==5:
-                #print("Win Ligne")
                 return jeton.idJoueur
         #verif colonne
         for i in range(len(colonne)):
@@ -84,7 +77,6 @@ class MoteurJeu:
             else:
                 compteurC=0
             if compteurC==5:
-                #print("Win Colonne")
                 return jeton.idJoueur
         #verif diag1
         for i in range(len(diag1)):
@@ -94,7 +86,6 @@ class MoteurJeu:
             else:
                 compteurD1=0
             if compteurD1==5:
-                #print("Win Diag1")
                 return jeton.idJoueur
         #verif diag2
         for i in range(len(diag2)):
@@ -104,7 +95,6 @@ class MoteurJeu:
             else:
                 compteurD2=0
             if compteurD2==5:
-                #print("Win Diag2")
                 return jeton.idJoueur
         #par défaut
         return 0
