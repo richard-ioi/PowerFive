@@ -1,7 +1,7 @@
 <dialogue niveau="Saloon">
     <personnage nom="froggy">
         <ligne number="0">
-            Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
+            Bonjour, je m'appelle Froggy et jesuis le plus fort, tu n'arriveras       jamais à me battre !.
         </ligne>
         <ligne number="1">
             Bonjour, je m'appelle Froggy et je gobe des mouches à tout va tout en servant des bières et des limonades.
@@ -15,7 +15,7 @@
     </personnage>
     <personnage nom="jurassy">
         <ligne number="0">
-            Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
+            Bonjour, je m'appelle Jurassy et je suis de niveau intermédiaire, essaie de me battre !
         </ligne>
         <ligne number="0=1">
             Bonjour, je m'appelle Jurassy et je suis recherché dans tout le Far West.
@@ -57,7 +57,7 @@
     </personnage>
     <personnage nom="weasel">
         <ligne number="0">
-            Bonjour, je suis Weasel, tu dois me battre 3 fois pour t'en sortir.
+            Bonjour, je suis Weasel, je ne suis pas très fort ! Tu risque de me battre très facilement.
         </ligne>
         <ligne number="1">
             Hehehe tu t'es fait avoir comme un bleu !
