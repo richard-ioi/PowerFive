@@ -42,7 +42,7 @@ class MoteurJeu:
             for rect in self.interface.rectList:
                 if rect["coord"] == (colonne, caseDispo):
                     rectCase = rect["rect"]
-            jeton = Jeton(idJoueur)
+            jeton = Jeton(idJoueur,colonne,caseDispo)
             self.interface.lacherJeton(jeton, rectCase, (colonne,caseDispo) )
             self.grille.grillePrincipal[ colonne ][ caseDispo ] = jeton
             self.dernierJeton = jeton

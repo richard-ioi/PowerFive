@@ -266,8 +266,8 @@ class Interface:
             jeton = self.lacherInfos[0]
             rectCase = self.lacherInfos[1]
             coordCase = self.lacherInfos[2]
-            jeton.x = coordCase[0]
-            jeton.y = coordCase[1]
+            #jeton.x = coordCase[0]
+            #jeton.y = coordCase[1]
             for rectC in self.rectColonne:
                 if rectC["colonne"] == coordCase[0]:
                     rectCol = rectC["rect"]
